@@ -14,7 +14,7 @@ This document should be read together with:
 - [Domain Model](../domain/domain-model.md), which records established domain structure, invariants, and unresolved modeling context.
 - `../product/glossary.md`, which is intended to own canonical vocabulary.
 
-At the time this register was generated, the conversation-generated `docs/README.md` and `docs/domain/domain-model.md` were available for inspection. A repository file for `docs/product/glossary.md` was not available, so glossary uncertainties were cross-checked against the glossary content previously generated in the discovery conversation rather than a repository file.
+At the time this register was generated, the conversation-generated `giftpipe-docs/README.md` and `giftpipe-docs/domain/domain-model.md` were available for inspection. A repository file for `giftpipe-docs/product/glossary.md` was not available, so glossary uncertainties were cross-checked against the glossary content previously generated in the discovery conversation rather than a repository file.
 
 Unresolved questions are **not approved requirements or implementation instructions**.
 
@@ -22,13 +22,13 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 ## 2. Overview
 
-| Category | High | Medium | Low | Total |
-| --- | ---: | ---: | ---: | ---: |
-| Domain model | 2 | 3 | 3 | 8 |
-| Domain operations and lifecycle | 1 | 3 | 1 | 5 |
-| Requirements and user experience | 0 | 2 | 0 | 2 |
-| Architecture and technical design | 0 | 0 | 2 | 2 |
-| **Total** | **3** | **8** | **6** | **17** |
+| Category                          |  High | Medium |   Low |  Total |
+| --------------------------------- | ----: | -----: | ----: | -----: |
+| Domain model                      |     2 |      3 |     3 |      8 |
+| Domain operations and lifecycle   |     1 |      3 |     1 |      5 |
+| Requirements and user experience  |     0 |      2 |     0 |      2 |
+| Architecture and technical design |     0 |      0 |     2 |      2 |
+| **Total**                         | **3** |  **8** | **6** | **17** |
 
 ---
 
@@ -196,12 +196,12 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 ## 4. Decision dependencies
 
-| Question | Depends on | Reason |
-| --- | --- | --- |
-| OQ-003 — Occasion/candidate outcome model | OQ-001 informs part of it | Outcome representation depends partly on whether an occasion-only candidate has independent identity |
-| OQ-008 — Promotion from occasion research | OQ-001, and potentially OQ-006 | Promotion semantics depend on what an occasion-only candidate/research container actually is |
-| OQ-013 — Partial reconciliation | OQ-003 | Partial completion needs a stable definition of resolved and unresolved OGI/OGC states |
-| OQ-016 — Aggregate boundaries | OQ-001, OQ-003, OQ-004 | Ownership and consistency boundaries should follow settled identity and lifecycle semantics rather than decide them accidentally |
+| Question                                  | Depends on                     | Reason                                                                                                                           |
+| ----------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| OQ-003 — Occasion/candidate outcome model | OQ-001 informs part of it      | Outcome representation depends partly on whether an occasion-only candidate has independent identity                             |
+| OQ-008 — Promotion from occasion research | OQ-001, and potentially OQ-006 | Promotion semantics depend on what an occasion-only candidate/research container actually is                                     |
+| OQ-013 — Partial reconciliation           | OQ-003                         | Partial completion needs a stable definition of resolved and unresolved OGI/OGC states                                           |
+| OQ-016 — Aggregate boundaries             | OQ-001, OQ-003, OQ-004         | Ownership and consistency boundaries should follow settled identity and lifecycle semantics rather than decide them accidentally |
 
 Other questions can be explored independently unless later discovery reveals stronger coupling.
 

@@ -1,4 +1,4 @@
-GiftPipe | 🎁
+# Gift|Pipe|🎁
 
 GiftPipe is a personal gift-planning product for people who want to remember good gift ideas before an important occasion becomes urgent.
 
