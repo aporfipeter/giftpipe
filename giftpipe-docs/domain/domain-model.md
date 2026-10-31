@@ -199,6 +199,7 @@ A GiftIdea remains the same conceptual idea across multiple occasions unless the
 **Invariants:**
 
 - A GiftIdea can exist independently of an Occasion.
+- A GiftIdea may be captured with only its Person assigned and no idea content; a generated placeholder title does not imply user-entered gifting intent.
 - A GiftIdea can be arbitrarily vague or concrete.
 - Specificity does not turn a GiftIdea into a GiftCandidate.
 - A GiftIdea may resolve as used for an Occasion even if no GiftCandidate exists.
@@ -300,6 +301,7 @@ Conceptually distinguished by the combination of the relevant GiftIdea and Occas
 
 **Invariants:**
 
+- The referenced GiftIdea and Occasion must belong to the same Person.
 - It is valid for an OccasionGiftIdea to have no candidates.
 - It is valid for an OccasionGiftIdea to resolve as given/used with no concrete candidate recorded.
 - Unused OccasionGiftIdeas remain associated with their original Occasion.
@@ -680,7 +682,7 @@ Preserve a gift-related thought with minimal friction.
 **Inputs:**
 
 - Person
-- GiftIdea title or equivalent captured content
+- optionally a GiftIdea title or other captured content
 - optionally an Occasion
 - optionally supporting research such as links
 
@@ -692,7 +694,9 @@ Preserve a gift-related thought with minimal friction.
 **Behavior:**
 
 - Creates a GiftIdea for the Person.
+- Recipient-only capture is valid. Title assignment follows [FR-004](../product/requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information); a generated placeholder title is not user-supplied idea content.
 - If an Occasion is supplied, creates the corresponding OccasionGiftIdea.
+- A supplied Occasion must belong to the assigned Person. An association across different Persons is invalid.
 - Does not require a GiftCandidate.
 
 **Postconditions:**
@@ -701,7 +705,7 @@ Preserve a gift-related thought with minimal friction.
 - If an Occasion was supplied, the idea is now considered for that Occasion.
 
 **Failure or conflict conditions:**  
-Not established.
+An Occasion belonging to another Person cannot be associated. Title-derivation failure handling and exact placeholder numbering remain open under [OQ-018](../discovery/open-questions.md#oq-018--how-should-giftidea-title-assignment-handle-failures-and-numbering).
 
 **Reversibility:**  
 Editing/archival semantics are not fully defined.
@@ -992,7 +996,7 @@ Every GiftIdea belongs to a Person.
 **Status:** Confirmed
 
 **Rationale:**  
-Recipient is the only required concept for initial idea capture.
+Recipient is the only required input for initial idea capture. No title, idea content, link, Occasion, or GiftCandidate is required; title assignment is specified in [FR-004](../product/requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information).
 
 ---
 
@@ -1242,6 +1246,38 @@ A GiftIdea remains eligible for future consideration after being given or not gi
 **Relevant operation/lifecycle:** Reconciliation, archival
 
 **Status:** Confirmed
+
+---
+
+### DM-R020 — Occasion associations preserve recipient consistency
+
+**Rule:**
+An OccasionGiftIdea may associate a GiftIdea with an Occasion only when both belong to the same Person. This applies during initial capture and later association.
+
+**Affected concepts:** Person, GiftIdea, Occasion, OccasionGiftIdea
+
+**Relevant operation/lifecycle:** Capture, occasion association
+
+**Status:** Confirmed
+
+**Rationale:**
+Occasion planning must preserve the recipient context of the durable GiftIdea. The user-facing selection behavior is specified in [FR-015](../product/requirements.md#fr-015--associate-a-giftidea-with-an-occasion).
+
+---
+
+### DM-R021 — Viewing occasion context does not change planning data
+
+**Rule:**
+Opening an Occasion Overview, including through an Occasion Reminder, does not change gift-planning data. Displaying an idea does not associate it with the Occasion, nominate candidates, record outcomes, or mark preparation or reconciliation complete.
+
+**Affected concepts:** GiftIdea, Occasion, OccasionGiftIdea, OccasionGiftCandidate, Reconciliation
+
+**Relevant operation/lifecycle:** Occasion context viewing, reminder follow-up
+
+**Status:** Confirmed
+
+**Rationale:**
+Resurfacing saved context is distinct from an explicit planning or reconciliation action. The user-facing overview behavior is specified in [FR-021](../product/requirements.md#fr-021--remind-users-about-approaching-occasions).
 
 ---
 

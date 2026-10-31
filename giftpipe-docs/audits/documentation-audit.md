@@ -273,3 +273,25 @@ These batches are recommendations, not approved documentation changes.
 2. Discuss reminder eligibility, reminder timing, and OQ-014 together. They jointly determine whether the central capture-and-resurface loop behaves as intended.
 3. Before committing to recurring occasion or reconciliation persistence models, resolve the relevant existing identity and outcome questions—especially OQ-004 and OQ-003.
 4. Apply the mechanical and established-decision batches when documentation editing is authorized. They can proceed independently of those product decisions.
+
+### Follow-up — first approved remediation batch
+
+**Source conversation:** Codex session `01a190be-86f0-72b2-9a8a-58b09c8cdac3`, discussion begun 2026-10-31. Use this session ID to revisit the actual conversation; this section records the approved documentation scope, not a transcript.
+
+**Baseline:** The original audit above was committed unchanged as `42d2b2d` before remediation. Its findings and verification counts describe that baseline. The table below records subsequent progress without rewriting the original assessment.
+
+The user approved the capture, recipient-consistency, and notification/overview documentation batch. Changes were propagated to the [vision](../product/vision.md), [glossary](../product/glossary.md), [domain model](../domain/domain-model.md), [requirements](../product/requirements.md), and [open-questions register](../discovery/open-questions.md). [AGENTS.md](../../AGENTS.md) now requires source-session traceability for approved documentation batches.
+
+| Finding | Progress in this batch | Remaining uncertainty |
+|---|---|---|
+| AUD-001 | Minimum-content ambiguity resolved: a Person alone is sufficient. Explicit titles win; a single link supplies a derived title; no content or multiple links use a generic placeholder, numbered as needed. | `OQ-018` tracks link-title failure handling and exact placeholder numbering. `OQ-011` still owns automatic Candidate creation. |
+| AUD-002 | Resolved: GiftIdea and Occasion must belong to the same Person (`DM-R020`). Capture prepopulates the Person when started from a Person; Occasion selection is disabled until assignment and filtered to that Person's Occasions. | Exact UI behavior when changing the Person remains unspecified, but a previous recipient's Occasion cannot remain valid. Duplicate associations remain under `OQ-005`. |
+| AUD-003 | Partially resolved: the in-app Occasion Overview includes the Person's ideas with no Occasion associations. Notifications are brief and link to that same overview. Opening it does not change planning data (`DM-R021`); detailed research is linked separately. | `OQ-020` tracks other-Occasion idea eligibility and presentation; `OQ-014` retains the usefulness threshold, including recipient-only placeholders. |
+| AUD-004 | Tracking gap addressed: `OQ-019` explicitly owns pre-occasion timing, repetition, and app-level/occasion-level settings interaction. `FR-021` and the dependency table reference it. | No schedule or settings precedence was selected. Post-occasion follow-up remains separately under `OQ-015`. |
+| AUD-010 | Corrected while maintaining the category overview for the four new questions (`OQ-018` through `OQ-021`). | No individual question priority changed. |
+
+**Additional boundaries:** One Occasion Overview serves ordinary navigation and notification entry, with access to planning, research, reconciliation, and history as appropriate. Its exact layout and the research UI remain deferred. Email-only initial notification delivery was not verified as an existing decision and remains a proposal under `OQ-021`; no new channel commitment was made.
+
+**Outside this batch:** AUD-005 through AUD-009 remain for later discussion or authorized maintenance. Existing reconciliation entry conditions, accepted ADRs, identifiers, and unresolved domain decisions have not been changed by this batch.
+
+**Verification:** Checked 17 Markdown files, all 168 local links and heading targets, 86 requirement/rule/question identifiers, and every open-question category count. Confirmed that this audit's original committed content remains an unchanged prefix with the follow-up appended. All checks passed, as did `git diff --check` for the documentation edits. No application tests were run for this documentation-only batch.

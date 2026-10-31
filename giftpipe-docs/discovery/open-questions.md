@@ -24,11 +24,11 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 | Category                          |  High | Medium |   Low |  Total |
 | --------------------------------- | ----: | -----: | ----: | -----: |
-| Domain model                      |     2 |      3 |     3 |      8 |
-| Domain operations and lifecycle   |     1 |      3 |     1 |      5 |
-| Requirements and user experience  |     0 |      2 |     0 |      2 |
+| Domain model                      |     3 |      2 |     3 |      8 |
+| Domain operations and lifecycle   |     0 |      5 |     1 |      6 |
+| Requirements and user experience  |     0 |      5 |     0 |      5 |
 | Architecture and technical design |     0 |      0 |     2 |      2 |
-| **Total**                         | **3** |  **8** | **6** | **17** |
+| **Total**                         | **3** | **12** | **6** | **21** |
 
 ---
 
@@ -128,7 +128,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** The user explicitly chooses whether a URL is a product link or a supporting reference link. ProductLinkNode is not itself a GiftCandidate. What remains unsettled is the first-capture case: a user creates a new gift for Dad by pasting only a product link.
+- **Context:** The user explicitly chooses whether a URL is a product link or a supporting reference link. ProductLinkNode is not itself a GiftCandidate. What remains unsettled is the first-capture case: a user creates a new gift for Dad by pasting only a product link. Deriving a GiftIdea title from a single link is established under `FR-004`; that title assignment does not settle whether a GiftCandidate is also created.
 - **Options considered:**
   - Create the GiftIdea plus ProductLinkNode only.
   - Create the GiftIdea, a GiftCandidate, and attach the ProductLinkNode beneath that candidate.
@@ -151,6 +151,15 @@ Unresolved questions are **not approved requirements or implementation instructi
 - **Impact:** Occasion lifecycle, reminder/follow-up behavior, open versus resolved states, and acceptance criteria.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q004`, `DM-Q018`; Reconciliation section; `DM-R008`, `DM-R011`.
 
+#### OQ-018 — How should GiftIdea title assignment handle failures and numbering?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** Recipient-only capture is valid. An explicit title wins; otherwise one link supplies a derived title, while no content or multiple links use a generic placeholder such as "Gift for Dad", numbered as needed to distinguish existing placeholders. The exact numbering and collision rules, and the behavior when a single link cannot supply a usable title, have not been decided.
+- **Unresolved details:** Title retrieval failure or delay; placeholder numbering sequence and collision scope. A generic fallback on link-title failure was suggested but not accepted as part of this batch.
+- **Impact:** Capture acceptance criteria and generated title behavior. These details do not reopen the accepted recipient-only capture rule or title precedence.
+- **References:** [Requirements](../product/requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information) — `FR-004`; [Domain Model](../domain/domain-model.md#81-capture-giftidea); `OQ-011` separately owns product-link-only Candidate creation.
+
 ---
 
 ### Requirements and user experience
@@ -159,7 +168,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** The agreed product principle is to surface user-captured ideas first and generate proactive AI suggestions when an approaching occasion has no useful manual ideas. "Useful" has not yet been defined. A vague GiftIdea such as "Whisky" may be useful enough for one user but may still benefit from proactive research for another.
+- **Context:** The agreed product principle is to surface user-captured ideas first and generate proactive AI suggestions when an approaching occasion has no useful manual ideas. "Useful" has not yet been defined. A vague GiftIdea such as "Whisky" may be useful enough for one user but may still benefit from proactive research for another. Recipient-only GiftIdeas with generated placeholder titles are now valid; whether such a record qualifies as useful manual context is also unresolved. The Occasion Overview includes the Person's ideas with no Occasion associations; `OQ-020` tracks the remaining pool boundaries. Display eligibility alone does not settle the usefulness threshold.
 - **Impact:** Reminder behavior, AI cost, user annoyance, proactive suggestion requirements, and settings.
 - **References:** Product discovery; [Domain Model](../domain/domain-model.md) — bounded AI and OccasionGiftIdea concepts.
 
@@ -170,6 +179,32 @@ Unresolved questions are **not approved requirements or implementation instructi
 - **Context:** GiftPipe should proactively ask the user after an Occasion what happened so outcomes do not depend on manual maintenance. Discovery also established a desire not to harass users with repeated messages. Exact timing, retry behavior, and stopping conditions are not yet defined.
 - **Impact:** Reconciliation completion rate, notification requirements, user experience, and lifecycle of unresolved occasions.
 - **References:** Product discovery; [Domain Model](../domain/domain-model.md) — Reconciliation and Occasion lifecycle.
+
+#### OQ-019 — What controls pre-occasion notification timing and settings interaction?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** Brief Occasion Reminders link to the in-app Occasion Overview. Their timing must be discussed separately from overview content. App-level and occasion-level notification settings and their interaction have been identified for exploration, but no scheduling or precedence policy is approved.
+- **Unresolved details:** When an Occasion becomes eligible for notification; whether and when notifications repeat; app-level defaults and occasion-level settings; their precedence and any disabling or stopping behavior.
+- **Impact:** Notification scheduling, user control, acceptance criteria, and avoiding excessive interruption. This is distinct from the post-occasion reconciliation follow-up policy in `OQ-015`.
+- **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; `OQ-004` owns recurring occurrence identity.
+
+#### OQ-020 — What are the remaining Occasion Overview idea-pool and presentation rules?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** The Occasion Overview is shared by ordinary navigation and notification entry. It presents existing occasion plans, includes the Person's ideas with no Occasion associations, provides previous gifting context, and links to detailed research. Merely opening it does not change gift-planning data. The complete hierarchy and eligibility boundaries are not established.
+- **Unresolved details:** Whether and how ideas associated with other Occasions are offered for the approaching Occasion; ordering and overlap among unassociated ideas, current research, and previously given gifts; detailed research navigation and UI. Existing archival constraints remain in force; this question does not authorize resurfacing archived ideas proactively.
+- **Impact:** Resurfacing usefulness, navigation, presentation, and the idea pool evaluated by `OQ-014`. Previous gifts appearing as history does not itself decide their automatic eligibility for a new Occasion.
+- **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; [Occasion Overview](../product/glossary.md#occasion-overview); [Domain Model](../domain/domain-model.md#dm-r019--giving-a-gift-does-not-retire-the-giftidea) — `DM-R019`, `DM-R021`.
+
+#### OQ-021 — Is initial notification delivery email-only, and what content belongs in each channel?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** The notification layer should remain thin and largely platform agnostic, with brief notifications directing users to the Occasion Overview. Email-only initial delivery was recalled during discussion but could not be verified in the repository; it remains proposed scope. Email may permit more context than a push notification, but the content distinction is deferred.
+- **Impact:** Initial-release scope, supported delivery channels, notification content, and channel-specific acceptance criteria. Mentioning a channel does not commit the product to supporting it.
+- **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; [Release boundaries](../product/requirements.md#release-boundaries).
 
 ---
 

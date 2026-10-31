@@ -127,12 +127,20 @@ Frictionless capture is the primary product loop.
 **Acceptance criteria:**
 
 - A Person is required for a GiftIdea.
+- A Person alone is sufficient to save a GiftIdea; no title, idea content, or link is required.
+- An explicitly supplied title takes precedence over attached links and generated titles.
+- With exactly one link and no explicit title, GiftPipe derives the title from that link.
+- With no content, or multiple links and no explicit title, GiftPipe assigns a generic title such as "Gift for Dad" using the Person's name. Numbered placeholders such as "Gift 1 for Dad" and "Gift 2 for Dad" distinguish existing placeholder titles.
 - The user can save a vague idea such as "Whisky".
 - The user can save a concrete idea such as "Metallica tickets".
 - A GiftCandidate is not required at capture time.
 - An Occasion is not required at capture time.
+- Starting capture from a Person prepopulates that Person. Capture from the main page requires a Person to be assigned before Occasion selection is enabled; see `FR-015`.
 
 **References:** `DM-R001`, `DM-R002`, `DM-R003`, `DM-R005`.
+
+**Limitations:**
+Title-derivation failure handling and the exact placeholder numbering/collision rules remain open under [OQ-018](../discovery/open-questions.md#oq-018--how-should-giftidea-title-assignment-handle-failures-and-numbering). Link-derived titles do not settle automatic GiftCandidate creation, which remains under `OQ-011`. Whether a recipient-only placeholder qualifies as a useful manual idea remains under `OQ-014`.
 
 ---
 
@@ -358,8 +366,12 @@ A durable GiftIdea and a particular Occasion have distinct meanings.
 - A GiftIdea can be associated with an Occasion during initial capture.
 - The association preserves the GiftIdea independently of the Occasion.
 - The resulting OccasionGiftIdea can exist without any candidate.
+- The GiftIdea and Occasion must belong to the same Person; a cross-recipient association is rejected.
+- Occasion selection lists only the assigned Person's Occasions.
+- During capture, Occasion selection is disabled until a Person is assigned. Capture started from a Person prepopulates that Person.
+- If the Person changes during capture, an Occasion selected for the previous Person cannot remain a valid association. The UI's exact clearing or reselection interaction is unspecified.
 
-**References:** `DM-R002`, `DM-R005`.
+**References:** `DM-R002`, `DM-R005`, `DM-R020`.
 
 ---
 
@@ -471,15 +483,24 @@ Exact candidate state names and transition rules are unresolved under `OQ-003`.
 GiftPipe must proactively remind the user about relevant approaching Occasions.
 
 **Rationale:**  
-Resurfacing saved context at the right time is central to the product value proposition.
+Resurfacing saved context at the right time is central to the product value proposition. Brief notifications bring the user into a shared in-app planning view, keeping the notification layer thin and largely platform agnostic.
 
 **Acceptance criteria:**
 
 - An approaching Occasion can trigger a reminder.
-- The reminder can surface relevant user-captured GiftIdeas.
+- The notification briefly identifies the Occasion, Person, and time remaining, and links to the Occasion Overview in the app.
+- The same Occasion Overview is accessible through normal app navigation; reminder entry does not require a separate Reminder Screen.
+- The overview presents ideas and candidates already under consideration for the Occasion and includes the Person's GiftIdeas that have no Occasion associations, subject to the established exclusion of archived ideas from proactive future consideration (`DM-R019`).
+- Previous gifts and outcomes are available as context. Their presentation does not itself establish automatic eligibility for a new Occasion.
 - Existing user-captured ideas are prioritized ahead of speculative AI alternatives.
+- The overview links to detailed research; the research workflow's UI and the exact hierarchy of overview content remain deferred.
+- Opening the overview through a notification does not change gift-planning data: it does not create OccasionGiftIdeas, nominate candidates, record outcomes, or mark preparation or reconciliation complete.
+- The overview supports occasion context before and after the Occasion, including access to reconciliation and history. This does not change the existing unresolved reconciliation entry conditions.
 
-**References:** [Product Vision](vision.md), Human ideas outrank speculative AI suggestions.
+**References:** [Product Vision](vision.md), Human ideas outrank speculative AI suggestions; [Occasion Overview](glossary.md#occasion-overview); `DM-R021`.
+
+**Limitations:**
+Pre-occasion notification timing and the interaction between app-level and occasion-level notification settings remain open under `OQ-019`. Detailed idea-pool boundaries, hierarchy, and research navigation remain under `OQ-020`. Email-only initial delivery and channel-specific content remain proposals under `OQ-021`. No notification schedule, delivery channel, or detailed research-screen design is established by this requirement.
 
 ---
 
@@ -964,7 +985,7 @@ A Person exists or is being established as the recipient.
 A GiftIdea exists for the Person and can remain independent of any Occasion or GiftCandidate.
 
 **Unresolved questions:**  
-None required for the core workflow.
+Recipient-only capture is established. Title-derivation failure handling and exact placeholder numbering remain under `OQ-018`; product-link-only Candidate creation remains under `OQ-011`.
 
 ---
 
@@ -974,7 +995,7 @@ None required for the core workflow.
 Preserve an idea and immediately make it relevant to an upcoming Occasion.
 
 **Initial conditions:**  
-A Person and relevant Occasion are available.
+A Person and an Occasion belonging to that same Person are available. Occasion selection follows `FR-015`.
 
 **Relevant requirements:**  
 `FR-004`, `FR-015`, `FR-016`.
@@ -1012,16 +1033,16 @@ Product-link-only capture depends on `OQ-011`. Full research taxonomy remains de
 Bring durable GiftIdeas and concrete options into a specific Occasion context.
 
 **Initial conditions:**  
-An OccasionGiftIdea exists.
+An Occasion and its Person exist. Viewing the Occasion Overview does not require an existing OccasionGiftIdea; nominating or creating occasion-specific candidates requires the corresponding occasion-specific context.
 
 **Relevant requirements:**  
 `FR-018`, `FR-019`, `FR-020`, `FR-021` through `FR-023`.
 
 **Expected outcome:**  
-Relevant candidates can be nominated or created for the Occasion, and the user is reminded as the Occasion approaches.
+The user can open the Occasion Overview directly or through a brief notification. It presents existing occasion plans, includes the Person's ideas with no Occasion associations, provides previous gifting context, and links to research. Explicit planning actions can establish occasion-specific context and nominate or create candidates where applicable; merely viewing the overview does not change gift-planning data.
 
 **Unresolved questions:**  
-Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive AI threshold depends on `OQ-014`.
+Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive AI threshold depends on `OQ-014`. Pre-occasion notification policy depends on `OQ-019`; overview idea-pool boundaries and presentation depend on `OQ-020`; initial delivery channel and channel-specific content depend on `OQ-021`.
 
 ---
 
@@ -1120,6 +1141,10 @@ This loop describes product direction but should not be treated as a complete re
 | `FR-022`, `FR-023` | `OQ-014` | Definition of a sufficiently useful manual idea | Automatic AI trigger behavior cannot be finalized |
 | `FR-034` | `OQ-015` | Reconciliation follow-up frequency and stopping rules | Notification behavior remains incomplete |
 | `FR-036` | `OQ-013` | Partial reconciliation semantics | Incomplete Occasion resolution behavior remains blocked |
+| `FR-004` | `OQ-018` | Link-title derivation failure handling and exact placeholder numbering | Basic title precedence is established; edge-case behavior is not finalized |
+| `FR-021` | `OQ-019` | Pre-occasion timing, repetition, and app-level/occasion-level settings interaction | Notification scheduling cannot yet be acceptance-tested fully |
+| `FR-021` | `OQ-020` | Remaining idea-pool boundaries, overview hierarchy, and research navigation | Core resurfacing is established; complete overview behavior remains open |
+| `FR-021` | `OQ-021` | Initial delivery channel and channel-specific content | Email-only initial delivery is not an established release commitment |
 
 Other open questions in the register can remain deferred without preventing implementation of unrelated confirmed behavior.
 

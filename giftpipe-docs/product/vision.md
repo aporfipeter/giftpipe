@@ -126,7 +126,9 @@ After the occasion, lightweight reconciliation preserves what actually happened.
 
 ### Frictionless capture comes first
 
-The user should be able to save a useful thought with minimal information. The recipient is the only information established as mandatory for the initial capture concept; further detail can be added later.
+The user should be able to save a GiftIdea with only a recipient assigned, even before entering any idea content. GiftPipe supplies a placeholder title when needed; further detail can be added later. Generated placeholders identify records without implying that the user has supplied a gifting thought.
+
+The [capture requirements](requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information) define title precedence for explicit titles, single-link capture, and generic placeholders.
 
 The product should not require the user to fully classify or research an idea before saving it.
 
@@ -141,6 +143,8 @@ A captured idea may remain valuable even when no concrete product or candidate i
 Existing user-captured ideas should be surfaced before GiftPipe automatically generates alternatives.
 
 AI fills gaps, develops an idea, evaluates options, or assists research. It should not make the user's own saved context secondary by default.
+
+Occasion notifications should be brief and direct the user to an in-app Occasion Overview. The overview brings together occasion planning context, including ideas for the Person that have no Occasion associations, and links to detailed research. Opening it through a notification does not change gift-planning data. Notification timing, delivery channels, and the detailed overview hierarchy remain separate discovery topics; see [the reminder requirements](requirements.md#fr-021--remind-users-about-approaching-occasions).
 
 ### AI should be bounded to gifting work
 

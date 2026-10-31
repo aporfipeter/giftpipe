@@ -77,6 +77,8 @@ A durable, open-ended gifting idea associated with a Person. It may represent a 
 
 A GiftIdea can exist independently of an Occasion and can accumulate research over time.
 
+It may also be captured with only a Person assigned and no idea content. A system-supplied placeholder title identifies that record without implying user-entered gifting intent. Title assignment behavior belongs to [the capture requirements](requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information).
+
 **Relationships:**  
 Belongs to a [Person](#person). It may have reusable [GiftCandidates](#giftcandidate), research material, and one or more [OccasionGiftIdeas](#occasiongiftidea) connecting it to specific occasions.
 
@@ -621,10 +623,30 @@ AI Enhancement differs from broad gift suggestion: it researches the captured id
 ### Occasion Reminder
 
 **Definition:**  
-A proactive notification informing the user that an Occasion is approaching and surfacing relevant existing GiftIdeas before introducing new AI-generated alternatives.
+A brief proactive notification informing the user that an Occasion is approaching and linking to its in-app [Occasion Overview](#occasion-overview).
 
 **Relationships:**  
-Uses Occasion information and associated OccasionGiftIdeas.
+Uses Occasion information. The linked overview presents the gifting context, including associated OccasionGiftIdeas and the Person's ideas with no Occasion associations.
+
+**Important distinctions:**
+The notification layer is intended to remain thin and largely platform agnostic. Email may eventually include more information than other channels, but email-only initial delivery and channel-specific content limits are not established decisions. Opening the linked overview does not change gift-planning data.
+
+**Status:** Confirmed
+
+---
+
+### Occasion Overview
+
+**Definition:**
+The in-app view of an Occasion's planning context, accessible through normal app navigation and from an Occasion Reminder.
+
+**Relationships:**
+Brings together Occasion information, ideas and candidates already under consideration, the Person's unassociated GiftIdeas, and previous gifting context. Links to detailed research rather than incorporating the full research workflow.
+
+**Important distinctions:**
+There is one Occasion Overview rather than a separate Reminder Screen. It may support preparation before an Occasion and access to reconciliation and history afterward. Its exact hierarchy and research navigation remain open. A [Research Summary](#research-summary) is derived research information, not the name of this screen.
+
+Displaying an idea in the overview does not create an OccasionGiftIdea or change its outcome.
 
 **Status:** Confirmed
 
@@ -750,7 +772,7 @@ However, the exact behavior when a user creates a new GiftIdea by pasting only a
 
 ## GiftIdea shape
 
-GiftIdea's domain role is confirmed, but its exact attributes beyond Person association and a human-understandable idea/title have deliberately not been finalized.
+GiftIdea's domain role and recipient-only capture are confirmed. A human-entered idea or title is not required; GiftPipe assigns a title according to the [capture requirements](requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information). Other attributes remain unspecified, and title-assignment edge cases remain open under [OQ-018](../discovery/open-questions.md#oq-018--how-should-giftidea-title-assignment-handle-failures-and-numbering).
 
 ---
 
