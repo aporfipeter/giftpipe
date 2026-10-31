@@ -35,4 +35,12 @@ Project documentation is the authoritative record of established product and dom
 
 A documentation change batch is a proposed set of changes, not an authoritative decision record. Only approved changes propagated into the appropriate documentation become part of the project's documented source of truth.
 
+#### Conversation traceability
+
+- When applying an approved documentation change batch, record the source conversation's session ID in the batch's durable provenance (for example, an audit follow-up section or a relevant decision record), so the user can revisit the actual discussion.
+- Obtain the ID from the session environment when available; never invent one. If it is unavailable, state that explicitly.
+- Keep approved changes and unresolved proposals distinguishable in the provenance. A session reference does not replace the authoritative product and domain documentation.
+
+Audit-remediation discussion begun on 2026-10-31: session `01a190be-86f0-72b2-9a8a-58b09c8cdac3`. Follow-up scope and progress belong in [the documentation audit](giftpipe-docs/audits/documentation-audit.md).
+
 Follow `giftpipe-docs/README.md` for documentation ownership and cross-reference conventions.
