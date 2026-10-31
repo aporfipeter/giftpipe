@@ -1,0 +1,275 @@
+### Executive summary
+
+GiftPipe’s documentation is a coherent foundation for continued discovery and for beginning bounded implementation work. Its strongest areas are the durable GiftIdea model, contextual candidate semantics, separation of research scopes, and reconciliation that supports multiple gifts without requiring concrete candidates.
+
+It is **not yet a complete implementation specification**. The most consequential gaps concern minimum capture content, recipient consistency when associating ideas with occasions, and reminder eligibility and timing.
+
+The seven Accepted ADRs agree with the current domain model and requirements. Their rationale is internally coherent. I did not independently verify their historical claims against the original discovery conversation, which was not available in the inspected documentation.
+
+**Scope and missing paths:** `docs/` does not exist. Consequently, all requested paths under it—including `docs/README.md`, the five named product/domain/discovery files, and `docs/decisions/`—are missing at those locations. Their counterparts exist under `giftpipe-docs/`, the authoritative location identified by repository `AGENTS.md`. I audited all 14 Markdown documents there, plus the relevant repository guidance.
+
+**Verification performed:**
+
+- Unique definitions: 36 FRs, 8 NFRs, 19 domain rules, 20 domain questions, 17 open questions, and 7 ADRs.
+- All referenced identifiers exist.
+- All 107 Markdown links resolve, including heading targets.
+- ADR statuses match the index; there are no supersession relationships to reconcile.
+- No files were changed. The existing Obsidian `workspace.json` modification remains untouched.
+
+### Findings summary
+
+No Critical findings.
+
+| ID | Severity | Category | Finding |
+|---|---|---|---|
+| AUD-001 | High | Completeness | Minimum valid GiftIdea content is ambiguous |
+| AUD-002 | High | Completeness | Recipient consistency for occasion association is unspecified |
+| AUD-003 | High | Completeness | Reminder eligibility for unassociated durable ideas is unclear |
+| AUD-004 | High | Completeness | Pre-occasion reminder timing lacks a defined policy or tracked question |
+| AUD-005 | Medium | Completeness | Reconciliation entry with no existing OccasionGiftIdeas is unclear |
+| AUD-006 | Medium | Completeness | Privacy verification does not directly test account isolation |
+| AUD-007 | Medium | Ownership | Unresolved material is maintained across overlapping registers |
+| AUD-008 | Medium | Traceability | Material requirement boundaries lack nearby open-question references |
+| AUD-009 | Low | Structure | The documentation map retains obsolete provisional guidance |
+| AUD-010 | Low | Consistency | Open-question category priority counts are incorrect |
+
+### Detailed findings
+
+**AUD-001 — Minimum valid GiftIdea content is ambiguous**
+
+**Severity:** High  
+**Category:** Completeness
+
+**Location:** [giftpipe-docs/product/vision.md:129](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/vision.md:129), [giftpipe-docs/domain/domain-model.md:680](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:680), [giftpipe-docs/product/glossary.md:753](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/glossary.md:753).
+
+**Evidence:** The vision identifies the recipient as the only mandatory information. The capture operation lists a title or equivalent captured content, but its preconditions say other fields may be omitted. The glossary describes the unresolved GiftIdea shape as attributes beyond Person association **and a human-understandable idea/title**.
+
+**Explanation:** These statements leave two materially different interpretations: saving only a Person creates a valid GiftIdea, or some captured content is also required. This affects validation and the primary capture workflow, rather than merely terminology.
+
+**Recommended action:** Clarify the minimum valid captured content, including whether it may be derived from a link. Record the answer consistently in the domain capture preconditions and FR-004 acceptance criteria.
+
+**Decision required:** **Yes.** The available record does not unambiguously establish whether a content-free placeholder is valid.
+
+---
+
+**AUD-002 — Recipient consistency for occasion association is unspecified**
+
+**Severity:** High  
+**Category:** Completeness
+
+**Location:** [giftpipe-docs/domain/domain-model.md:154](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:154), [giftpipe-docs/domain/domain-model.md:186](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:186), [giftpipe-docs/domain/domain-model.md:287](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:287), [giftpipe-docs/product/requirements.md:345](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:345).
+
+**Evidence:** GiftIdea belongs to one Person; Occasion is associated with a Person. OccasionGiftIdea references one of each. Neither its invariants nor FR-015 specifies whether their Persons must match.
+
+**Explanation:** The relationship can be implemented structurally while connecting an idea for one recipient to another recipient’s occasion. The documentation provides no explicit eligibility rule for accepting or rejecting that association. This is a missing constraint, not a documented permission for cross-recipient planning.
+
+**Recommended action:** Clarify the recipient compatibility rule and record it in the authoritative association semantics, with a corresponding FR-015 acceptance criterion.
+
+**Decision required:** **Yes.** Confirm whether matching Persons is required or whether any broader association is intended.
+
+---
+
+**AUD-003 — Reminder eligibility for unassociated durable ideas is unclear**
+
+**Severity:** High  
+**Category:** Completeness
+
+**Location:** [giftpipe-docs/domain/domain-model.md:999](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:999), [giftpipe-docs/product/glossary.md:621](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/glossary.md:621), [giftpipe-docs/product/requirements.md:476](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:476), [giftpipe-docs/discovery/open-questions.md:158](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/discovery/open-questions.md:158).
+
+**Evidence:** GiftIdeas may remain independent of occasions. Occasion Reminder uses Occasion information and associated OccasionGiftIdeas. FR-021 instead refers broadly to “relevant user-captured GiftIdeas.” OQ-014 asks whether manual ideas are sufficiently useful, without explicitly defining the eligible idea pool.
+
+**Explanation:** An idea captured only for Dad could either resurface for his approaching birthday or remain absent until manually associated. Both readings fit parts of the documentation, but produce substantially different behavior in the central capture-and-resurface loop.
+
+**Recommended action:** Clarify whether reminders consider only associated ideas or also other eligible ideas for the Person. Distinguish displaying an idea from creating an OccasionGiftIdea. Extend OQ-014 where appropriate.
+
+**Decision required:** **Yes.** Idea eligibility and any association side effects are not established.
+
+---
+
+**AUD-004 — Pre-occasion reminder timing is not sufficiently defined or tracked**
+
+**Severity:** High  
+**Category:** Completeness
+
+**Location:** [giftpipe-docs/product/requirements.md:466](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:466), [giftpipe-docs/discovery/open-questions.md:166](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/discovery/open-questions.md:166).
+
+**Evidence:** FR-021 requires reminders for “relevant approaching Occasions”; its acceptance criteria say an approaching Occasion can trigger a reminder. OQ-015 explicitly covers **post-occasion** follow-up timing, frequency, and stopping conditions. No equivalent pre-occasion policy is recorded.
+
+**Explanation:** “Approaching” does not establish when a reminder becomes due or whether it should occur again. This prevents reliable acceptance testing of an established core behavior. It is separate from recurrence identity and from the usefulness threshold for AI generation.
+
+**Recommended action:** Track the unresolved pre-occasion trigger policy explicitly, then define observable acceptance criteria once resolved. Do not infer a schedule from OQ-015.
+
+**Decision required:** **Yes.** Reminder timing and any repetition policy remain undefined.
+
+---
+
+**AUD-005 — Reconciliation entry with no existing OccasionGiftIdeas is unclear**
+
+**Severity:** Medium  
+**Category:** Completeness
+
+**Location:** [giftpipe-docs/domain/domain-model.md:155](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:155), [giftpipe-docs/product/requirements.md:671](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:671), [giftpipe-docs/product/requirements.md:1033](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:1033).
+
+**Evidence:** An Occasion may have zero OccasionGiftIdeas. FR-031 supports recording previously uncaptured gifts during reconciliation. However, the reconciliation workflow’s initial conditions say the Occasion “has relevant OccasionGiftIdeas.”
+
+**Explanation:** The documented entry condition appears to exclude an Occasion for which nothing was planned, even though adding previously uncaptured gifts is established behavior. The empty starting case is neither expressly supported nor excluded.
+
+**Recommended action:** Clarify whether reconciliation may start with zero OccasionGiftIdeas and align its preconditions and acceptance criteria accordingly.
+
+**Decision required:** **Yes.** The existing record does not explicitly settle this boundary.
+
+---
+
+**AUD-006 — Privacy verification does not directly test account isolation**
+
+**Severity:** Medium  
+**Category:** Completeness
+
+**Location:** [giftpipe-docs/product/requirements.md:827](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:827), [giftpipe-docs/product/requirements.md:65](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:65).
+
+**Evidence:** NFR-003 requires planning data to be private to its user. Its verification checks that recipients need not participate and that another account does not implicitly share the same data. FR-001 similarly checks independent maintenance.
+
+**Explanation:** Independent records and optional recipient participation do not verify that another account cannot access or change private records. The privacy requirement itself is clear; its verification omits the central promised boundary.
+
+**Recommended action:** Add explicit verification that one independent account cannot read or change another account’s private planning data through supported interfaces.
+
+**Decision required:** **No.** This operationalizes the established private-account model without selecting an authorization architecture.
+
+---
+
+**AUD-007 — Unresolved material has overlapping ownership**
+
+**Severity:** Medium  
+**Category:** Ownership
+
+**Location:** [giftpipe-docs/product/glossary.md:676](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/glossary.md:676), [giftpipe-docs/domain/domain-model.md:1398](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:1398), [giftpipe-docs/discovery/open-questions.md:5](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/discovery/open-questions.md:5).
+
+**Evidence:** The glossary maintains substantial open-question descriptions and alternatives. The domain model maintains 20 DM-Q entries. The separate register declares itself authoritative for active uncertainty. The glossary and domain question sections lack direct OQ mappings, although the register provides mappings in the opposite direction.
+
+Coverage also differs: [DM-Q015](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:1416) includes permanent deletion, while [OQ-012](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/discovery/open-questions.md:138) concentrates on archival, reactivation, and permitted archived operations.
+
+**Explanation:** Domain-local context is useful and permitted by the guide. The maintenance problem is the absence of an explicit boundary between contextual summaries and independently maintained unresolved material. A reader cannot reliably determine which local questions are represented in the authoritative register.
+
+**Recommended action:** Preserve existing identifiers. Add OQ references to overlapping local entries, identify those entries as contextual summaries, and reconcile material coverage differences without resolving the questions. Keep minor technical uncertainties local where the register’s inclusion criteria permit that.
+
+**Decision required:** **No.** This concerns ownership and visibility of existing uncertainty.
+
+---
+
+**AUD-008 — Material requirement boundaries lack nearby question references**
+
+**Severity:** Medium  
+**Category:** Traceability
+
+**Location:** [giftpipe-docs/product/requirements.md:345](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:345), [giftpipe-docs/product/requirements.md:611](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:611), [giftpipe-docs/product/requirements.md:1112](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/requirements.md:1112).
+
+**Evidence:**
+
+- FR-015 specifies association creation without referencing [OQ-005](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/discovery/open-questions.md:75), which leaves duplicate associations unresolved.
+- FR-028 and its workflow omit [OQ-010](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/discovery/open-questions.md:119), which leaves correction or reopening unresolved.
+- Neither dependency appears in the requirements dependency table.
+
+**Explanation:** These are existing questions with direct effects on the operations being specified. Their absence near Confirmed requirements makes it easier to infer uniqueness or correction behavior accidentally. This does not make forward association creation or outcome recording wholly blocked.
+
+**Recommended action:** Add concise references and boundary notes for duplicate association handling and completed-outcome correction. Extend the existing dependency table rather than introducing another tracking mechanism.
+
+**Decision required:** **No.** The uncertainties are already documented.
+
+---
+
+**AUD-009 — The documentation map retains obsolete provisional guidance**
+
+**Severity:** Low  
+**Category:** Structure
+
+**Location:** [giftpipe-docs/README.md:40](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/README.md:40), [giftpipe-docs/product/vision.md:303](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/product/vision.md:303), [giftpipe-docs/domain/domain-model.md:9](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/domain/domain-model.md:9).
+
+**Evidence:** The guide still describes the other documents as intended paths until created. The vision describes requirements as a future document. Several existing authoritative documents are referenced only as inline paths despite the guide’s relative-link convention.
+
+**Explanation:** Historical generation notes can remain accurate provenance. Current navigation and future-tense guidance, however, no longer reflect repository contents and require contributors to repeat existence checks.
+
+**Recommended action:** Refresh the current inventory and future-tense references, and link existing documents. Preserve historical availability statements as historical notes rather than treating them as false.
+
+**Decision required:** **No.**
+
+---
+
+**AUD-010 — Open-question category priority counts are incorrect**
+
+**Severity:** Low  
+**Category:** Consistency
+
+**Location:** [giftpipe-docs/discovery/open-questions.md:25](/Users/peteraporfi/Developer/giftpipe/giftpipe-docs/discovery/open-questions.md:25).
+
+**Evidence:** The overview reports:
+
+- Domain model: 2 High, 3 Medium, 3 Low.
+- Domain operations and lifecycle: 1 High, 3 Medium, 1 Low.
+
+The actual entries give:
+
+- Domain model: **3 High, 2 Medium, 3 Low**.
+- Domain operations and lifecycle: **0 High, 4 Medium, 1 Low**.
+
+The overall totals remain correct.
+
+**Explanation:** The category summary misrepresents where the highest-priority discovery work sits, although no question’s individual priority is ambiguous.
+
+**Recommended action:** Correct the two category rows from the existing entries.
+
+**Decision required:** **No.**
+
+### Implementation readiness
+
+“Ready” here means the documented behavior supports beginning a bounded implementation slice. It does not imply a complete release specification or permission to implement during the project’s current documentation-only phase.
+
+| Established capability | Readiness | Assessment |
+|---|---|---|
+| Independent accounts and basic Person creation | **Ready** | Ownership and participation expectations are clear. Strengthen privacy verification under AUD-006. |
+| Explicit PersonProfile maintenance | **Partially ready** | User control and separation from inferred history are clear. The complete structured profile shape remains unspecified. |
+| Basic GiftIdea capture | **Partially ready** | Person scope, vague/concrete input, and optional occasion/candidate behavior are clear. Resolve minimum content under AUD-001. |
+| General research, reusable candidates, explicit link semantics | **Ready for bounded operations** | Adding candidates and reference/product links is coherent. Full lifecycle and taxonomy remain open under OQ-002 and OQ-007. |
+| GiftIdea archival | **Partially ready** | Historical preservation and exclusion from proactive consideration are clear. Reactivation and other archived-state operations remain under OQ-012. |
+| One-off occasion association | **Partially ready** | Core association behavior is clear. Recipient compatibility and duplicate handling need boundaries: AUD-002 and OQ-005. |
+| Recurring occasion occurrences | **Blocked** | OQ-004 leaves the occurrence identity needed by history, reminders, and reconciliation unresolved. |
+| Occasion reminders | **Partially ready** | The purpose and priority of manual context are clear. Eligibility and scheduling remain insufficiently defined: AUD-003 and AUD-004. |
+| Manual bounded AI enhancement | **Ready for a narrow slice** | Preserving intent, using relevant context, and retaining useful research are coherent. This does not require settling the complete action catalog. |
+| Proactive AI suggestions | **Blocked** | OQ-014 leaves the automatic generation threshold unresolved; reminder eligibility also matters. |
+| Product-link-only initial capture | **Blocked** | FR-013 explicitly depends on OQ-011. |
+| Occasion-local candidate creation | **Blocked** | FR-019 explicitly depends on OQ-001. |
+| Reconciliation, history, and optional feedback | **Partially ready** | The principal outcome scenarios are strong. Complete lifecycle behavior depends on OQ-003, OQ-010, OQ-013, OQ-015, and the entry boundary in AUD-005. |
+
+The documentation correctly treats aggregate boundaries, research promotion, summary refresh policies, and the full release boundary as unresolved. Their incompleteness does not block every capability.
+
+The structure remains practical for humans and Codex. The larger documents have coherent responsibilities; their length alone does not justify splitting them. Concept summaries, operational rules, and worked scenarios generally serve different purposes rather than constituting harmful duplication.
+
+### Recommended remediation batches
+
+**1. Safe editorial or mechanical corrections**
+
+- **AUD-009:** Refresh the inventory, future-tense references, and relative links.
+- **AUD-010:** Correct category priority counts.
+- **AUD-007:** Add mappings between existing uncertainty entries, preserving identifiers, meaning, and status.
+
+**2. Changes that propagate already established decisions or boundaries**
+
+- **AUD-006:** Translate the private-account decision into direct isolation verification.
+- **AUD-008:** Surface existing duplicate-association and reconciliation-correction uncertainties beside affected requirements.
+- Complete AUD-007’s coverage reconciliation using existing documented uncertainty, without resolving it.
+
+**3. Changes requiring product clarification**
+
+- **AUD-001:** Minimum valid captured content.
+- **AUD-002:** Recipient compatibility for occasion association.
+- **AUD-003:** Reminder eligibility for unassociated durable ideas.
+- **AUD-004:** Pre-occasion reminder trigger policy.
+- **AUD-005:** Reconciliation eligibility when no ideas were previously associated.
+
+These batches are recommendations, not approved documentation changes.
+
+### Recommended next steps
+
+1. Clarify minimum capture content and recipient compatibility first; both affect foundational validation and relationships.
+2. Discuss reminder eligibility, reminder timing, and OQ-014 together. They jointly determine whether the central capture-and-resurface loop behaves as intended.
+3. Before committing to recurring occasion or reconciliation persistence models, resolve the relevant existing identity and outcome questions—especially OQ-004 and OQ-003.
+4. Apply the mechanical and established-decision batches when documentation editing is authorized. They can proceed independently of those product decisions.
