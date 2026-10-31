@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "decisions/README.md",
+                "file": "decisions/ADR-007-keep-personprofile-explicitly-user-controlled.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "ADR-007-keep-personprofile-explicitly-user-controlled"
             }
           }
         ]
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "decisions/README.md",
+                "file": "decisions/ADR-007-keep-personprofile-explicitly-user-controlled.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "decisions/README.md",
+                "file": "decisions/ADR-007-keep-personprofile-explicitly-user-controlled.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -161,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "decisions/README.md",
+                "file": "decisions/ADR-007-keep-personprofile-explicitly-user-controlled.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -190,19 +190,21 @@
   },
   "active": "a161c21ff003e28e",
   "lastOpenFiles": [
-    "product/requirements.md",
-    "decisions/README.md",
-    "decisions/ADR-007-keep-personprofile-explicitly-user-controlled.md",
     "decisions/ADR-006-make-link-semantics-user-directed.md",
+    "discovery/open-questions.md",
+    "audits/documentation-audit.md",
+    "audits",
+    "README.md",
+    "product/vision.md",
+    "decisions/README.md",
+    "product/requirements.md",
+    "decisions/ADR-007-keep-personprofile-explicitly-user-controlled.md",
     "decisions/ADR-005-bound-ai-to-explicit-gifting-actions.md",
     "decisions/ADR-004-reconcile-outcomes-without-forcing-single-candidate.md",
     "decisions/ADR-003-use-occasiongiftidea-as-first-class-occasion-context.md",
     "decisions/ADR-002-candidate-status-is-structural-not-specificity-based.md",
     "decisions/ADR-001-gift-ideas-are-durable-and-occasion-independent.md",
     "decisions",
-    "README.md",
-    "product/vision.md",
-    "discovery/open-questions.md",
     "discovery",
     "domain/domain-model.md",
     "domain",
