@@ -295,3 +295,20 @@ The user approved the capture, recipient-consistency, and notification/overview 
 **Outside this batch:** AUD-005 through AUD-009 remain for later discussion or authorized maintenance. Existing reconciliation entry conditions, accepted ADRs, identifiers, and unresolved domain decisions have not been changed by this batch.
 
 **Verification:** Checked 17 Markdown files, all 168 local links and heading targets, 86 requirement/rule/question identifiers, and every open-question category count. Confirmed that this audit's original committed content remains an unchanged prefix with the follow-up appended. All checks passed, as did `git diff --check` for the documentation edits. No application tests were run for this documentation-only batch.
+
+### Follow-up — second approved remediation batch
+
+**Source conversation:** Codex session `01a190be-86f0-72b2-9a8a-58b09c8cdac3`, continuing the discussion begun 2026-10-31. The first remediation batch was committed as `c9cabea` before this batch.
+
+**Approved scope:** The user approved reconciliation with zero existing OccasionGiftIdeas, an explicit no-gift outcome distinct from no response, and neutral post-occasion invitations that do not imply an obligation to use GiftPipe. These changes were propagated to the [domain model](../domain/domain-model.md#87-reconcile-occasion), [requirements](../product/requirements.md#fr-028--reconcile-an-occasion-after-it-occurs), [glossary](../product/glossary.md#reconciliation), and [existing open-question context](../discovery/open-questions.md). The original audit and first follow-up remain unchanged above.
+
+| Finding | Progress in this batch | Remaining uncertainty |
+|---|---|---|
+| AUD-005 | Resolved: reconciliation may begin with zero associated ideas. The user can record the first previously uncaptured gift through the existing creation and association behavior, or explicitly report that no gift was given (`DM-R022`, `FR-028`, `FR-031`). | Exact outcome representation (`OQ-003`), correction/reopening (`OQ-010`), partial completion (`OQ-013`), and follow-up timing/stopping (`OQ-015`) remain open. |
+| AUD-008 | Reconciliation boundary made explicit: `FR-028`, its workflow, and the requirements dependency table now reference correction/reopening under `OQ-010`. | The separate duplicate-association boundary near `FR-015` and its dependency on `OQ-005` remain outside this batch. AUD-008 is only partially addressed. |
+
+**Follow-up wording:** `FR-034` establishes an invitation such as "Would you like to record what you gave for Dad's Birthday?" without calling out missing app activity. This is an illustrative tone principle, not fixed final copy or a notification schedule. A lack of response does not establish that no gift was given.
+
+**Preserved uncertainty:** No new lifecycle states, persistence representation, automatic resolution of remaining planning items, correction behavior, partial-completion rules, or notification timing/stopping rules were selected. Accepted ADRs and existing identifiers remain unchanged. AUD-006, AUD-007, AUD-009, and the remaining part of AUD-008 still await a later batch.
+
+**Verification:** Checked 17 Markdown files, all 177 local links and heading targets, 107 requirement/rule/question identifiers (including the 20 `DM-Q` entries), and every open-question category count. Confirmed that existing identifiers and all previously committed audit content were preserved. All checks passed, as did `git diff --check`. No application tests were run for this documentation-only batch. Changes are left uncommitted for review.

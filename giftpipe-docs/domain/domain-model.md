@@ -161,6 +161,7 @@ Occasions may be recurring or one-off. Exact recurrence semantics are deferred.
 
 - Multiple gifts may be given for one Occasion.
 - Multiple OccasionGiftIdeas may be considered for one Occasion.
+- Reconciliation may start with zero OccasionGiftIdeas and may record an explicit report that no gift was given; see `DM-R022`.
 
 **Status:** Confirmed.
 
@@ -875,15 +876,16 @@ Resolve what the user actually gave after an Occasion and update historical gift
 **Inputs:**
 
 - Occasion
-- its open OccasionGiftIdeas
-- their OccasionGiftCandidates
+- its open OccasionGiftIdeas, if any
+- their OccasionGiftCandidates, if any
 - optional previously uncaptured gifts
+- an optional explicit report that no gift was given
 - optional success feedback
 
 **Preconditions:**
 
 - Occasion has occurred or the user is otherwise ready to reconcile it.
-- Relevant OccasionGiftIdeas are available.
+- No existing OccasionGiftIdea is required; an Occasion with zero associated ideas is eligible.
 
 **Behavior:**
 
@@ -893,12 +895,15 @@ Resolve what the user actually gave after an Occasion and update historical gift
 - Allows an OccasionGiftIdea to be marked used/given without a concrete candidate.
 - Allows a specific OccasionGiftCandidate to be recorded as given.
 - Allows the user to add previously uncaptured gifts.
+- Allows the first gift to be entered when the Occasion has no existing OccasionGiftIdeas, using the established previously uncaptured gift operation.
+- Allows the user to explicitly record that no gift was given for the Occasion. Declining to answer or leaving the follow-up unanswered does not establish that outcome; see `DM-R022`.
 - Resolves remaining relevant OccasionGiftIdeas according to user input.
 - May collect optional Gift Success Feedback.
 
 **Postconditions:**
 
 - Gift history reflects what was actually given to the extent the user supplied detail.
+- An explicit report of no gift given is a known outcome, distinct from an unanswered follow-up. Its exact lifecycle representation remains unresolved under `OQ-003`.
 - OccasionGiftIdea historical associations remain intact.
 - GiftIdea remains available for future occasions unless archived.
 
@@ -906,9 +911,9 @@ Resolve what the user actually gave after an Occasion and update historical gift
 Not established.
 
 **Reversibility:**  
-Reopening or correcting reconciliation has not yet been discussed.
+Reopening or correcting reconciliation remains open under [OQ-010](../discovery/open-questions.md#oq-010--can-a-completed-reconciliation-be-reopened-or-corrected).
 
-**Status:** Confirmed core process; detailed lifecycle semantics unresolved.
+**Status:** Confirmed core process; outcome representation, partial completion, and follow-up timing remain unresolved under `OQ-003`, `OQ-013`, and `OQ-015` respectively.
 
 ---
 
@@ -1278,6 +1283,22 @@ Opening an Occasion Overview, including through an Occasion Reminder, does not c
 
 **Rationale:**
 Resurfacing saved context is distinct from an explicit planning or reconciliation action. The user-facing overview behavior is specified in [FR-021](../product/requirements.md#fr-021--remind-users-about-approaching-occasions).
+
+---
+
+### DM-R022 — Reconciliation supports unplanned occasions and explicit no-gift outcomes
+
+**Rule:**
+Reconciliation may begin for an eligible Occasion even when it has no OccasionGiftIdeas. A previously uncaptured gift can be recorded through the existing gift-entry operation. The user may also explicitly record that no gift was given for the Occasion. Declining to answer or not responding does not establish a no-gift outcome; any unreported outcome remains unknown.
+
+**Affected concepts:** Occasion, Reconciliation, OccasionGiftIdea, Gift History
+
+**Relevant operation/lifecycle:** Reconciliation entry and outcome recording
+
+**Status:** Confirmed behavior; exact lifecycle representation unresolved
+
+**Rationale:**
+Preserving actual gifting history must not require prior planning in GiftPipe. An explicit report of no gift given carries information that silence does not. This rule does not settle the outcome/state model (`OQ-003`), correction (`OQ-010`), partial completion (`OQ-013`), or notification timing and stopping rules (`OQ-015`).
 
 ---
 

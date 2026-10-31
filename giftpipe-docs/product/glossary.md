@@ -381,17 +381,19 @@ An OccasionGiftIdea can validly resolve as given even when no GiftCandidate or O
 ### Reconciliation
 
 **Definition:**  
-The post-occasion process through which GiftPipe asks the user what was actually given and resolves the open OccasionGiftIdeas and relevant candidate outcomes.
+The post-occasion process through which GiftPipe invites the user to record what actually happened, including gifts given or an explicit report that no gift was given, and resolves relevant planning outcomes where they exist.
 
 Reconciliation is intended to reduce manual bookkeeping and preserve accurate gifting history.
 
 **Relationships:**  
-Operates across the Occasion's OccasionGiftIdeas and their OccasionGiftCandidates and contributes to Gift History.
+Operates at Occasion level, across its OccasionGiftIdeas and OccasionGiftCandidates where they exist, and contributes to Gift History. It may begin when the Occasion has no associated ideas.
 
 **Important distinctions:**  
 Reconciliation is deterministic from known GiftPipe structure rather than dependent on unrestricted AI interpretation.
 
 It must support multiple gifts per Occasion.
+
+An explicit report that no gift was given is a known outcome. Declining to answer or leaving a follow-up unanswered does not establish a no-gift outcome; any unreported outcome remains unknown. Exact lifecycle representation remains open; see [the reconciliation rules](../domain/domain-model.md#dm-r022--reconciliation-supports-unplanned-occasions-and-explicit-no-gift-outcomes).
 
 **Status:** Confirmed
 
@@ -405,7 +407,7 @@ A focused reconciliation interaction covering the Occasion as a whole rather tha
 GiftPipe can present the relevant GiftIdeas first, with nominated candidates beneath them when candidates exist.
 
 **Relationships:**  
-Uses all relevant open [OccasionGiftIdeas](#occasiongiftidea) for an Occasion.
+Uses all relevant open [OccasionGiftIdeas](#occasiongiftidea) for an Occasion where they exist. Zero associated ideas is a valid starting point; the user can add the first previously uncaptured gift or explicitly report that no gift was given.
 
 **Status:** Confirmed
 
@@ -674,6 +676,9 @@ A proactive prompt after an Occasion that invites the user to perform Reconcilia
 **Relationships:**  
 Feeds Gift History and resolves OccasionGiftIdeas.
 
+**Important distinctions:**
+The invitation must not imply an obligation to use GiftPipe or call out missing app activity. It can invite reconciliation whether or not the user planned in the app. For example, "Would you like to record what you gave for Dad's Birthday?" illustrates the intended tone; it is not fixed final copy. See [FR-034](requirements.md#fr-034--follow-up-on-unresolved-post-occasion-outcomes) for notification behavior and its unresolved scheduling boundary.
+
 **Status:** Confirmed
 
 ---
@@ -797,9 +802,11 @@ The exact representation of an AI Action—including prompts, schemas, handlers,
 The core reconciliation behavior is established:
 
 - operate at Occasion level,
+- allow entry with zero associated ideas,
 - support multiple gifts,
 - show GiftIdeas and their nominated candidates,
 - allow previously uncaptured gifts to be added,
-- permit a GiftIdea to resolve as given without a concrete Candidate.
+- permit a GiftIdea to resolve as given without a concrete Candidate,
+- accept an explicit report that no gift was given, distinct from an unanswered follow-up.
 
-Detailed status transitions and handling of partially reconciled occasions remain to be designed.
+Detailed state representation, correction/reopening, partial reconciliation, and follow-up timing remain open under `OQ-003`, `OQ-010`, `OQ-013`, and `OQ-015` in [the open-questions register](../discovery/open-questions.md).

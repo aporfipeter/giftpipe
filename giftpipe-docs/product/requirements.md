@@ -495,7 +495,7 @@ Resurfacing saved context at the right time is central to the product value prop
 - Existing user-captured ideas are prioritized ahead of speculative AI alternatives.
 - The overview links to detailed research; the research workflow's UI and the exact hierarchy of overview content remain deferred.
 - Opening the overview through a notification does not change gift-planning data: it does not create OccasionGiftIdeas, nominate candidates, record outcomes, or mark preparation or reconciliation complete.
-- The overview supports occasion context before and after the Occasion, including access to reconciliation and history. This does not change the existing unresolved reconciliation entry conditions.
+- The overview supports occasion context before and after the Occasion, including access to reconciliation and history. Reconciliation entry and explicit no-gift outcomes follow `FR-028`.
 
 **References:** [Product Vision](vision.md), Human ideas outrank speculative AI suggestions; [Occasion Overview](glossary.md#occasion-overview); `DM-R021`.
 
@@ -642,11 +642,17 @@ Gift history should not depend on the user manually maintaining every planning s
 **Acceptance criteria:**
 
 - Reconciliation can operate across the Occasion's relevant OccasionGiftIdeas.
+- Reconciliation can begin even when the Occasion has zero OccasionGiftIdeas and no prior gift-planning activity in GiftPipe.
+- The user can explicitly record that no gift was given for the Occasion.
+- When no outcome has been reported, declining to answer or leaving a follow-up unanswered leaves it unknown; it does not imply that no gift was given.
 - The user can record that an OccasionGiftIdea was used.
 - The user can record that an OccasionGiftIdea was not used.
 - Reconciliation preserves historical OccasionGiftIdea associations.
 
-**References:** `DM-R006`, `DM-R011`.
+**References:** `DM-R006`, `DM-R011`, `DM-R022`.
+
+**Limitations:**
+The exact representation of outcomes, including an explicit no-gift report, remains under `OQ-003`. Correction/reopening remains under `OQ-010`, partial completion under `OQ-013`, and notification timing and stopping rules under `OQ-015`. These confirmed behaviors do not resolve those lifecycle choices.
 
 ---
 
@@ -702,6 +708,7 @@ Actual gifting behavior may diverge from prior planning.
 **Acceptance criteria:**
 
 - The user can add another gift during reconciliation even after recording one or more existing gifts.
+- The user can record the first gift when the Occasion has no existing OccasionGiftIdeas, using the same gift-creation and association behavior below.
 - The newly entered gift becomes a new GiftIdea for the Person.
 - The new GiftIdea is associated with the Occasion through an OccasionGiftIdea.
 - The new OccasionGiftIdea is recorded as used/given.
@@ -758,10 +765,15 @@ GiftPipe must be able to follow up after an Occasion when reconciliation remains
 **Acceptance criteria:**
 
 - GiftPipe can prompt the user to reconcile an Occasion after it occurs.
+- A follow-up may invite the user to record what happened even when no ideas were associated with the Occasion.
+- Follow-up wording is neutral and optional in tone. It does not imply an obligation to use GiftPipe or describe missing ideas or planning activity as an omission by the user.
 - The system must avoid indefinite or excessive prompting.
 - Exact timing, retry frequency, and stopping conditions cannot be finalized until `OQ-015` is resolved.
 
 **References:** `OQ-015`.
+
+**Illustrative wording:**
+"Would you like to record what you gave for Dad's Birthday?" illustrates the intended invitation. "You haven't added any gift ideas for Dad's Birthday" frames missing app activity as the reason for prompting and should not be used. These examples establish a wording principle, not fixed final copy or a notification schedule.
 
 ---
 
@@ -777,9 +789,10 @@ GiftPipe must preserve historical gifting outcomes across occasions so they can 
 - Given gifts remain represented after reconciliation.
 - Unused OccasionGiftIdeas remain historically represented.
 - Gift History can distinguish what was considered from what was actually given where that information was captured.
+- An explicit report that no gift was given remains distinguishable from an unknown outcome due to no response; its exact representation remains under `OQ-003`.
 - Future AI assistance can use relevant Gift History.
 
-**References:** `DM-R006`, `DM-R013`, `DM-R019`.
+**References:** `DM-R006`, `DM-R013`, `DM-R019`, `DM-R022`.
 
 ---
 
@@ -1052,16 +1065,16 @@ Occasion-only candidate identity depends on `OQ-001`; exact candidate state sema
 Record what actually happened after the Occasion.
 
 **Initial conditions:**  
-The Occasion has relevant OccasionGiftIdeas and has occurred or is ready to be reconciled.
+The Occasion has occurred or is ready to be reconciled. Existing OccasionGiftIdeas are optional; reconciliation may begin with zero associated ideas.
 
 **Relevant requirements:**  
 `FR-028` through `FR-036`.
 
 **Expected outcome:**  
-GiftPipe records which ideas or candidates were actually given, allows previously uncaptured gifts to be added, preserves unused ideas historically, and optionally records success feedback.
+GiftPipe records which ideas or candidates were actually given, allows previously uncaptured gifts to be added even when nothing was previously planned, preserves unused ideas historically, and optionally records success feedback. The user may instead explicitly report that no gift was given. An unanswered follow-up does not establish a no-gift outcome; any unreported outcome remains unknown. Follow-up wording follows the neutral invitation principle in `FR-034`.
 
 **Unresolved questions:**  
-Outcome-state semantics depend on `OQ-003`; partial reconciliation depends on `OQ-013`; follow-up policy depends on `OQ-015`.
+Outcome-state semantics, including explicit no-gift representation, depend on `OQ-003`; correction/reopening depends on `OQ-010`; partial reconciliation depends on `OQ-013`; follow-up timing and stopping policy depend on `OQ-015`.
 
 ---
 
@@ -1138,6 +1151,8 @@ This loop describes product direction but should not be treated as a complete re
 | `FR-014` | `OQ-004` | Recurring Occasion versus occurrence identity | Detailed occurrence behavior and history cannot be finalized |
 | `FR-019` | `OQ-001` | Whether an occasion-only candidate must reference a reusable GiftCandidate | Candidate creation semantics remain blocked |
 | `FR-020`, `FR-030` | `OQ-003` | Exact OccasionGiftCandidate selection/outcome state model | State transitions and some acceptance criteria remain incomplete |
+| `FR-028`, `FR-035` | `OQ-003` | Exact representation of reconciliation outcomes, including explicit no-gift reports | Confirmed observable outcomes do not establish the full state model |
+| `FR-028` | `OQ-010` | Whether completed reconciliation can be corrected or reopened | Forward outcome recording is established; correction behavior remains open |
 | `FR-022`, `FR-023` | `OQ-014` | Definition of a sufficiently useful manual idea | Automatic AI trigger behavior cannot be finalized |
 | `FR-034` | `OQ-015` | Reconciliation follow-up frequency and stopping rules | Notification behavior remains incomplete |
 | `FR-036` | `OQ-013` | Partial reconciliation semantics | Incomplete Occasion resolution behavior remains blocked |

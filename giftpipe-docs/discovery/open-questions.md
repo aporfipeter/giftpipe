@@ -59,10 +59,10 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** High
 - **Status:** Open
-- **Context:** The domain already supports several established facts: an OccasionGiftIdea can be used without a concrete candidate; multiple OccasionGiftCandidates can be intended or given; multiple gifts may be given for one Occasion; and reconciliation records actual outcomes. The exact state vocabulary and division of responsibility between OccasionGiftIdea and OccasionGiftCandidate are still unsettled.
+- **Context:** The domain already supports several established facts: an OccasionGiftIdea can be used without a concrete candidate; multiple OccasionGiftCandidates can be intended or given; multiple gifts may be given for one Occasion; and reconciliation records actual outcomes. Reconciliation may also begin with zero associated ideas, and the user can explicitly report that no gift was given for the Occasion. An unanswered follow-up does not establish a no-gift outcome. The exact state vocabulary and division of responsibility between OccasionGiftIdea and OccasionGiftCandidate, including how an occasion-level no-gift report is represented, are still unsettled.
 - **Options considered:** Meanings equivalent to open/unresolved, used/given, not used/not given, candidate selected/intended, candidate given, and candidate rejected-for-this-occasion have appeared in discussion, but no final lifecycle has been approved.
 - **Impact:** Reconciliation, history, reminders, selection semantics, acceptance criteria, and future persistence design.
-- **References:** [Domain Model](../domain/domain-model.md) — `DM-Q003`, `DM-Q004`, `DM-Q018`; `DM-R008`, `DM-R010`, `DM-R011`.
+- **References:** [Domain Model](../domain/domain-model.md) — `DM-Q003`, `DM-Q004`, `DM-Q018`; `DM-R008`, `DM-R010`, `DM-R011`, `DM-R022`.
 
 #### OQ-004 — How should recurring Occasion definitions relate to specific occurrences?
 
@@ -147,7 +147,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** Occasion-level reconciliation may involve several OccasionGiftIdeas and multiple gifts. The user may resolve some items, add an uncaptured gift, and leave other outcomes uncertain. The conversation established that reconciliation can be deferred, but not the semantics of partial completion.
+- **Context:** Occasion-level reconciliation may involve several OccasionGiftIdeas and multiple gifts. The user may resolve some items, add an uncaptured gift, and leave other outcomes uncertain. Reconciliation may begin with zero associated ideas, and an explicit report that no gift was given is valid. These accepted behaviors do not settle partial-completion semantics, the treatment of remaining planning items, or their state transitions. Reconciliation can be deferred, but deferral or silence is not itself a no-gift report.
 - **Impact:** Occasion lifecycle, reminder/follow-up behavior, open versus resolved states, and acceptance criteria.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q004`, `DM-Q018`; Reconciliation section; `DM-R008`, `DM-R011`.
 
@@ -176,9 +176,9 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** GiftPipe should proactively ask the user after an Occasion what happened so outcomes do not depend on manual maintenance. Discovery also established a desire not to harass users with repeated messages. Exact timing, retry behavior, and stopping conditions are not yet defined.
+- **Context:** GiftPipe should proactively invite the user after an Occasion to record what happened so outcomes do not depend on manual maintenance. The invitation is neutral, does not imply an obligation to use GiftPipe, and does not call out missing ideas or planning activity. It can apply when no ideas were associated with the Occasion. An explicit no-gift outcome is valid, while an unanswered follow-up does not establish that outcome. Follow-up must avoid excessive prompting. Exact timing, retry behavior, and stopping conditions, including how recorded outcomes affect them, remain undefined.
 - **Impact:** Reconciliation completion rate, notification requirements, user experience, and lifecycle of unresolved occasions.
-- **References:** Product discovery; [Domain Model](../domain/domain-model.md) — Reconciliation and Occasion lifecycle.
+- **References:** [Requirements](../product/requirements.md#fr-034--follow-up-on-unresolved-post-occasion-outcomes) — `FR-034`; [Domain Model](../domain/domain-model.md#87-reconcile-occasion) — Reconciliation; `DM-R022`.
 
 #### OQ-019 — What controls pre-occasion notification timing and settings interaction?
 
