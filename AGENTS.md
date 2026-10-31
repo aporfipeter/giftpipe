@@ -21,6 +21,7 @@ Project documentation is the authoritative record of established product and dom
 
 - During Explore mode, Sol may accumulate documentation-relevant conclusions throughout a discussion without immediately proposing edits.
 - Track established decisions, tentative conclusions, and unresolved questions separately.
+- When the amount of accumulated documentation-relevant conclusions reaches a logical checkpoint (eg. an area is sufficiently discussed and its points are addressed) or a size that would sit outside the amount of text a human user can digest in one sitting, suggest to perform a documentation update batch.
 - Do not treat an idea as approved merely because it was discussed or received positive feedback.
 - Maintain the pending change batch within the conversation; do not create files or modify documentation automatically.
 - Avoid interrupting exploration with repeated approval requests.
