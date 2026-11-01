@@ -6,7 +6,7 @@ This document captures the conceptual and behavioral domain model established so
 
 It focuses on domain concepts, relationships, rules, lifecycle behavior, and business processes that have emerged from product discovery. It deliberately avoids prescribing database schemas, ORM mappings, API shapes, UI components, framework choices, or persistence strategies.
 
-The canonical vocabulary for GiftPipe belongs in `../product/glossary.md`. This document uses those terms to explain how the concepts behave together. Future `../product/requirements.md` documentation should describe externally observable behavior and acceptance criteria that arise from this model.
+The canonical vocabulary for GiftPipe belongs in [../product/glossary.md](../product/glossary.md). This document uses those terms to explain how the concepts behave together. The [../product/requirements.md](../product/requirements.md) documentation describes externally observable behavior and acceptance criteria that arise from this model.
 
 Where discovery has not yet produced a firm conclusion, the model explicitly marks concepts and relationships as **Tentative** or **Unresolved** rather than silently completing the design.
 
@@ -1454,40 +1454,42 @@ How product links are later reconciled into GiftCandidates remains open.
 
 ## 11. Unresolved modeling questions
 
-| ID | Question | Affected concepts | Why it matters | Current understanding |
-|---|---|---|---|---|
-| DM-Q001 | Is OccasionGiftCandidate always backed by a reusable GiftCandidate, or may it exist only within an OccasionGiftIdea? | GiftCandidate, OccasionGiftCandidate | Determines identity, reuse, promotion, and ownership semantics | Both models have been discussed; not yet resolved |
-| DM-Q002 | What is the exact lifecycle vocabulary for GiftCandidate? | GiftCandidate | Needed for consistent shortlist/reject behavior | "Active" was considered too broad; added/shortlisted/rejected concepts exist |
-| DM-Q003 | What is the exact lifecycle vocabulary for OccasionGiftCandidate? | OccasionGiftCandidate | Needed to distinguish nominated, intended, given, and unused candidates | Multiple candidates may be intended or given; exact states unresolved |
-| DM-Q004 | What is the exact OccasionGiftIdea outcome model? | OccasionGiftIdea | Required for reconciliation and history | Used/given, not used/not given, and unresolved are established meanings; names and additional states remain open |
-| DM-Q005 | Can reconciliation be reopened or corrected after completion? | Occasion, OccasionGiftIdea, OccasionGiftCandidate | Affects lifecycle reversibility and history correction | Not discussed |
-| DM-Q006 | Is Candidate nomination reversible, and what happens to historical nomination if removed before the Occasion? | GiftCandidate, OccasionGiftCandidate | Affects occasion planning semantics | Not discussed |
-| DM-Q007 | Does GiftCandidate have independent identity strong enough to be treated as an Entity? | GiftCandidate | Affects aggregate boundaries and reuse semantics | Semantically reusable, but DDD classification not explicitly settled |
-| DM-Q008 | Does OccasionGiftCandidate have independent identity or only association semantics? | OccasionGiftCandidate | Affects whether occasion-only candidates can exist cleanly | Unresolved |
-| DM-Q009 | Is ResearchThread a real domain concept or only a useful conceptual grouping? | Research Thread, Research Node | Affects research ownership and possible promotion operations | Tentative only |
-| DM-Q010 | What is the complete Research Node taxonomy? | Research Node, LinkNode, ProductLinkNode, GiftCandidate | Needed to stabilize hierarchical research semantics | LinkNode and ProductLinkNode accepted; broader taxonomy deferred |
-| DM-Q011 | How does occasion-specific research become reusable general GiftIdea research? | GiftIdea research, OccasionGiftIdea research | Important for knowledge reuse without losing history | Promotion/copy/reference semantics explicitly deferred |
-| DM-Q012 | When a new GiftIdea is created from a pasted ProductLinkNode, should a GiftCandidate also be created automatically? | GiftIdea, ProductLinkNode, GiftCandidate | Affects initial capture semantics | Not conclusively settled |
-| DM-Q013 | How are recurring Occasion definitions related to specific yearly occurrences? | Occasion | Affects identity, reminder timing, and reconciliation history | Recurring occasions are supported conceptually; occurrence model not yet defined |
-| DM-Q014 | Are multiple OccasionGiftIdeas for the same GiftIdea and same Occasion allowed? | OccasionGiftIdea | Affects identity and deduplication | Not discussed |
-| DM-Q015 | What are the exact archive and permanent deletion semantics for GiftIdea? | GiftIdea | Affects lifecycle and privacy behavior | Archive is preferred for normal use; permanent deletion must remain possible for data management |
-| DM-Q016 | What is the precise identity and ownership of PersonProfile? | Person, PersonProfile | Affects aggregate modeling | One profile per Person is implied but not explicitly established as an entity/value object |
-| DM-Q017 | How should "current research state" be represented and refreshed? | Raw Research History, Current Research State, Research Summary | Affects AI context and derived knowledge | Conceptual distinction confirmed; refresh mechanism deferred |
-| DM-Q018 | What domain concept records multiple concrete gifts when one OccasionGiftIdea resolves through several OccasionGiftCandidates? | OccasionGiftIdea, OccasionGiftCandidate, Gift History | Needed for exact reconciliation outcome semantics | Multiple gifts are confirmed; exact outcome representation remains open |
-| DM-Q019 | Which research relationships are valid between arbitrary node types? | Research Node, Research Tree | Affects tree integrity and bounded AI actions | Flexible hierarchy is desired, but valid combinations should emerge through iteration |
-| DM-Q020 | What operations are allowed on archived GiftIdeas? | GiftIdea | Affects reversibility and future reuse | Archived ideas remain historically visible; reactivation rules not discussed |
+These entries are contextual summaries, not an independent question register. The linked entries in the [Open Questions Register](../discovery/open-questions.md) own the active uncertainty, alternatives, and status. Existing `DM-Q` identifiers remain stable for traceability.
+
+| ID | Question | Affected concepts | Why it matters | Current understanding | Authoritative question |
+|---|---|---|---|---|---|
+| DM-Q001 | Is OccasionGiftCandidate always backed by a reusable GiftCandidate, or may it exist only within an OccasionGiftIdea? | GiftCandidate, OccasionGiftCandidate | Determines identity, reuse, promotion, and ownership semantics | Both models have been discussed; not yet resolved | [OQ-001](../discovery/open-questions.md#oq-001--can-an-occasiongiftcandidate-exist-without-an-underlying-reusable-giftcandidate) |
+| DM-Q002 | What is the exact lifecycle vocabulary for GiftCandidate? | GiftCandidate | Needed for consistent shortlist/reject behavior | "Active" was considered too broad; added/shortlisted/rejected concepts exist | [OQ-002](../discovery/open-questions.md#oq-002--what-lifecycle-states-belong-to-a-reusable-giftcandidate) |
+| DM-Q003 | What is the exact lifecycle vocabulary for OccasionGiftCandidate? | OccasionGiftCandidate | Needed to distinguish nominated, intended, given, and unused candidates | Multiple candidates may be intended or given; exact states unresolved | [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate) |
+| DM-Q004 | What is the exact OccasionGiftIdea outcome model? | OccasionGiftIdea | Required for reconciliation and history | Used/given, not used/not given, and unresolved are established meanings; names and additional states remain open | [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate), [OQ-013](../discovery/open-questions.md#oq-013--how-should-partially-completed-reconciliation-behave) |
+| DM-Q005 | Can reconciliation be reopened or corrected after completion? | Occasion, OccasionGiftIdea, OccasionGiftCandidate | Affects lifecycle reversibility and history correction | Not discussed | [OQ-010](../discovery/open-questions.md#oq-010--can-a-completed-reconciliation-be-reopened-or-corrected) |
+| DM-Q006 | Is Candidate nomination reversible, and what happens to historical nomination if removed before the Occasion? | GiftCandidate, OccasionGiftCandidate | Affects occasion planning semantics | Not discussed | [OQ-009](../discovery/open-questions.md#oq-009--is-candidate-nomination-reversible-and-what-history-should-remain-if-a-nomination-is-withdrawn) |
+| DM-Q007 | Does GiftCandidate have independent identity strong enough to be treated as an Entity? | GiftCandidate | Affects aggregate boundaries and reuse semantics | Semantically reusable, but DDD classification not explicitly settled | [OQ-001](../discovery/open-questions.md#oq-001--can-an-occasiongiftcandidate-exist-without-an-underlying-reusable-giftcandidate) |
+| DM-Q008 | Does OccasionGiftCandidate have independent identity or only association semantics? | OccasionGiftCandidate | Affects whether occasion-only candidates can exist cleanly | Unresolved | [OQ-001](../discovery/open-questions.md#oq-001--can-an-occasiongiftcandidate-exist-without-an-underlying-reusable-giftcandidate) |
+| DM-Q009 | Is ResearchThread a real domain concept or only a useful conceptual grouping? | Research Thread, Research Node | Affects research ownership and possible promotion operations | Tentative only | [OQ-006](../discovery/open-questions.md#oq-006--is-researchthread-a-real-domain-concept-or-only-a-useful-conceptual-grouping) |
+| DM-Q010 | What is the complete Research Node taxonomy? | Research Node, LinkNode, ProductLinkNode, GiftCandidate | Needed to stabilize hierarchical research semantics | LinkNode and ProductLinkNode accepted; broader taxonomy deferred | [OQ-007](../discovery/open-questions.md#oq-007--what-is-the-minimum-stable-taxonomy-of-research-node-types) |
+| DM-Q011 | How does occasion-specific research become reusable general GiftIdea research? | GiftIdea research, OccasionGiftIdea research | Important for knowledge reuse without losing history | Promotion/copy/reference semantics explicitly deferred | [OQ-008](../discovery/open-questions.md#oq-008--how-should-occasion-specific-research-become-reusable-general-giftidea-research) |
+| DM-Q012 | When a new GiftIdea is created from a pasted ProductLinkNode, should a GiftCandidate also be created automatically? | GiftIdea, ProductLinkNode, GiftCandidate | Affects initial capture semantics | Not conclusively settled | [OQ-011](../discovery/open-questions.md#oq-011--when-a-new-giftidea-is-captured-from-only-a-productlinknode-should-giftpipe-also-create-a-giftcandidate) |
+| DM-Q013 | How are recurring Occasion definitions related to specific yearly occurrences? | Occasion | Affects identity, reminder timing, and reconciliation history | Recurring occasions are supported conceptually; occurrence model not yet defined | [OQ-004](../discovery/open-questions.md#oq-004--how-should-recurring-occasion-definitions-relate-to-specific-occurrences) |
+| DM-Q014 | Are multiple OccasionGiftIdeas for the same GiftIdea and same Occasion allowed? | OccasionGiftIdea | Affects identity and deduplication | Not discussed | [OQ-005](../discovery/open-questions.md#oq-005--may-the-same-giftidea-have-more-than-one-occasiongiftidea-for-the-same-occasion-occurrence) |
+| DM-Q015 | What are the exact archive and permanent deletion semantics for GiftIdea? | GiftIdea | Affects lifecycle and privacy behavior | Archive is preferred for normal use; permanent deletion must remain possible for data management | [OQ-012](../discovery/open-questions.md#oq-012--what-are-the-archive-and-reactivation-semantics-for-giftidea) |
+| DM-Q016 | What is the precise identity and ownership of PersonProfile? | Person, PersonProfile | Affects aggregate modeling | One profile per Person is implied but not explicitly established as an entity/value object | [OQ-016](../discovery/open-questions.md#oq-016--what-are-the-actual-ddd-aggregate-and-consistency-boundaries) |
+| DM-Q017 | How should "current research state" be represented and refreshed? | Raw Research History, Current Research State, Research Summary | Affects AI context and derived knowledge | Conceptual distinction confirmed; refresh mechanism deferred | [OQ-017](../discovery/open-questions.md#oq-017--how-should-current-research-state-and-research-summary-be-derived-and-refreshed) |
+| DM-Q018 | What domain concept records multiple concrete gifts when one OccasionGiftIdea resolves through several OccasionGiftCandidates? | OccasionGiftIdea, OccasionGiftCandidate, Gift History | Needed for exact reconciliation outcome semantics | Multiple gifts are confirmed; exact outcome representation remains open | [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate), [OQ-013](../discovery/open-questions.md#oq-013--how-should-partially-completed-reconciliation-behave) |
+| DM-Q019 | Which research relationships are valid between arbitrary node types? | Research Node, Research Tree | Affects tree integrity and bounded AI actions | Flexible hierarchy is desired, but valid combinations should emerge through iteration | [OQ-007](../discovery/open-questions.md#oq-007--what-is-the-minimum-stable-taxonomy-of-research-node-types) |
+| DM-Q020 | What operations are allowed on archived GiftIdeas? | GiftIdea | Affects reversibility and future reuse | Archived ideas remain historically visible; reactivation rules not discussed | [OQ-012](../discovery/open-questions.md#oq-012--what-are-the-archive-and-reactivation-semantics-for-giftidea) |
 
 ---
 
 ## 12. Relationship to other project documentation
 
-### `../product/glossary.md`
+### [../product/glossary.md](../product/glossary.md)
 
 The glossary owns canonical terminology and concise definitions.
 
 This domain model should use glossary terms consistently and should not create competing definitions. When domain discovery changes the meaning of a term, both documents should be reviewed together.
 
-### `../product/requirements.md`
+### [../product/requirements.md](../product/requirements.md)
 
 Requirements should describe externally observable product behavior and acceptance criteria derived from the domain model.
 
@@ -1515,8 +1517,8 @@ An entity in this document does not imply a separate table, service, or class.
 
 A change to the domain model may require coordinated updates to:
 
-- `../product/glossary.md`,
-- future `../product/requirements.md`,
+- [../product/glossary.md](../product/glossary.md),
+- [../product/requirements.md](../product/requirements.md),
 - relevant decision records,
 - and implementation specifications.
 

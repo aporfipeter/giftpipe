@@ -4,7 +4,7 @@
 
 This directory contains GiftPipe's durable project documentation.
 
-GiftPipe is currently moving from conversation-driven discovery into Git-versioned Markdown documentation. The goal is to preserve established product and domain knowledge without prematurely freezing unresolved design work.
+GiftPipe preserves conversation-driven discovery in Git-versioned Markdown documentation. The goal is to preserve established product and domain knowledge without prematurely freezing unresolved design work.
 
 The documentation should help both human contributors and AI coding agents understand:
 
@@ -20,7 +20,7 @@ This structure is intentionally lightweight and may evolve as the project mature
 
 ## Documentation structure
 
-The intended initial structure is:
+The current documentation structure is:
 
 ```text
 giftpipe-docs/
@@ -32,16 +32,17 @@ giftpipe-docs/
 ├── domain/
 │   └── domain-model.md
 ├── decisions/
-│   └── README.md
-└── discovery/
-    └── open-questions.md
+│   ├── README.md
+│   └── ADR-*.md
+├── discovery/
+│   └── open-questions.md
+└── audits/
+    └── documentation-audit.md
 ```
 
-Not every planned file should be assumed to exist yet.
+The documents below exist in the repository. The decision index links to the seven Accepted ADRs; the audit records the original assessment and subsequent approved remediation batches.
 
-At the time this guide is being established, `giftpipe-docs/README.md` is being created here. A GiftPipe glossary has also been produced during discovery, but its presence in the repository must be verified before treating `product/glossary.md` as an existing file.
-
-All other paths below describe the intended documentation organization until those files are created.
+**Generation provenance:** When this guide was first established, only the guide was being created here. The glossary had been produced during discovery but its repository presence was unverified; other paths described the planned organization. The inventory below now describes existing files.
 
 ---
 
@@ -49,15 +50,16 @@ All other paths below describe the intended documentation organization until tho
 
 | Path                          | Responsibility                     | Contains                                                                                                |
 | ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `giftpipe-docs/README.md`     | Documentation map                  | Structure, information ownership, maintenance principles, and guidance for contributors and agents      |
-| `product/vision.md`           | Product direction                  | Purpose, target problem, goals, scope, exclusions, product principles                                   |
-| `product/glossary.md`         | Shared language                    | Canonical domain terms, aliases, distinctions, terminology status                                       |
-| `product/requirements.md`     | Expected behavior                  | Functional and non-functional requirements, capabilities, user-observable behavior, acceptance criteria |
-| `domain/domain-model.md`      | Domain structure and rules         | Entities, value objects, relationships, invariants, lifecycles, domain processes                        |
-| `decisions/README.md`         | Decision-record index and guidance | Significant decisions and links to individual decision records as they are introduced                   |
-| `discovery/open-questions.md` | Active uncertainty                 | Unresolved questions, competing proposals, deferred design topics, areas requiring investigation        |
+| [giftpipe-docs/README.md](README.md)     | Documentation map                  | Structure, information ownership, maintenance principles, and guidance for contributors and agents      |
+| [product/vision.md](product/vision.md)           | Product direction                  | Purpose, target problem, goals, scope, exclusions, product principles                                   |
+| [product/glossary.md](product/glossary.md)         | Shared language                    | Canonical domain terms, aliases, distinctions, terminology status                                       |
+| [product/requirements.md](product/requirements.md)     | Expected behavior                  | Functional and non-functional requirements, capabilities, user-observable behavior, acceptance criteria |
+| [domain/domain-model.md](domain/domain-model.md)      | Domain structure and rules         | Entities, value objects, relationships, invariants, lifecycles, domain processes                        |
+| [decisions/README.md](decisions/README.md)         | Decision-record index and guidance | Significant decisions and links to the existing individual decision records                   |
+| [discovery/open-questions.md](discovery/open-questions.md) | Active uncertainty                 | Unresolved questions, competing proposals, deferred design topics, areas requiring investigation        |
+| [audits/documentation-audit.md](audits/documentation-audit.md) | Audit and remediation history | Baseline findings, approved follow-up scope, progress, and source-conversation provenance |
 
-The inventory is provisional. New documents or directories should be introduced when they provide a clear ownership boundary, not merely because more files seem desirable.
+The inventory describes the current repository. New documents or directories should be introduced when they provide a clear ownership boundary, not merely because more files seem desirable.
 
 ---
 
@@ -69,7 +71,7 @@ Other documents may summarize or reference that information, but should avoid ma
 
 ### Product vision
 
-`product/vision.md` owns the explanation of:
+[product/vision.md](product/vision.md) owns the explanation of:
 
 - why GiftPipe exists,
 - which problems it addresses,
@@ -82,7 +84,7 @@ It should explain product direction without becoming a detailed requirements or 
 
 ### Glossary
 
-`product/glossary.md` owns:
+[product/glossary.md](product/glossary.md) owns:
 
 - canonical GiftPipe terminology,
 - concise domain definitions,
@@ -94,7 +96,7 @@ Other documentation should use glossary terminology consistently rather than red
 
 ### Domain model
 
-`domain/domain-model.md` owns:
+[domain/domain-model.md](domain/domain-model.md) owns:
 
 - domain entities and value objects,
 - relationships between concepts,
@@ -107,7 +109,7 @@ The glossary explains what terms mean. The domain model explains how those conce
 
 ### Requirements
 
-`product/requirements.md` owns:
+[product/requirements.md](product/requirements.md) owns:
 
 - functional expectations,
 - non-functional expectations,
@@ -133,7 +135,7 @@ Not every minor implementation choice needs a formal decision record.
 
 ### Discovery
 
-`discovery/open-questions.md` owns unresolved material.
+[discovery/open-questions.md](discovery/open-questions.md) owns unresolved material.
 
 This includes:
 
@@ -165,7 +167,7 @@ Open questions collect uncertainty that has not yet earned a place as establishe
 
 Documentation can be created and refined iteratively as discovery continues.
 
-Do not create links to planned files until those files actually exist. Until then, refer to intended paths using inline code such as `domain/domain-model.md`.
+Link to existing documents using relative Markdown links. For a future file that does not exist, use an inline path until it is created.
 
 ---
 
@@ -219,7 +221,7 @@ Avoid unnecessary duplication, elaborate templates, excessive metadata, or gover
 
 Start with cohesive documents rather than aggressively splitting documentation into many small files.
 
-Documents such as `product/glossary.md` and `domain/domain-model.md` should remain unified while they are easy to understand and maintain.
+Documents such as [product/glossary.md](product/glossary.md) and [domain/domain-model.md](domain/domain-model.md) should remain unified while they are easy to understand and maintain.
 
 Consider splitting a document when:
 
@@ -256,7 +258,7 @@ Before making domain-sensitive changes:
 7. Surface contradictions or missing information instead of silently choosing an interpretation.
 8. Propose substantial documentation restructuring before performing it.
 
-This guidance complements, but does not replace, any broader repository-level instructions that may later exist in `AGENTS.md`.
+This guidance complements, but does not replace, the repository-level instructions in [AGENTS.md](../AGENTS.md).
 
 ---
 
