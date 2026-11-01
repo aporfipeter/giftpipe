@@ -6,15 +6,17 @@ This register is the authoritative location for active unresolved questions that
 
 It exists to preserve uncertainty explicitly and to prevent contributors or AI coding agents from treating an unanswered question as permission to choose a convenient interpretation.
 
+The glossary and domain model may retain short contextual summaries that link to the authoritative entries here. Those summaries are not separate question registers; maintain unresolved alternatives and status in this register, and propagate any approved resolution to the owning documentation. Preserve existing local identifiers for traceability.
+
 Questions belong here when a real decision is still required. Minor implementation details that do not affect domain meaning, user-observable behavior, or an upcoming architectural choice should remain outside this register until they become relevant.
 
 This document should be read together with:
 
 - [Documentation Guide](../README.md), which defines documentation ownership and maintenance principles.
 - [Domain Model](../domain/domain-model.md), which records established domain structure, invariants, and unresolved modeling context.
-- `../product/glossary.md`, which is intended to own canonical vocabulary.
+- [Glossary](../product/glossary.md), which owns canonical vocabulary.
 
-At the time this register was generated, the conversation-generated `giftpipe-docs/README.md` and `giftpipe-docs/domain/domain-model.md` were available for inspection. A repository file for `giftpipe-docs/product/glossary.md` was not available, so glossary uncertainties were cross-checked against the glossary content previously generated in the discovery conversation rather than a repository file.
+**Generation provenance:** At the time this register was generated, the conversation-generated [giftpipe-docs/README.md](../README.md) and [giftpipe-docs/domain/domain-model.md](../domain/domain-model.md) were available for inspection. A repository file for [giftpipe-docs/product/glossary.md](../product/glossary.md) was not available, so glossary uncertainties were cross-checked against the glossary content previously generated in the discovery conversation rather than a repository file.
 
 Unresolved questions are **not approved requirements or implementation instructions**.
 
@@ -60,7 +62,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 - **Priority:** High
 - **Status:** Open
 - **Context:** The domain already supports several established facts: an OccasionGiftIdea can be used without a concrete candidate; multiple OccasionGiftCandidates can be intended or given; multiple gifts may be given for one Occasion; and reconciliation records actual outcomes. Reconciliation may also begin with zero associated ideas, and the user can explicitly report that no gift was given for the Occasion. An unanswered follow-up does not establish a no-gift outcome. The exact state vocabulary and division of responsibility between OccasionGiftIdea and OccasionGiftCandidate, including how an occasion-level no-gift report is represented, are still unsettled.
-- **Options considered:** Meanings equivalent to open/unresolved, used/given, not used/not given, candidate selected/intended, candidate given, and candidate rejected-for-this-occasion have appeared in discussion, but no final lifecycle has been approved.
+- **Options considered:** Meanings equivalent to open/unresolved, used/given, not used/not given, candidate selected/intended, candidate given, and candidate rejected-for-this-occasion have appeared in discussion, but no final lifecycle has been approved. Additional OccasionGiftIdea state names such as abandoned or deferred have also been considered without being selected.
 - **Impact:** Reconciliation, history, reminders, selection semantics, acceptance criteria, and future persistence design.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q003`, `DM-Q004`, `DM-Q018`; `DM-R008`, `DM-R010`, `DM-R011`, `DM-R022`.
 
@@ -139,8 +141,8 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Low
 - **Status:** Open
-- **Context:** Archival is the established way to exclude an idea from proactive future consideration without destroying history. Whether an archived idea can be restored, and what operations remain available while archived, have not been established.
-- **Impact:** GiftIdea lifecycle, search/history behavior, and future reuse.
+- **Context:** Archival is the established way to exclude an idea from proactive future consideration without destroying history. Whether an archived idea can be restored, and what operations remain available while archived, have not been established. Permanent deletion must remain possible for explicit data-management purposes, as recorded in `DM-Q015`; its exact semantics, including effects on associated research and historical records, remain unresolved. This question owns that existing deletion uncertainty alongside archive and reactivation behavior.
+- **Impact:** GiftIdea lifecycle, search/history behavior, future reuse, privacy/data management, and preservation of related history.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q015`, `DM-Q020`; `DM-R019`.
 
 #### OQ-013 — How should partially completed reconciliation behave?
@@ -217,7 +219,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 - **Depends on:** OQ-001, OQ-003, and OQ-004
 - **Context:** Person, GiftIdea, OccasionGiftIdea, and Occasion have all been identified as plausible aggregate or coordination boundaries, but no aggregate roots or transactional consistency rules have been established.
 - **Impact:** Application-service boundaries, persistence design, transactional behavior, and implementation architecture.
-- **References:** [Domain Model](../domain/domain-model.md) — Aggregate boundaries and ownership section.
+- **References:** [Domain Model](../domain/domain-model.md) — `DM-Q016`; Aggregate boundaries and ownership section.
 
 #### OQ-017 — How should Current Research State and Research Summary be derived and refreshed?
 

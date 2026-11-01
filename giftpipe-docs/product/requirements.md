@@ -14,7 +14,7 @@ The requirements are grounded in:
 - the [Domain Model](../domain/domain-model.md),
 - and the [Open Questions Register](../discovery/open-questions.md).
 
-A repository copy of `glossary.md` was not available when this document was generated. Terminology was therefore checked against the glossary content previously produced during discovery, but this document does not claim to have inspected `glossary.md` as a repository file.
+**Generation provenance:** A repository copy of [glossary.md](glossary.md) was not available when this document was generated. Terminology was therefore checked against the glossary content previously produced during discovery, but this document does not claim to have inspected [glossary.md](glossary.md) as a repository file.
 
 Requirements use established GiftPipe terminology and defer unresolved behavior to the open questions register rather than silently choosing an interpretation.
 
@@ -65,6 +65,7 @@ The established initial participation model is private individual use rather tha
 **Acceptance criteria:**
 
 - A user can maintain their own GiftPipe data independently of another user.
+- All account data is private to that account; no data sharing of any kind between accounts is allowed in the current product scope.
 - A Person being planned for does not need to be a GiftPipe user.
 - GiftPipe does not require recipient participation in order to plan gifts for that Person.
 
@@ -370,6 +371,8 @@ A durable GiftIdea and a particular Occasion have distinct meanings.
 - Occasion selection lists only the assigned Person's Occasions.
 - During capture, Occasion selection is disabled until a Person is assigned. Capture started from a Person prepopulates that Person.
 - If the Person changes during capture, an Occasion selected for the previous Person cannot remain a valid association. The UI's exact clearing or reselection interaction is unspecified.
+
+**Unresolved boundary:** Whether the same GiftIdea may have more than one OccasionGiftIdea for the same Occasion occurrence remains open under [OQ-005](../discovery/open-questions.md#oq-005--may-the-same-giftidea-have-more-than-one-occasiongiftidea-for-the-same-occasion-occurrence). Association creation does not establish a duplicate-association policy.
 
 **References:** `DM-R002`, `DM-R005`, `DM-R020`.
 
@@ -858,12 +861,12 @@ Frictionless capture is the primary behavior the product is intended to encourag
 
 ## 4.2 Privacy and data control
 
-### NFR-003 — Keep recipient planning private by default
+### NFR-003 — Keep all account data private
 
 **Status:** Confirmed
 
 **Requirement:**  
-The initial product model must treat each user's recipient, gift-planning, and gifting-history data as private to that user rather than shared by default with other GiftPipe users or recipients.
+The current product model must keep all account data private to that user. No data sharing of any kind between accounts is allowed, including recipient context, gift ideas and candidates, research, occasions, and gifting history.
 
 **Rationale:**  
 The established participation model is independent private accounts.
@@ -871,7 +874,8 @@ The established participation model is independent private accounts.
 **Verification:**
 
 - Recipients are not required to access or contribute to the user's planning data.
-- Another independent GiftPipe user does not implicitly share the same Person or gift-planning data.
+- Through supported interfaces, one independent account cannot read or change another account's private data. Verification covers recipient context, gift ideas and candidates, research, occasions, and gifting history.
+- No supported interface permits data sharing between accounts in the current product scope.
 
 **References:** [Product Vision](vision.md), Private individual account model.
 
@@ -1149,6 +1153,7 @@ This loop describes product direction but should not be treated as a complete re
 |---|---|---|---|
 | `FR-013` | `OQ-011` | Whether product-link-only capture also creates a GiftCandidate | Initial research structure remains blocked |
 | `FR-014` | `OQ-004` | Recurring Occasion versus occurrence identity | Detailed occurrence behavior and history cannot be finalized |
+| `FR-015` | `OQ-005` | Whether repeated association of the same GiftIdea with the same Occasion occurrence is allowed | Forward association creation is established; duplicate-association handling remains open |
 | `FR-019` | `OQ-001` | Whether an occasion-only candidate must reference a reusable GiftCandidate | Candidate creation semantics remain blocked |
 | `FR-020`, `FR-030` | `OQ-003` | Exact OccasionGiftCandidate selection/outcome state model | State transitions and some acceptance criteria remain incomplete |
 | `FR-028`, `FR-035` | `OQ-003` | Exact representation of reconciliation outcomes, including explicit no-gift reports | Confirmed observable outcomes do not establish the full state model |
@@ -1169,7 +1174,7 @@ Other open questions in the register can remain deferred without preventing impl
 
 The [Product Vision](vision.md) defines why GiftPipe exists, its value proposition, high-level product principles, and scope boundaries.
 
-`glossary.md` is intended to own canonical vocabulary. A repository copy was unavailable during generation of this requirements document, so terminology should be revalidated against that file once it is present.
+The [Glossary](glossary.md) owns canonical vocabulary. The original generation circumstances are recorded in the provenance note in section 1.
 
 The [Domain Model](../domain/domain-model.md) owns entities, relationships, invariants, lifecycle semantics, and domain operations. Requirements reference its `DM-Rxxx` rules rather than restating them as competing domain definitions.
 

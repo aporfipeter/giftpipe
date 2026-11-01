@@ -48,7 +48,7 @@ A user privately maintains information relevant to gifting for these people. The
 
 GiftPipe is intended to be tried by real users early rather than remain a single-user personal prototype. Friends and family can use their own independent accounts and provide feedback on whether the capture, reminder, research, and reconciliation loops are genuinely useful.
 
-This does not imply collaborative accounts or shared gift planning.
+Each account is private. No data sharing of any kind between accounts is allowed in the current product scope.
 
 ---
 
@@ -236,7 +236,7 @@ Native mobile applications are not required for the initial product direction; t
 
 **Phone-first usage context.** Gift ideas often occur away from a desk, so the product should support fast mobile capture as a primary usage pattern.
 
-**Private individual account model initially.** Each user manages their own people, ideas, occasions, and history. Recipients do not need accounts.
+**Private individual account model initially.** All account data is private to its user, including recipient context, ideas, candidates, research, occasions, and gifting history. No data sharing of any kind between accounts is allowed in the current product scope. Recipients do not need accounts.
 
 **Recipient is central to capture.** A captured GiftIdea belongs to a Person. The product is not intended as a generic bookmark or research manager.
 
@@ -300,11 +300,13 @@ No unresolved question currently changes the central product vision that GiftPip
 
 The [Documentation Guide](../README.md) defines the overall documentation structure and ownership principles.
 
-`glossary.md` is intended to be the authoritative source for canonical GiftPipe vocabulary and terminology distinctions. At the time this vision was generated, a repository copy of `glossary.md` was not available for direct inspection; the glossary produced earlier in discovery was used as contextual reference.
+The [Glossary](glossary.md) owns canonical GiftPipe vocabulary and terminology distinctions.
+
+**Generation provenance:** At the time this vision was generated, a repository copy of the glossary was not available for direct inspection; the glossary produced earlier in discovery was used as contextual reference.
 
 The [Domain Model](../domain/domain-model.md) owns the conceptual relationships, invariants, lifecycle behavior, and domain processes underlying the product.
 
-`requirements.md` will own detailed functional and non-functional expectations and acceptance criteria once created. This vision should not substitute for those requirements.
+The [Requirements](requirements.md) own detailed functional and non-functional expectations and acceptance criteria. This vision should not substitute for those requirements.
 
 The [Open Questions Register](../discovery/open-questions.md) is the authoritative location for unresolved decisions. This document should reference those questions rather than maintain an independent backlog.
 

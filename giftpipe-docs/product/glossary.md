@@ -702,90 +702,65 @@ The invitation must not imply an obligation to use GiftPipe or call out missing 
 
 # Open terminology questions
 
+These are contextual summaries of terminology uncertainty. The linked entries in the [Open Questions Register](../discovery/open-questions.md) own material unresolved questions, alternatives, and status. Minor details below remain local until they meet the register's inclusion criteria; they are not approved decisions.
+
 ## OccasionGiftCandidate identity
 
-The domain meaning of OccasionGiftCandidate is established, but its identity relationship to GiftCandidate is not yet final.
-
-Two possible interpretations remain:
-
-1. every OccasionGiftCandidate ultimately references a reusable GiftCandidate; or
-2. an OccasionGiftCandidate may exist only within its OccasionGiftIdea unless explicitly promoted to reusable GiftIdea research.
-
-This decision was intentionally deferred after the occasion-page discussion.
+The domain meaning is established, but whether an OccasionGiftCandidate must reference a reusable GiftCandidate or may exist only within its OccasionGiftIdea remains open under [OQ-001](../discovery/open-questions.md#oq-001--can-an-occasiongiftcandidate-exist-without-an-underlying-reusable-giftcandidate).
 
 ---
 
 ## Candidate lifecycle vocabulary
 
-Research needs to preserve concepts such as newly added, shortlisted, rejected, and possibly selected candidates, but the exact canonical state names have not been agreed.
-
-Earlier proposals such as `active` were considered too broad.
+Newly added, shortlisted, and rejected are discussed concepts; canonical state names remain open under [OQ-002](../discovery/open-questions.md#oq-002--what-lifecycle-states-belong-to-a-reusable-giftcandidate). The earlier term `active` was considered too broad.
 
 ---
 
 ## Meaning and representation of selection
 
-The current shared direction is that selection means one or more concrete options that the user intends to give for a specific Occasion.
-
-Selection is not the same as the historical outcome "given".
-
-However, the exact lifecycle/state representation of selection on OccasionGiftCandidate remains unfinalized.
+Selection means one or more concrete options intended for a specific Occasion, distinct from the historical outcome "given". Its exact lifecycle/state representation remains open under [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate).
 
 ---
 
 ## OccasionGiftIdea outcome vocabulary
 
-The domain requires OccasionGiftIdeas to resolve at least into concepts equivalent to:
-
-- used/given,
-- not used/not given,
-- still unresolved.
-
-Exact state names and any additional states such as abandoned or deferred have not been finalized.
+Used/given, not used/not given, and still unresolved are established meanings. Exact state names and additional states remain open under [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate).
 
 ---
 
 ## Research Node taxonomy
 
-The research model is hierarchical, and LinkNode and ProductLinkNode have been explicitly accepted.
-
-The complete set of Research Node types remains intentionally open and is expected to emerge through product iteration.
+The hierarchical research model and LinkNode/ProductLinkNode distinction are established. The complete taxonomy and valid node relationships remain open under [OQ-007](../discovery/open-questions.md#oq-007--what-is-the-minimum-stable-taxonomy-of-research-node-types).
 
 ---
 
 ## Research Thread as an entity
 
-Research Thread is a useful conceptual abstraction for grouping GiftIdea or OccasionGiftIdea research, but it is not yet confirmed as a distinct domain entity.
+Research Thread is a useful conceptual grouping, not a confirmed domain entity. Its status remains open under [OQ-006](../discovery/open-questions.md#oq-006--is-researchthread-a-real-domain-concept-or-only-a-useful-conceptual-grouping).
 
 ---
 
 ## Promotion between research scopes
 
-GiftPipe will eventually need rules for making useful occasion-specific research reusable as general GiftIdea research.
-
-Whether this operation is described as promotion, copying, referencing, or another concept remains undecided.
+How useful occasion-specific research becomes reusable general GiftIdea research remains open under [OQ-008](../discovery/open-questions.md#oq-008--how-should-occasion-specific-research-become-reusable-general-giftidea-research); move, copy, reference, and summary semantics have not been selected.
 
 ---
 
 ## Product-link capture and automatic Candidate creation
 
-ProductLinkNode and LinkNode are established concepts, and ProductLinkNode is not itself equivalent to GiftCandidate.
-
-However, the exact behavior when a user creates a new GiftIdea by pasting only a product link has not been fully finalized. In particular, it remains open whether this should immediately create a GiftCandidate or simply attach the ProductLinkNode to the newly created GiftIdea.
+ProductLinkNode is distinct from GiftCandidate. Whether product-link-only initial capture also creates a GiftCandidate remains open under [OQ-011](../discovery/open-questions.md#oq-011--when-a-new-giftidea-is-captured-from-only-a-productlinknode-should-giftpipe-also-create-a-giftcandidate).
 
 ---
 
 ## GiftIdea shape
 
-GiftIdea's domain role and recipient-only capture are confirmed. A human-entered idea or title is not required; GiftPipe assigns a title according to the [capture requirements](requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information). Other attributes remain unspecified, and title-assignment edge cases remain open under [OQ-018](../discovery/open-questions.md#oq-018--how-should-giftidea-title-assignment-handle-failures-and-numbering).
+GiftIdea's domain role and recipient-only capture are confirmed. A human-entered idea or title is not required; GiftPipe assigns a title according to the [capture requirements](requirements.md#fr-004--capture-a-giftidea-with-minimal-required-information). Other attributes remain unspecified. This entry retains that context; material questions about those attributes belong in the register when identified. Title-assignment edge cases remain open under [OQ-018](../discovery/open-questions.md#oq-018--how-should-giftidea-title-assignment-handle-failures-and-numbering).
 
 ---
 
 ## Research summary lifecycle
 
-The distinction between Raw Research History, Current Research State, and derived summaries is established.
-
-The precise rules for creating, caching, invalidating, or regenerating Research Summaries remain deferred.
+Raw Research History is authoritative; Current Research State and summaries are derived. Creation, caching, invalidation, and refresh rules remain open under [OQ-017](../discovery/open-questions.md#oq-017--how-should-current-research-state-and-research-summary-be-derived-and-refreshed).
 
 ---
 
@@ -793,7 +768,7 @@ The precise rules for creating, caching, invalidating, or regenerating Research 
 
 Bounded AI and explicit AI Actions are accepted product concepts.
 
-The exact representation of an AI Action—including prompts, schemas, handlers, applicability rules, or persistence configuration—is an architectural concern that has not yet been settled.
+The exact representation of an AI Action—including prompts, schemas, handlers, applicability rules, or persistence configuration—is an architectural concern that has not yet been settled. These details remain local context until they materially affect product behavior, domain meaning, or an upcoming architectural choice; this entry is not a separate active question register.
 
 ---
 
@@ -809,4 +784,4 @@ The core reconciliation behavior is established:
 - permit a GiftIdea to resolve as given without a concrete Candidate,
 - accept an explicit report that no gift was given, distinct from an unanswered follow-up.
 
-Detailed state representation, correction/reopening, partial reconciliation, and follow-up timing remain open under `OQ-003`, `OQ-010`, `OQ-013`, and `OQ-015` in [the open-questions register](../discovery/open-questions.md).
+Detailed state representation, correction/reopening, partial reconciliation, and follow-up timing remain open under [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate), [OQ-010](../discovery/open-questions.md#oq-010--can-a-completed-reconciliation-be-reopened-or-corrected), [OQ-013](../discovery/open-questions.md#oq-013--how-should-partially-completed-reconciliation-behave), and [OQ-015](../discovery/open-questions.md#oq-015--what-should-control-post-occasion-reconciliation-follow-up-frequency-and-stopping-conditions) in [the open-questions register](../discovery/open-questions.md).
