@@ -179,6 +179,7 @@ A GiftIdea represents durable gifting intent or interest rather than a one-time 
 - A GiftIdea can exist before any Occasion association.
 - A GiftIdea can be considered for more than one Occasion over time.
 - Giving or not giving the GiftIdea for one Occasion does not automatically archive it.
+- Prior use and association with another Occasion do not exclude an otherwise eligible GiftIdea from the current Occasion's available ideas. Recipient and archival constraints still apply.
 
 **References:** `DM-R002`, `DM-R019`.
 
@@ -264,8 +265,10 @@ Gift research can evolve from a root idea into candidates, links, notes, and AI-
 - Research can contain parent-child relationships.
 - GiftCandidate research can contain supporting research beneath a candidate.
 - GiftPipe is not required to expose arbitrary free-form tree editing to satisfy this requirement.
+- The GiftIdea page provides a distinct section or link for general research and visible links to its OccasionGiftIdeas, labelled by Occasion and showing whether they remain in the plan.
+- The user can open each occasion context to review its specific research, including when the idea has been removed from that Occasion's plan. General and occasion-specific research remain separate; navigation does not merge or promote them.
 
-**References:** [Domain Model](../domain/domain-model.md), Research Tree concept; `OQ-007`.
+**References:** [Domain Model](../domain/domain-model.md), Research Tree concept; `DM-R014`, `DM-R023`; `OQ-007`, `OQ-008`.
 
 ---
 
@@ -367,14 +370,19 @@ A durable GiftIdea and a particular Occasion have distinct meanings.
 - A GiftIdea can be associated with an Occasion during initial capture.
 - The association preserves the GiftIdea independently of the Occasion.
 - The resulting OccasionGiftIdea can exist without any candidate.
+- Opening an idea from an Occasion retains the Occasion context. Its page offers `Add to <Occasion>` when not in the plan and `Remove from <Occasion>` when included. Opening the idea to inspect its details or research does not add it.
+- The Occasion Overview and its full-list modal provide rounded + / − buttons for quick adds and removes. These invoke the same participation behavior as the contextual idea-page action.
+- First-time addition creates an OccasionGiftIdea. Removal changes only its planning-participation state, retaining the context, both references, research, candidate context, and recorded outcomes.
+- Re-adding a removed idea to the same Occasion restores participation through the same OccasionGiftIdea with its research intact, rather than creating a fresh context.
+- Removal does not archive the durable GiftIdea or record a not-given outcome. The preserved occasion context remains reachable from the GiftIdea page.
 - The GiftIdea and Occasion must belong to the same Person; a cross-recipient association is rejected.
 - Occasion selection lists only the assigned Person's Occasions.
 - During capture, Occasion selection is disabled until a Person is assigned. Capture started from a Person prepopulates that Person.
 - If the Person changes during capture, an Occasion selected for the previous Person cannot remain a valid association. The UI's exact clearing or reselection interaction is unspecified.
 
-**Unresolved boundary:** Whether the same GiftIdea may have more than one OccasionGiftIdea for the same Occasion occurrence remains open under [OQ-005](../discovery/open-questions.md#oq-005--may-the-same-giftidea-have-more-than-one-occasiongiftidea-for-the-same-occasion-occurrence). Association creation does not establish a duplicate-association policy.
+**Unresolved boundaries:** Re-adding a withdrawn idea restores its existing context; this does not settle broader duplicate-context rules under [OQ-005](../discovery/open-questions.md#oq-005--may-the-same-giftidea-have-more-than-one-occasiongiftidea-for-the-same-occasion-occurrence). Exact lifecycle names and representation remain under `OQ-003`. Availability and behavior of planning controls after completed reconciliation remain under `OQ-003` and `OQ-010`; this requirement does not authorize reopening or modifying recorded outcomes.
 
-**References:** `DM-R002`, `DM-R005`, `DM-R020`.
+**References:** `DM-R002`, `DM-R005`, `DM-R020`, `DM-R023`.
 
 ---
 
@@ -408,9 +416,10 @@ The historical fact that an idea was considered but not used remains useful.
 
 - Reconciliation can record that an OccasionGiftIdea was not used.
 - The historical association to that Occasion remains available afterward.
+- Removing an idea from the plan under `FR-015` changes planning participation, not the actual-gift outcome; its preserved occasion context and research remain accessible. Withdrawal alone is not reconciliation.
 - The underlying GiftIdea remains eligible for future occasions unless archived.
 
-**References:** `DM-R006`, `DM-R019`.
+**References:** `DM-R006`, `DM-R019`, `DM-R023`.
 
 ---
 
@@ -493,17 +502,20 @@ Resurfacing saved context at the right time is central to the product value prop
 - An approaching Occasion can trigger a reminder.
 - The notification briefly identifies the Occasion, Person, and time remaining, and links to the Occasion Overview in the app.
 - The same Occasion Overview is accessible through normal app navigation; reminder entry does not require a separate Reminder Screen.
-- The overview presents ideas and candidates already under consideration for the Occasion and includes the Person's GiftIdeas that have no Occasion associations, subject to the established exclusion of archived ideas from proactive future consideration (`DM-R019`).
-- Previous gifts and outcomes are available as context. Their presentation does not itself establish automatic eligibility for a new Occasion.
+- The overview distinguishes ideas and candidates currently in the Occasion's plan from other available GiftIdeas for the same Person.
+- The available pool includes otherwise eligible ideas regardless of prior use, association with other Occasions, or previous withdrawal from this Occasion's plan. The same-Person constraint (`DM-R020`) and established exclusion of archived ideas from proactive consideration (`DM-R019`) remain in force.
+- Business rules rank available ideas for this Occasion. A preview shows the first x ideas; View all opens a modal exposing the full eligible list from that ranked pool. Ranking rules and the value of x remain TBD under `OQ-020`.
+- The overview and modal offer rounded + / − controls with the behavior in `FR-015`; browsing an idea retains the Occasion context for its contextual Add/Remove action.
+- Previous gifts and outcomes remain available as context; prior use does not by itself disqualify an idea.
 - Existing user-captured ideas are prioritized ahead of speculative AI alternatives.
-- The overview links to detailed research; the research workflow's UI and the exact hierarchy of overview content remain deferred.
+- The overview links to detailed research. On the GiftIdea page, general research and linked OccasionGiftIdea research are separately accessible as specified in `FR-010`. The detailed research workflow and remaining layout details remain deferred.
 - Opening the overview through a notification does not change gift-planning data: it does not create OccasionGiftIdeas, nominate candidates, record outcomes, or mark preparation or reconciliation complete.
 - The overview supports occasion context before and after the Occasion, including access to reconciliation and history. Reconciliation entry and explicit no-gift outcomes follow `FR-028`.
 
 **References:** [Product Vision](vision.md), Human ideas outrank speculative AI suggestions; [Occasion Overview](glossary.md#occasion-overview); `DM-R021`.
 
 **Limitations:**
-Pre-occasion notification timing and the interaction between app-level and occasion-level notification settings remain open under `OQ-019`. Detailed idea-pool boundaries, hierarchy, and research navigation remain under `OQ-020`. Email-only initial delivery and channel-specific content remain proposals under `OQ-021`. No notification schedule, delivery channel, or detailed research-screen design is established by this requirement.
+Pre-occasion notification timing and the interaction between app-level and occasion-level notification settings remain open under `OQ-019`. The ranking rules, preview count, and remaining presentation details remain under `OQ-020`; eligibility, the preview/modal pattern, and research-scope navigation are established above. Email-only initial delivery and channel-specific content remain proposals under `OQ-021`. No notification schedule, delivery channel, or detailed research-screen design is established by this requirement.
 
 ---
 
@@ -1053,13 +1065,13 @@ Bring durable GiftIdeas and concrete options into a specific Occasion context.
 An Occasion and its Person exist. Viewing the Occasion Overview does not require an existing OccasionGiftIdea; nominating or creating occasion-specific candidates requires the corresponding occasion-specific context.
 
 **Relevant requirements:**  
-`FR-018`, `FR-019`, `FR-020`, `FR-021` through `FR-023`.
+`FR-010`, `FR-015`, `FR-018`, `FR-019`, `FR-020`, `FR-021` through `FR-023`.
 
 **Expected outcome:**  
-The user can open the Occasion Overview directly or through a brief notification. It presents existing occasion plans, includes the Person's ideas with no Occasion associations, provides previous gifting context, and links to research. Explicit planning actions can establish occasion-specific context and nominate or create candidates where applicable; merely viewing the overview does not change gift-planning data.
+The user can open the Occasion Overview directly or through a brief notification. It presents the current plan and a ranked preview of other eligible ideas for the Person, including ideas used before or associated with other Occasions. View all exposes the full eligible list in a modal. Rounded + / − controls add or remove ideas from the plan; inspecting an idea opens it with the Occasion context and its explicit Add/Remove action. Removal retains the OccasionGiftIdea and its research; re-addition restores the same context. General research and individual occasion-specific research remain separately accessible from the GiftIdea page. Candidate nomination or creation remains explicit where applicable; merely viewing ideas or research does not change planning data. Ranking rules, the preview count, and remaining presentation details are unresolved under `OQ-020`.
 
 **Unresolved questions:**  
-Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive AI threshold depends on `OQ-014`. Pre-occasion notification policy depends on `OQ-019`; overview idea-pool boundaries and presentation depend on `OQ-020`; initial delivery channel and channel-specific content depend on `OQ-021`.
+Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive AI threshold depends on `OQ-014`. Pre-occasion notification policy depends on `OQ-019`; ranking rules, preview count, and remaining presentation details depend on `OQ-020`; initial delivery channel and channel-specific content depend on `OQ-021`.
 
 ---
 
@@ -1153,7 +1165,9 @@ This loop describes product direction but should not be treated as a complete re
 |---|---|---|---|
 | `FR-013` | `OQ-011` | Whether product-link-only capture also creates a GiftCandidate | Initial research structure remains blocked |
 | `FR-014` | `OQ-004` | Recurring Occasion versus occurrence identity | Detailed occurrence behavior and history cannot be finalized |
-| `FR-015` | `OQ-005` | Whether repeated association of the same GiftIdea with the same Occasion occurrence is allowed | Forward association creation is established; duplicate-association handling remains open |
+| `FR-015` | `OQ-005` | Broader duplicate-context rules for the same GiftIdea and Occasion occurrence | Re-addition reuses its existing context; other duplicate-context handling remains open |
+| `FR-015` | `OQ-003`, `OQ-010` | Exact participation-state representation and control behavior after completed reconciliation | Withdrawal and restoration preserve context; they do not settle completed-outcome correction or reopening |
+| `FR-010` | `OQ-008` | Promotion of research between scopes | Separate browsing is established; movement, copying, or promotion remains undecided |
 | `FR-019` | `OQ-001` | Whether an occasion-only candidate must reference a reusable GiftCandidate | Candidate creation semantics remain blocked |
 | `FR-020`, `FR-030` | `OQ-003` | Exact OccasionGiftCandidate selection/outcome state model | State transitions and some acceptance criteria remain incomplete |
 | `FR-028`, `FR-035` | `OQ-003` | Exact representation of reconciliation outcomes, including explicit no-gift reports | Confirmed observable outcomes do not establish the full state model |
@@ -1163,7 +1177,7 @@ This loop describes product direction but should not be treated as a complete re
 | `FR-036` | `OQ-013` | Partial reconciliation semantics | Incomplete Occasion resolution behavior remains blocked |
 | `FR-004` | `OQ-018` | Link-title derivation failure handling and exact placeholder numbering | Basic title precedence is established; edge-case behavior is not finalized |
 | `FR-021` | `OQ-019` | Pre-occasion timing, repetition, and app-level/occasion-level settings interaction | Notification scheduling cannot yet be acceptance-tested fully |
-| `FR-021` | `OQ-020` | Remaining idea-pool boundaries, overview hierarchy, and research navigation | Core resurfacing is established; complete overview behavior remains open |
+| `FR-021` | `OQ-020` | Ranking rules, preview count x, and remaining presentation details | Eligible pool, ranked preview, full-list modal, and scope navigation are established; ranking acceptance criteria remain incomplete |
 | `FR-021` | `OQ-021` | Initial delivery channel and channel-specific content | Email-only initial delivery is not an established release commitment |
 
 Other open questions in the register can remain deferred without preventing implementation of unrelated confirmed behavior.

@@ -204,7 +204,7 @@ Belongs to an OccasionGiftIdea rather than placing an `occasionId` directly on a
 **Important distinctions:**  
 General GiftIdea research is reusable across occasions; occasion-specific research describes the application of that GiftIdea to one particular Occasion.
 
-How information moves between the two scopes remains deferred.
+The GiftIdea page exposes the OccasionGiftIdea contexts, including withdrawn ones, so their research can be reviewed. General research has a separate section or link. Research stays under its original context when an idea is removed from an Occasion's plan; browsing it does not promote it to general research. How information moves between the two scopes remains deferred under `OQ-008`.
 
 **Status:** Confirmed
 
@@ -304,6 +304,8 @@ Connects one GiftIdea to one Occasion. It may contain occasion-specific research
 An OccasionGiftIdea is more than a purely technical join: it represents a meaningful domain event/context with its own research and outcome.
 
 The historical relationship to the Occasion remains even when the idea was not given. An unused idea is not automatically moved to another Occasion.
+
+The lifecycle state indicates whether the GiftIdea is currently included in the Occasion's plan. Remove changes that participation without deleting the context or its research, references, candidates, or outcomes. Add again restores the same context. Withdrawal does not establish a not-given outcome. The context remains visible and reachable from the GiftIdea page. Exact state names and representation remain unresolved under `OQ-003`.
 
 **Status:** Confirmed
 
@@ -628,7 +630,7 @@ AI Enhancement differs from broad gift suggestion: it researches the captured id
 A brief proactive notification informing the user that an Occasion is approaching and linking to its in-app [Occasion Overview](#occasion-overview).
 
 **Relationships:**  
-Uses Occasion information. The linked overview presents the gifting context, including associated OccasionGiftIdeas and the Person's ideas with no Occasion associations.
+Uses Occasion information. The linked overview presents current planning contexts and the Person's other eligible ideas, including ideas used before or associated with other Occasions, subject to recipient and archival constraints.
 
 **Important distinctions:**
 The notification layer is intended to remain thin and largely platform agnostic. Email may eventually include more information than other channels, but email-only initial delivery and channel-specific content limits are not established decisions. Opening the linked overview does not change gift-planning data.
@@ -643,12 +645,12 @@ The notification layer is intended to remain thin and largely platform agnostic.
 The in-app view of an Occasion's planning context, accessible through normal app navigation and from an Occasion Reminder.
 
 **Relationships:**
-Brings together Occasion information, ideas and candidates already under consideration, the Person's unassociated GiftIdeas, and previous gifting context. Links to detailed research rather than incorporating the full research workflow.
+Brings together Occasion information, ideas and candidates currently in the plan, other eligible ideas for the Person, and previous gifting context. Prior use or association with another Occasion does not exclude an otherwise eligible idea. Business rules rank available ideas; a preview shows the first x, and View all opens the full eligible list in a modal. Links to detailed research rather than incorporating the full research workflow.
 
 **Important distinctions:**
-There is one Occasion Overview rather than a separate Reminder Screen. It may support preparation before an Occasion and access to reconciliation and history afterward. Its exact hierarchy and research navigation remain open. A [Research Summary](#research-summary) is derived research information, not the name of this screen.
+There is one Occasion Overview rather than a separate Reminder Screen. It may support preparation before an Occasion and access to reconciliation and history afterward. Rounded + / − controls on the overview and full-list modal provide quick planning changes. Opening an idea retains the Occasion context for its Add/Remove action. The ranking rules, preview count, and remaining presentation details remain open under `OQ-020`. The GiftIdea page provides separate access to general research and each occasion context's research. A [Research Summary](#research-summary) is derived research information, not the name of this screen.
 
-Displaying an idea in the overview does not create an OccasionGiftIdea or change its outcome.
+Displaying an idea in the overview does not create an OccasionGiftIdea or change its outcome. Explicit removal changes planning participation while preserving the context and research; re-addition restores that same context (`DM-R023`).
 
 **Status:** Confirmed
 
