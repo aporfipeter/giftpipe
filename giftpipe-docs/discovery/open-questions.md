@@ -61,10 +61,10 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** High
 - **Status:** Open
-- **Context:** The domain already supports several established facts: an OccasionGiftIdea can be used without a concrete candidate; multiple OccasionGiftCandidates can be intended or given; multiple gifts may be given for one Occasion; and reconciliation records actual outcomes. Reconciliation may also begin with zero associated ideas, and the user can explicitly report that no gift was given for the Occasion. An unanswered follow-up does not establish a no-gift outcome. The exact state vocabulary and division of responsibility between OccasionGiftIdea and OccasionGiftCandidate, including how an occasion-level no-gift report is represented, are still unsettled.
+- **Context:** The domain already supports several established facts: an OccasionGiftIdea can be used without a concrete candidate; multiple OccasionGiftCandidates can be intended or given; multiple gifts may be given for one Occasion; and reconciliation records actual outcomes. Reconciliation may also begin with zero associated ideas, and the user can explicitly report that no gift was given for the Occasion. An unanswered follow-up does not establish a no-gift outcome. Planning participation can be withdrawn and restored on the same OccasionGiftIdea without losing research or history; it is distinct from the actual gifting outcome. Removal alone is not a not-given outcome. The exact state vocabulary and representation of participation and outcomes, their division of responsibility between OccasionGiftIdea and OccasionGiftCandidate, behavior after completed reconciliation, and how an occasion-level no-gift report is represented remain unsettled.
 - **Options considered:** Meanings equivalent to open/unresolved, used/given, not used/not given, candidate selected/intended, candidate given, and candidate rejected-for-this-occasion have appeared in discussion, but no final lifecycle has been approved. Additional OccasionGiftIdea state names such as abandoned or deferred have also been considered without being selected.
 - **Impact:** Reconciliation, history, reminders, selection semantics, acceptance criteria, and future persistence design.
-- **References:** [Domain Model](../domain/domain-model.md) — `DM-Q003`, `DM-Q004`, `DM-Q018`; `DM-R008`, `DM-R010`, `DM-R011`, `DM-R022`.
+- **References:** [Domain Model](../domain/domain-model.md) — `DM-Q003`, `DM-Q004`, `DM-Q018`; `DM-R008`, `DM-R010`, `DM-R011`, `DM-R022`, `DM-R023`.
 
 #### OQ-004 — How should recurring Occasion definitions relate to specific occurrences?
 
@@ -78,7 +78,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** OccasionGiftIdea is conceptually distinguished by GiftIdea plus Occasion, but the discovery conversation has not established whether duplicate associations are valid or should collapse into one ongoing occasion context.
+- **Context:** OccasionGiftIdea is conceptually distinguished by GiftIdea plus Occasion. Removing an idea from the plan preserves its context; re-adding it to that same Occasion restores participation on the same OccasionGiftIdea rather than creating a fresh record. This settles that re-addition path, but does not establish a general uniqueness constraint or whether other duplicate occasion contexts are permitted.
 - **Impact:** OccasionGiftIdea identity, nomination, reconciliation, deduplication, and user-visible history.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q014`.
 
@@ -102,7 +102,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Low
 - **Status:** Open
-- **Context:** General GiftIdea research and Occasion-specific research are deliberately separate. Discovery has discussed promoting useful occasion discoveries into durable general knowledge but has not decided whether the operation should move, copy, reference, summarize, or otherwise reconcile the information.
+- **Context:** General GiftIdea research and Occasion-specific research are deliberately separate. The GiftIdea page exposes general research separately from links to individual OccasionGiftIdeas and their specific research, including withdrawn contexts. Browsing those contexts is established and does not promote or merge their research. Discovery has discussed promoting useful occasion discoveries into durable general knowledge but has not decided whether the operation should move, copy, reference, summarize, or otherwise reconcile the information.
 - **Impact:** Research history integrity, cross-occasion reuse, Candidate reuse, and possible ResearchThread semantics.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q011`; `DM-R014`.
 
@@ -122,7 +122,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** Reconciliation records what was actually given and feeds Gift History. Users may make mistakes or learn additional detail later, but correction/reopening behavior has not been discussed.
+- **Context:** Reconciliation records what was actually given and feeds Gift History. Users may make mistakes or learn additional detail later, but correction/reopening behavior has not been established. Planning withdrawal and re-addition do not change recorded outcomes; whether and how those planning controls are available after completed reconciliation also remains open with `OQ-003`.
 - **Impact:** Historical accuracy, lifecycle reversibility, Gift Success Feedback, and acceptance criteria.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q005`.
 
@@ -170,7 +170,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** The agreed product principle is to surface user-captured ideas first and generate proactive AI suggestions when an approaching occasion has no useful manual ideas. "Useful" has not yet been defined. A vague GiftIdea such as "Whisky" may be useful enough for one user but may still benefit from proactive research for another. Recipient-only GiftIdeas with generated placeholder titles are now valid; whether such a record qualifies as useful manual context is also unresolved. The Occasion Overview includes the Person's ideas with no Occasion associations; `OQ-020` tracks the remaining pool boundaries. Display eligibility alone does not settle the usefulness threshold.
+- **Context:** The agreed product principle is to surface user-captured ideas first and generate proactive AI suggestions when an approaching occasion has no useful manual ideas. "Useful" has not yet been defined. A vague GiftIdea such as "Whisky" may be useful enough for one user but may still benefit from proactive research for another. Recipient-only GiftIdeas with generated placeholder titles are now valid; whether such a record qualifies as useful manual context is also unresolved. The Occasion Overview offers all otherwise eligible ideas for the Person, including ideas used before or associated with other Occasions, subject to existing recipient and archival constraints. `OQ-020` owns the ranking rules and remaining presentation details. Display eligibility and ranking do not by themselves settle the usefulness threshold.
 - **Impact:** Reminder behavior, AI cost, user annoyance, proactive suggestion requirements, and settings.
 - **References:** Product discovery; [Domain Model](../domain/domain-model.md) — bounded AI and OccasionGiftIdea concepts.
 
@@ -195,9 +195,9 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** The Occasion Overview is shared by ordinary navigation and notification entry. It presents existing occasion plans, includes the Person's ideas with no Occasion associations, provides previous gifting context, and links to detailed research. Merely opening it does not change gift-planning data. The complete hierarchy and eligibility boundaries are not established.
-- **Unresolved details:** Whether and how ideas associated with other Occasions are offered for the approaching Occasion; ordering and overlap among unassociated ideas, current research, and previously given gifts; detailed research navigation and UI. Existing archival constraints remain in force; this question does not authorize resurfacing archived ideas proactively.
-- **Impact:** Resurfacing usefulness, navigation, presentation, and the idea pool evaluated by `OQ-014`. Previous gifts appearing as history does not itself decide their automatic eligibility for a new Occasion.
+- **Context:** The Occasion Overview is shared by ordinary navigation and notification entry. It distinguishes current plans from other available ideas for the Person. Otherwise eligible ideas remain available despite previous use, association with other Occasions, or withdrawal from this Occasion's plan. Recipient and archival constraints still apply. Business rules rank available ideas; the first x appear in a preview, and View all opens a modal containing the full eligible list. Rounded + / − controls and contextual idea-page Add/Remove actions change participation explicitly. Merely viewing ideas does not change planning data. The GiftIdea page separately exposes general research and links to each occasion context's specific research, including withdrawn contexts.
+- **Unresolved details:** Exact business rules and their ordering/tie behavior; the preview count x; remaining layout, contextual labelling, and research-workflow UI details beyond the established separate entry points. No ranking algorithm, score, configuration policy for x, or detailed research editor has been selected. Existing archival constraints remain in force; this question does not authorize resurfacing archived ideas proactively.
+- **Impact:** Resurfacing usefulness, ordering, presentation, and acceptance criteria for the ranked preview and full list. Prior use no longer leaves eligibility ambiguous, but ranking and display do not settle the usefulness threshold in `OQ-014`.
 - **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; [Occasion Overview](../product/glossary.md#occasion-overview); [Domain Model](../domain/domain-model.md#dm-r019--giving-a-gift-does-not-retire-the-giftidea) — `DM-R019`, `DM-R021`.
 
 #### OQ-021 — Is initial notification delivery email-only, and what content belongs in each channel?

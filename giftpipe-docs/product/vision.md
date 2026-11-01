@@ -144,7 +144,7 @@ Existing user-captured ideas should be surfaced before GiftPipe automatically ge
 
 AI fills gaps, develops an idea, evaluates options, or assists research. It should not make the user's own saved context secondary by default.
 
-Occasion notifications should be brief and direct the user to an in-app Occasion Overview. The overview brings together occasion planning context, including ideas for the Person that have no Occasion associations, and links to detailed research. Opening it through a notification does not change gift-planning data. Notification timing, delivery channels, and the detailed overview hierarchy remain separate discovery topics; see [the reminder requirements](requirements.md#fr-021--remind-users-about-approaching-occasions).
+Occasion notifications should be brief and direct the user to an in-app Occasion Overview. The overview brings together current occasion plans and other eligible ideas for the Person, including previously used ideas and those associated with other Occasions, subject to recipient and archival constraints. It presents a ranked preview with access to the full list and links to separately scoped general and occasion-specific research. Opening it through a notification does not change gift-planning data. Notification timing, delivery channels, exact ranking rules, the preview count, and remaining overview presentation details remain separate discovery topics; see [the reminder requirements](requirements.md#fr-021--remind-users-about-approaching-occasions).
 
 ### AI should be bounded to gifting work
 

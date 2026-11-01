@@ -187,7 +187,7 @@ A GiftIdea remains the same conceptual idea across multiple occasions unless the
 - Belongs to one Person.
 - May have zero or more GiftCandidates.
 - May have general research.
-- May participate in zero or more OccasionGiftIdeas.
+- May participate in zero or more OccasionGiftIdeas, including contexts no longer actively included in an Occasion's plan. Those contexts and their research remain reachable from the GiftIdea.
 
 **Lifecycle:**
 
@@ -276,7 +276,7 @@ Candidate lifecycle vocabulary is not finalized. Discussion has included concept
 Represents the application of a GiftIdea to one particular Occasion.
 
 **Identity:**  
-Conceptually distinguished by the combination of the relevant GiftIdea and Occasion. Whether multiple separate OccasionGiftIdeas for the same GiftIdea and Occasion are permitted has not been discussed.
+Conceptually distinguished by the combination of the relevant GiftIdea and Occasion. Removing an idea from the plan and adding it again reuses the same OccasionGiftIdea. The broader question of whether multiple separate contexts for the same GiftIdea and Occasion are permitted remains under `OQ-005`.
 
 **Responsibilities:**
 
@@ -296,7 +296,10 @@ Conceptually distinguished by the combination of the relevant GiftIdea and Occas
 **Lifecycle:**
 
 - Created when a GiftIdea is associated with an Occasion.
-- Remains open while the occasion is pending or unreconciled.
+- Its lifecycle state indicates whether the GiftIdea is currently included in the Occasion's plan.
+- Removing the idea changes only that planning participation; the OccasionGiftIdea, its links to GiftIdea and Occasion, and its research remain intact.
+- Adding the idea back to the same Occasion restores participation through the same OccasionGiftIdea.
+- Planning participation is distinct from the unresolved or reconciled gifting outcome; removing an idea does not record that it was not given.
 - After the occasion, Reconciliation resolves its outcome.
 - Historical association to the Occasion remains even when the idea was not used.
 
@@ -633,10 +636,12 @@ Unknown:
 Known behavior:
 
 1. Created when a GiftIdea is associated with an Occasion.
-2. Remains unresolved/open before reconciliation.
+2. Its lifecycle state indicates active inclusion in or withdrawal from the Occasion's plan. This participation meaning is distinct from the actual gifting outcome.
 3. May accumulate OccasionGiftCandidates and occasion-specific research.
-4. After the Occasion, reconciliation resolves what happened.
-5. Historical association to the Occasion is preserved permanently unless explicitly removed for data-management reasons.
+4. Removing the idea from the plan changes only its planning participation. The OccasionGiftIdea still references the GiftIdea and Occasion; its research and history remain intact and accessible.
+5. Re-adding it to the same Occasion restores participation through that same context rather than creating a fresh record.
+6. After the Occasion, reconciliation records what happened. Withdrawal alone does not establish a not-given outcome.
+7. Historical association to the Occasion is preserved permanently unless explicitly removed for data-management reasons.
 
 Known outcomes include concepts equivalent to:
 
@@ -644,7 +649,7 @@ Known outcomes include concepts equivalent to:
 - not used/not given
 - unresolved
 
-Exact vocabulary is not finalized.
+Exact vocabulary and state representation are not finalized. The following diagram covers reconciliation outcomes only; it does not model planning participation.
 
 ```mermaid
 stateDiagram-v2
@@ -654,7 +659,7 @@ stateDiagram-v2
     Open --> Open : reconciliation deferred / incomplete
 ```
 
-The diagram shows only the behavior conclusively established. Additional states or reopening rules remain unresolved.
+The diagram shows only established reconciliation behavior. Planning withdrawal and re-addition are established above without selecting enum names or a persistence representation. Their interaction with completed reconciliation remains under `OQ-003` and `OQ-010`; additional outcome states and reopening rules remain unresolved.
 
 ---
 
@@ -1179,7 +1184,7 @@ Rejection reasons are useful for future summaries and AI recommendations.
 ### DM-R014 — General and occasion-specific research remain distinct
 
 **Rule:**  
-Research reusable across occasions belongs to the GiftIdea context, while occasion-specific research belongs to the OccasionGiftIdea context.
+Research reusable across occasions belongs to the GiftIdea context, while occasion-specific research belongs to the OccasionGiftIdea context. Merely assigning a GiftIdea to an Occasion does not move its general research; the context in which research is added determines its scope. Removing the idea from the plan preserves occasion-specific research under the same OccasionGiftIdea. The GiftIdea page provides distinct access to general research and to its individual occasion contexts, including withdrawn contexts; browsing either scope does not merge or promote research. Promotion between scopes remains under `OQ-008`.
 
 **Affected concepts:** GiftIdea, OccasionGiftIdea, Research
 
@@ -1299,6 +1304,22 @@ Reconciliation may begin for an eligible Occasion even when it has no OccasionGi
 
 **Rationale:**
 Preserving actual gifting history must not require prior planning in GiftPipe. An explicit report of no gift given carries information that silence does not. This rule does not settle the outcome/state model (`OQ-003`), correction (`OQ-010`), partial completion (`OQ-013`), or notification timing and stopping rules (`OQ-015`).
+
+---
+
+### DM-R023 — Planning participation preserves the occasion context
+
+**Rule:**
+An OccasionGiftIdea's lifecycle state indicates whether its GiftIdea is currently included in the Occasion's plan. Removing the idea changes that participation state without deleting the OccasionGiftIdea, severing its GiftIdea or Occasion references, or changing its research, candidate context, or recorded outcomes. Re-adding the idea to the same Occasion restores participation through that same OccasionGiftIdea. Withdrawal is not a not-given outcome and does not archive the GiftIdea.
+
+**Affected concepts:** GiftIdea, Occasion, OccasionGiftIdea, Research
+
+**Relevant operation/lifecycle:** Occasion planning, withdrawal, re-addition
+
+**Status:** Confirmed behavior; exact state representation unresolved
+
+**Rationale:**
+Quick planning changes must preserve accumulated occasion-specific work and history. Exact lifecycle names and representation remain under `OQ-003`, completed-reconciliation behavior under `OQ-003` and `OQ-010`, and broader duplicate-context rules under `OQ-005`. User-facing controls are specified in [FR-015](../product/requirements.md#fr-015--associate-a-giftidea-with-an-occasion).
 
 ---
 
@@ -1461,7 +1482,7 @@ These entries are contextual summaries, not an independent question register. Th
 | DM-Q001 | Is OccasionGiftCandidate always backed by a reusable GiftCandidate, or may it exist only within an OccasionGiftIdea? | GiftCandidate, OccasionGiftCandidate | Determines identity, reuse, promotion, and ownership semantics | Both models have been discussed; not yet resolved | [OQ-001](../discovery/open-questions.md#oq-001--can-an-occasiongiftcandidate-exist-without-an-underlying-reusable-giftcandidate) |
 | DM-Q002 | What is the exact lifecycle vocabulary for GiftCandidate? | GiftCandidate | Needed for consistent shortlist/reject behavior | "Active" was considered too broad; added/shortlisted/rejected concepts exist | [OQ-002](../discovery/open-questions.md#oq-002--what-lifecycle-states-belong-to-a-reusable-giftcandidate) |
 | DM-Q003 | What is the exact lifecycle vocabulary for OccasionGiftCandidate? | OccasionGiftCandidate | Needed to distinguish nominated, intended, given, and unused candidates | Multiple candidates may be intended or given; exact states unresolved | [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate) |
-| DM-Q004 | What is the exact OccasionGiftIdea outcome model? | OccasionGiftIdea | Required for reconciliation and history | Used/given, not used/not given, and unresolved are established meanings; names and additional states remain open | [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate), [OQ-013](../discovery/open-questions.md#oq-013--how-should-partially-completed-reconciliation-behave) |
+| DM-Q004 | What is the exact OccasionGiftIdea outcome model? | OccasionGiftIdea | Required for reconciliation and history | Used/given, not used/not given, and unresolved remain distinct from planning withdrawal/restoration; exact state representation remains open | [OQ-003](../discovery/open-questions.md#oq-003--what-is-the-exact-outcomestate-model-for-occasiongiftidea-and-occasiongiftcandidate), [OQ-013](../discovery/open-questions.md#oq-013--how-should-partially-completed-reconciliation-behave) |
 | DM-Q005 | Can reconciliation be reopened or corrected after completion? | Occasion, OccasionGiftIdea, OccasionGiftCandidate | Affects lifecycle reversibility and history correction | Not discussed | [OQ-010](../discovery/open-questions.md#oq-010--can-a-completed-reconciliation-be-reopened-or-corrected) |
 | DM-Q006 | Is Candidate nomination reversible, and what happens to historical nomination if removed before the Occasion? | GiftCandidate, OccasionGiftCandidate | Affects occasion planning semantics | Not discussed | [OQ-009](../discovery/open-questions.md#oq-009--is-candidate-nomination-reversible-and-what-history-should-remain-if-a-nomination-is-withdrawn) |
 | DM-Q007 | Does GiftCandidate have independent identity strong enough to be treated as an Entity? | GiftCandidate | Affects aggregate boundaries and reuse semantics | Semantically reusable, but DDD classification not explicitly settled | [OQ-001](../discovery/open-questions.md#oq-001--can-an-occasiongiftcandidate-exist-without-an-underlying-reusable-giftcandidate) |
@@ -1471,7 +1492,7 @@ These entries are contextual summaries, not an independent question register. Th
 | DM-Q011 | How does occasion-specific research become reusable general GiftIdea research? | GiftIdea research, OccasionGiftIdea research | Important for knowledge reuse without losing history | Promotion/copy/reference semantics explicitly deferred | [OQ-008](../discovery/open-questions.md#oq-008--how-should-occasion-specific-research-become-reusable-general-giftidea-research) |
 | DM-Q012 | When a new GiftIdea is created from a pasted ProductLinkNode, should a GiftCandidate also be created automatically? | GiftIdea, ProductLinkNode, GiftCandidate | Affects initial capture semantics | Not conclusively settled | [OQ-011](../discovery/open-questions.md#oq-011--when-a-new-giftidea-is-captured-from-only-a-productlinknode-should-giftpipe-also-create-a-giftcandidate) |
 | DM-Q013 | How are recurring Occasion definitions related to specific yearly occurrences? | Occasion | Affects identity, reminder timing, and reconciliation history | Recurring occasions are supported conceptually; occurrence model not yet defined | [OQ-004](../discovery/open-questions.md#oq-004--how-should-recurring-occasion-definitions-relate-to-specific-occurrences) |
-| DM-Q014 | Are multiple OccasionGiftIdeas for the same GiftIdea and same Occasion allowed? | OccasionGiftIdea | Affects identity and deduplication | Not discussed | [OQ-005](../discovery/open-questions.md#oq-005--may-the-same-giftidea-have-more-than-one-occasiongiftidea-for-the-same-occasion-occurrence) |
+| DM-Q014 | Are multiple OccasionGiftIdeas for the same GiftIdea and same Occasion allowed? | OccasionGiftIdea | Affects identity and deduplication | Re-addition restores the same withdrawn context; broader duplicate-context rules remain open | [OQ-005](../discovery/open-questions.md#oq-005--may-the-same-giftidea-have-more-than-one-occasiongiftidea-for-the-same-occasion-occurrence) |
 | DM-Q015 | What are the exact archive and permanent deletion semantics for GiftIdea? | GiftIdea | Affects lifecycle and privacy behavior | Archive is preferred for normal use; permanent deletion must remain possible for data management | [OQ-012](../discovery/open-questions.md#oq-012--what-are-the-archive-and-reactivation-semantics-for-giftidea) |
 | DM-Q016 | What is the precise identity and ownership of PersonProfile? | Person, PersonProfile | Affects aggregate modeling | One profile per Person is implied but not explicitly established as an entity/value object | [OQ-016](../discovery/open-questions.md#oq-016--what-are-the-actual-ddd-aggregate-and-consistency-boundaries) |
 | DM-Q017 | How should "current research state" be represented and refreshed? | Raw Research History, Current Research State, Research Summary | Affects AI context and derived knowledge | Conceptual distinction confirmed; refresh mechanism deferred | [OQ-017](../discovery/open-questions.md#oq-017--how-should-current-research-state-and-research-summary-be-derived-and-refreshed) |
