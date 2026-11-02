@@ -499,7 +499,7 @@ Resurfacing saved context at the right time is central to the product value prop
 
 **Acceptance criteria:**
 
-- An approaching Occasion can trigger a reminder.
+- An approaching Occasion can trigger a reminder at one of its scheduled times. Defaults, individual schedules, and date-change behavior follow `FR-037` and `DM-R024`.
 - The notification briefly identifies the Occasion, Person, and time remaining, and links to the Occasion Overview in the app.
 - The same Occasion Overview is accessible through normal app navigation; reminder entry does not require a separate Reminder Screen.
 - The overview distinguishes ideas and candidates currently in the Occasion's plan from other available GiftIdeas for the same Person.
@@ -512,10 +512,10 @@ Resurfacing saved context at the right time is central to the product value prop
 - Opening the overview through a notification does not change gift-planning data: it does not create OccasionGiftIdeas, nominate candidates, record outcomes, or mark preparation or reconciliation complete.
 - The overview supports occasion context before and after the Occasion, including access to reconciliation and history. Reconciliation entry and explicit no-gift outcomes follow `FR-028`.
 
-**References:** [Product Vision](vision.md), Human ideas outrank speculative AI suggestions; [Occasion Overview](glossary.md#occasion-overview); `DM-R021`.
+**References:** [Product Vision](vision.md), Human ideas outrank speculative AI suggestions; [Occasion Overview](glossary.md#occasion-overview); [FR-037](#fr-037--manage-occasion-reminder-defaults-and-schedules); `DM-R021`, `DM-R024`.
 
 **Limitations:**
-Pre-occasion notification timing and the interaction between app-level and occasion-level notification settings remain open under `OQ-019`. The ranking rules, preview count, and remaining presentation details remain under `OQ-020`; eligibility, the preview/modal pattern, and research-scope navigation are established above. Email-only initial delivery and channel-specific content remain proposals under `OQ-021`. No notification schedule, delivery channel, or detailed research-screen design is established by this requirement.
+The core pre-occasion schedule and defaults behavior is established in `FR-037`. Detailed timezone-change, daylight-saving, and delivery/retry behavior remains open under `OQ-019`; recurrence remains under `OQ-004`. The ranking rules, preview count, and remaining presentation details remain under `OQ-020`; eligibility, the preview/modal pattern, and research-scope navigation are established above. Email-only initial delivery and channel-specific content remain proposals under `OQ-021`. This requirement does not select a delivery channel or detailed research-screen design.
 
 ---
 
@@ -559,6 +559,46 @@ The product should help users avoid starting from zero when an Occasion is near.
 
 **Limitation:**  
 The trigger threshold remains dependent on `OQ-014`.
+
+---
+
+### FR-037 — Manage Occasion reminder defaults and schedules
+
+**Status:** Confirmed
+
+**Requirement:**
+GiftPipe must let users configure reminder defaults and manage independently owned reminder schedules for each Occasion, following `DM-R024`.
+
+**Rationale:**
+New occasions should receive useful defaults while users retain control over their own schedules, including choosing to have no reminders.
+
+**Acceptance criteria — app defaults:**
+
+- The user can configure zero to three reminder-default entries. The app initially supplies one entry for five days before the Occasion at 8 AM; the user can edit or delete it.
+- A + action exposes another default row until three entries exist. Exact duplicate offset/time entries merge silently rather than taking another slot.
+- The default delivery time initially is 8 AM and can be changed. Each occasion reminder's date and time can be changed independently. Changing defaults does not rewrite schedules already owned by existing Occasions.
+- Times use an account timezone initially taken from the device; the user can change it explicitly. Travel alone does not change the account timezone. Effects of an explicit timezone change on existing reminders remain under `OQ-019`.
+
+**Acceptance criteria — Occasion schedule and editor:**
+
+- Creating an Occasion copies applicable future reminders from the user's current defaults. These count toward the total limit of five reminder entries for that Occasion; up to three copied defaults can therefore leave room for additional manual entries.
+- The user can edit or delete copied and manually added entries. There is no disabled-reminder state in the MVP.
+- Tapping the Occasion's bell icon exposes presets for one, seven, and thirty days before the Occasion, plus a calendar action.
+- The calendar marks the Occasion date, and the user can choose the day for a reminder. Calendar selection establishes a relative day offset that is retained if the Occasion moves.
+- Existing reminder dates and times are visible with controls to change them. Different times on the same day are allowed and represent separate alerts.
+- Scheduling the exact same date and time as an existing reminder silently merges into that reminder. It does not create a second alert or consume another slot, even when five entries already exist.
+
+**Acceptance criteria — expired defaults and date moves:**
+
+- Defaults that would produce reminder times already in the past are skipped when an Occasion is created. No fallback date or immediate catch-up alert is generated.
+- If applying defaults leaves a new Occasion with no scheduled reminder, display: "No reminder is set for this occasion. Consider setting one manually." This also applies when the user has deleted all global defaults. The warning is informational; the user may continue without adding a reminder. If at least one default is scheduled, this zero-reminder warning does not apply.
+- Moving an Occasion retains each reminder's relative day offset and local delivery time. If the new date would put x reminders in the past, first prompt: "Moving the occasion would remove x reminders. Are you sure?"
+- Confirming applies the date move and deletes those expired reminders; cancelling leaves both the original date and its reminders unchanged.
+
+**References:** [Reminder Defaults](glossary.md#reminder-defaults), [Occasion Reminder Schedule](glossary.md#occasion-reminder-schedule); `DM-R024`; [FR-021](#fr-021--remind-users-about-approaching-occasions).
+
+**Limitations:**
+Recurring-occurrence identity and how defaults apply to future recurring occurrences remain under `OQ-004`. `OQ-019` retains detailed timezone-change, daylight-saving, manual past-time/boundary handling, notification delivery/retry, and already-delivered reminder behavior. Channel choice remains under `OQ-021`; post-occasion reconciliation follow-up remains separately under `OQ-015`. The potential future system for detailed GiftIdea plans and deadlines is outside this MVP requirement.
 
 ---
 
@@ -989,11 +1029,12 @@ Cost management and avoiding harassment were explicit motivations for bounded pr
 
 - The product supports conditions that limit automatic AI generation.
 - The product supports stopping or limiting post-Occasion follow-up.
+- Pre-occasion schedules follow `FR-037`: at most three default entries and five entries per Occasion, with exact duplicates merged.
 
 **References:** `OQ-014`, `OQ-015`.
 
 **Limitation:**  
-Exact thresholds and schedules remain unresolved, so this quality objective is established but not yet fully measurable.
+The pre-occasion schedule controls in `FR-037` are established. The proactive AI usefulness threshold and post-occasion follow-up timing/stopping policy remain unresolved, so this broader quality objective is not yet fully measurable.
 
 ---
 
@@ -1071,7 +1112,7 @@ An Occasion and its Person exist. Viewing the Occasion Overview does not require
 The user can open the Occasion Overview directly or through a brief notification. It presents the current plan and a ranked preview of other eligible ideas for the Person, including ideas used before or associated with other Occasions. View all exposes the full eligible list in a modal. Rounded + / − controls add or remove ideas from the plan; inspecting an idea opens it with the Occasion context and its explicit Add/Remove action. Removal retains the OccasionGiftIdea and its research; re-addition restores the same context. General research and individual occasion-specific research remain separately accessible from the GiftIdea page. Candidate nomination or creation remains explicit where applicable; merely viewing ideas or research does not change planning data. Ranking rules, the preview count, and remaining presentation details are unresolved under `OQ-020`.
 
 **Unresolved questions:**  
-Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive AI threshold depends on `OQ-014`. Pre-occasion notification policy depends on `OQ-019`; ranking rules, preview count, and remaining presentation details depend on `OQ-020`; initial delivery channel and channel-specific content depend on `OQ-021`.
+Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive AI threshold depends on `OQ-014`. Pre-occasion schedules follow `FR-037`; detailed timezone and delivery behavior remains under `OQ-019`; ranking rules, preview count, and remaining presentation details depend on `OQ-020`; initial delivery channel and channel-specific content depend on `OQ-021`.
 
 ---
 
@@ -1176,7 +1217,8 @@ This loop describes product direction but should not be treated as a complete re
 | `FR-034` | `OQ-015` | Reconciliation follow-up frequency and stopping rules | Notification behavior remains incomplete |
 | `FR-036` | `OQ-013` | Partial reconciliation semantics | Incomplete Occasion resolution behavior remains blocked |
 | `FR-004` | `OQ-018` | Link-title derivation failure handling and exact placeholder numbering | Basic title precedence is established; edge-case behavior is not finalized |
-| `FR-021` | `OQ-019` | Pre-occasion timing, repetition, and app-level/occasion-level settings interaction | Notification scheduling cannot yet be acceptance-tested fully |
+| `FR-021`, `FR-037` | `OQ-019` | Detailed timezone-change, daylight-saving, scheduling-boundary, and delivery/retry behavior | Core defaults and schedules are testable; operational timing details remain open |
+| `FR-037` | `OQ-004` | Recurring occurrence identity and application of defaults to future occurrences | The one-Occasion scheduling contract does not establish recurring-instance behavior |
 | `FR-021` | `OQ-020` | Ranking rules, preview count x, and remaining presentation details | Eligible pool, ranked preview, full-list modal, and scope navigation are established; ranking acceptance criteria remain incomplete |
 | `FR-021` | `OQ-021` | Initial delivery channel and channel-specific content | Email-only initial delivery is not an established release commitment |
 

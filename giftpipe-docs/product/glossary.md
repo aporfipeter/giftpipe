@@ -624,6 +624,32 @@ AI Enhancement differs from broad gift suggestion: it researches the captured id
 
 ## Reminders and proactive behavior
 
+### Reminder Defaults
+
+**Definition:**
+Up to three user-configured reminder templates copied into newly created Occasions. The initial configuration contains one reminder five days before at 8 AM, using the account timezone, which initially comes from the device. The user can edit or delete defaults and change the default delivery time.
+
+**Important distinctions:**
+These are templates for new Occasions, not shared reminders that continue to control existing schedules. A copied reminder belongs to its Occasion and counts toward that Occasion's five-entry limit. Exact duplicate offset/time templates merge without using another slot. There is no disabled state in the MVP.
+
+**Status:** Confirmed behavior; technical representation unresolved
+
+---
+
+### Occasion Reminder Schedule
+
+**Definition:**
+An Occasion's own editable collection of up to five reminders, including copied defaults and manual entries. Each entry has a day offset from the Occasion and a local delivery time in the account timezone.
+
+**Important distinctions:**
+The saved schedule is distinct from an [Occasion Reminder](#occasion-reminder) notification. Exact date-and-time duplicates merge into one entry; different times on the same day are permitted. Editing or deleting an occasion entry does not edit its originating default. Date moves retain offsets and local times, with confirmation before deleting reminders that would become past due. Defaults that have expired at creation are skipped without fallback scheduling; having no scheduled reminder prompts an informational warning, including when no defaults were configured. See [FR-037](requirements.md#fr-037--manage-occasion-reminder-defaults-and-schedules) for the editor and warning behavior.
+
+Recurrence, detailed timezone changes, and delivery/retry behavior remain unresolved. This does not specify persistence entities or delivery-history retention.
+
+**Status:** Confirmed behavior; technical representation unresolved
+
+---
+
 ### Occasion Reminder
 
 **Definition:**  
@@ -633,7 +659,7 @@ A brief proactive notification informing the user that an Occasion is approachin
 Uses Occasion information. The linked overview presents current planning contexts and the Person's other eligible ideas, including ideas used before or associated with other Occasions, subject to recipient and archival constraints.
 
 **Important distinctions:**
-The notification layer is intended to remain thin and largely platform agnostic. Email may eventually include more information than other channels, but email-only initial delivery and channel-specific content limits are not established decisions. Opening the linked overview does not change gift-planning data.
+Its pre-occasion scheduling follows the Occasion's [reminder schedule](#occasion-reminder-schedule), configured through the bell presets/calendar and date/time controls in [FR-037](requirements.md#fr-037--manage-occasion-reminder-defaults-and-schedules). The notification layer is intended to remain thin and largely platform agnostic. Email may eventually include more information than other channels, but email-only initial delivery and channel-specific content limits are not established decisions. Opening the linked overview does not change gift-planning data.
 
 **Status:** Confirmed
 
