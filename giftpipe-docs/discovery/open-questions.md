@@ -70,7 +70,7 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** High
 - **Status:** Open
-- **Context:** GiftPipe supports recurring occasions such as birthdays and anniversaries as well as one-off occasions. Reconciliation and history, however, operate on a specific occurrence such as "Dad's Birthday 2026". The identity boundary between the recurring definition and an individual occurrence has not been established.
+- **Context:** GiftPipe supports recurring occasions such as birthdays and anniversaries as well as one-off occasions. Reconciliation and history, however, operate on a specific occurrence such as "Dad's Birthday 2026". The identity boundary between the recurring definition and an individual occurrence has not been established. The reminder defaults/schedule contract in `FR-037` does not settle when future recurring occurrences are created or when reminder defaults are copied to them.
 - **Impact:** Occasion identity, reminder scheduling, OccasionGiftIdea association, history, reconciliation, and date behavior.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q013`.
 
@@ -186,10 +186,10 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** Brief Occasion Reminders link to the in-app Occasion Overview. Their timing must be discussed separately from overview content. App-level and occasion-level notification settings and their interaction have been identified for exploration, but no scheduling or precedence policy is approved.
-- **Unresolved details:** When an Occasion becomes eligible for notification; whether and when notifications repeat; app-level defaults and occasion-level settings; their precedence and any disabling or stopping behavior.
+- **Context:** Brief Occasion Reminders link to the in-app Occasion Overview. Their timing must be discussed separately from overview content. The core settings policy is now established: up to three defaults (initially five days before at 8 AM), copied into independently editable schedules capped at five per Occasion. Exact duplicates merge; different times on one day remain separate. Reminders are active or deleted. Date moves retain offsets and local times with confirmation before deleting expired entries. Expired defaults are skipped without fallback scheduling; a zero-reminder warning also appears when the defaults list is empty. Times use an account timezone initially taken from the device and explicitly changeable. These decisions narrow this question rather than settling all operational timing behavior.
+- **Unresolved details:** Effects of an explicit account-timezone change on existing reminders; daylight-saving gaps/overlaps; manual selection of past times and the exact due-now boundary; handling of already-delivered reminders when an Occasion moves; delivery failures, missed delivery, retries, and stopping behavior beyond user edits/deletion. Recurring-instance/default application is separate under `OQ-004`. No delivery history retention or scheduler architecture is selected.
 - **Impact:** Notification scheduling, user control, acceptance criteria, and avoiding excessive interruption. This is distinct from the post-occasion reconciliation follow-up policy in `OQ-015`.
-- **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; `OQ-004` owns recurring occurrence identity.
+- **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; [Reminder settings](../product/requirements.md#fr-037--manage-occasion-reminder-defaults-and-schedules) — `FR-037`; [Domain rule](../domain/domain-model.md#dm-r024--reminder-defaults-create-independently-owned-occasion-schedules) — `DM-R024`; `OQ-004` owns recurring occurrence identity.
 
 #### OQ-020 — What are the remaining Occasion Overview idea-pool and presentation rules?
 

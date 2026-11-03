@@ -44,6 +44,8 @@ GiftPipe's AI is intentionally **bounded** to explicit gift-related actions. AI 
 | Person | Entity | Represents a gift recipient managed by the user | Confirmed |
 | PersonProfile | Unclassified | Holds user-maintained recipient context relevant to gifting | Confirmed definition; classification unresolved |
 | Occasion | Entity | Represents a recurring or one-off event for which gifts may be considered | Confirmed |
+| Reminder Defaults | Unclassified | Supplies user-configured templates copied into newly created Occasions | Confirmed behavior; technical representation unresolved |
+| Occasion Reminder Schedule | Unclassified | Holds an Occasion's editable reminder offsets and delivery times | Confirmed behavior; technical representation unresolved |
 | GiftIdea | Entity | Represents a durable, occasion-independent gifting idea for a Person | Confirmed |
 | GiftIdea Specificity | Value Object / Attribute concept | Describes how broad or concrete a GiftIdea is without changing its structural role | Confirmed meaning; classification tentative |
 | GiftCandidate | Entity or owned concept | Represents a concrete option within GiftIdea research | Confirmed meaning; identity classification unresolved |
@@ -153,6 +155,7 @@ An Occasion is conceptually distinct by the event it represents for a Person. Ex
 
 - Associated with a Person.
 - Has zero or more OccasionGiftIdeas.
+- Owns up to five scheduled pre-occasion reminders, independently editable after default application; see `DM-R024`.
 
 **Lifecycle:**  
 Occasions may be recurring or one-off. Exact recurrence semantics are deferred.
@@ -1320,6 +1323,30 @@ An OccasionGiftIdea's lifecycle state indicates whether its GiftIdea is currentl
 
 **Rationale:**
 Quick planning changes must preserve accumulated occasion-specific work and history. Exact lifecycle names and representation remain under `OQ-003`, completed-reconciliation behavior under `OQ-003` and `OQ-010`, and broader duplicate-context rules under `OQ-005`. User-facing controls are specified in [FR-015](../product/requirements.md#fr-015--associate-a-giftidea-with-an-occasion).
+
+---
+
+### DM-R024 — Reminder defaults create independently owned occasion schedules
+
+**Rule:**
+
+- A user may configure up to three reminder defaults. Creating an Occasion copies the defaults whose resulting reminder times are still in the future into that Occasion's own schedule. Subsequent default changes apply to new Occasions, not existing occasion schedules.
+- Each Occasion may have up to five reminders in total, including copied defaults. The user may freely edit or delete its reminder entries. MVP reminders are active or deleted, with no disabled state.
+- Identical scheduled date-and-time combinations within an Occasion merge silently into the existing reminder. Identical day-offset/time combinations within global defaults likewise merge. A duplicate consumes no additional slot, including at a limit. Different times on the same day are allowed as separate alerts; there is no same-day consolidation rule.
+- An occasion reminder retains its relative day offset and local delivery time when the Occasion date changes, including reminders selected through the calendar. If the proposed move would leave reminders in the past, confirmation is required before applying the move and deleting those reminders. Cancelling preserves the original Occasion date and reminders.
+- Expired defaults are skipped at creation without a fallback or immediate catch-up reminder. If default application leaves the newly created Occasion with no scheduled reminder, an informational warning is shown, even if the global defaults list is empty. The warning does not prevent creating the Occasion without a reminder.
+- Scheduled times use an account timezone, initially taken from the device and explicitly changeable by the user; travel does not automatically replace that timezone. Per-reminder times can differ from the app's default delivery time.
+
+**Affected concepts:** Occasion, Reminder Defaults, Occasion Reminder Schedule
+
+**Relevant operation/lifecycle:** Occasion creation, reminder editing, Occasion date changes
+
+**Status:** Confirmed behavior; technical scheduling and delivery details unresolved
+
+**Rationale:**
+Defaults make reminders available on creation while copied ownership preserves individual planning choices. Exact duplicates have no additional user intent, whereas intentionally different times do. Explicit date-move confirmation protects reminders from silent deletion, and a zero-reminder warning leaves scheduling under user control without inventing fallback dates. Shipped settings and observable editing behavior are specified in [FR-037](../product/requirements.md#fr-037--manage-occasion-reminder-defaults-and-schedules).
+
+Recurrence remains under `OQ-004`. Timezone changes, daylight-saving boundaries, and detailed delivery/retry behavior remain under `OQ-019`. This rule does not define post-occasion follow-up scheduling (`OQ-015`) or a persistence/aggregate design.
 
 ---
 
