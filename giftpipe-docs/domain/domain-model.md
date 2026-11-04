@@ -1213,7 +1213,7 @@ Gift outcomes and AI inferences must not silently modify PersonProfile.
 ### DM-R016 — Useful AI output is research, not transient chat
 
 **Rule:**  
-When bounded AI generates useful gift research, that output should be preserved in the relevant research history.
+When bounded AI generates useful gift research, that output should be preserved in the relevant research history. Unadopted proactive suggestions are a separate transient proposal stage under `DM-R025`; they are not automatically saved as research. Explicit adoption creates durable idea/planning context without changing the retention of established research.
 
 **Affected concepts:** AI Research Output, Research Tree
 
@@ -1347,6 +1347,29 @@ Quick planning changes must preserve accumulated occasion-specific work and hist
 Defaults make reminders available on creation while copied ownership preserves individual planning choices. Exact duplicates have no additional user intent, whereas intentionally different times do. Explicit date-move confirmation protects reminders from silent deletion, and a zero-reminder warning leaves scheduling under user control without inventing fallback dates. Shipped settings and observable editing behavior are specified in [FR-037](../product/requirements.md#fr-037--manage-occasion-reminder-defaults-and-schedules).
 
 Recurrence remains under `OQ-004`. Timezone changes, daylight-saving boundaries, and detailed delivery/retry behavior remain under `OQ-019`. This rule does not define post-occasion follow-up scheduling (`OQ-015`) or a persistence/aggregate design.
+
+---
+
+### DM-R025 — Proactive suggestions become durable ideas only through adoption
+
+**Rule:**
+
+- A due Occasion Reminder initiates the eligibility check for proactive suggestions. The check uses the Person's eligible idea pool, including ideas outside the current plan and those used before or associated elsewhere, subject to recipient and archival constraints.
+- A GiftIdea with user-supplied idea content, such as a title, description, or link, is useful for this check without requiring research or candidates. An explicitly adopted AI suggestion also counts. A recipient-only record with a generated placeholder and no idea content does not count, even if explicitly included in the plan. The check examines content, not the displayed title.
+- Useful saved ideas suppress automatic generation; bounded AI actions remain available on explicit user request. Ordinary navigation is not a separate automatic-generation trigger. Exact generation timing and handoff mechanics remain under `OQ-022`.
+- When no useful ideas exist, the Occasion Overview can show an empty state and a separate "Consider these" section. Explicitly included empty stubs remain visible in the current plan as intentional work items; empty placeholders outside the current plan with no recommendation content are omitted from the available-ideas picker. This does not invalidate recipient-only capture or delete those records.
+- Unadopted proactive suggestions are transient proposals, not durable GiftIdeas, candidates, or research nodes. Explicit Add to occasion creates a GiftIdea from the chosen suggestion and its OccasionGiftIdea context. The adopted idea enters the current plan and counts as useful for subsequent reminder checks; textual specificity does not automatically create a GiftCandidate.
+- Other suggestions remain available during the same occasion-planning visit after an adoption, including while the user opens that Occasion's idea details, research, or modals. Leaving the visit discards unadded suggestions; adopted ideas remain. No hard-close recovery is required for the MVP.
+- A reminder-originated visit with available transient suggestions and no adoption requires confirmation before normal navigation away. Detail/research/modal navigation within that visit does not trigger this guard. With no suggestions or after at least one adoption, this specific guard does not apply.
+
+**Affected concepts:** Occasion Reminder, Occasion Overview, GiftIdea, OccasionGiftIdea, AI-Generated Occasion Suggestion
+
+**Relevant operation/lifecycle:** Reminder eligibility check, suggestion display, adoption, occasion-planning visit exit
+
+**Status:** Confirmed product behavior; generation execution and temporary-state mechanics unresolved
+
+**Rationale:**
+Saved intent takes priority over speculative alternatives. Explicit adoption establishes durable intent; merely displaying a suggestion does not. Keeping the list through related detail views supports comparison, while discarding unchosen proposals on departure avoids silently accumulating research. [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md) records why this complements retained AI research rather than replacing it. User-visible behavior is specified in FR-022, FR-023, and FR-038.
 
 ---
 

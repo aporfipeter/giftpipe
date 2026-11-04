@@ -140,7 +140,7 @@ A captured idea may remain valuable even when no concrete product or candidate i
 
 ### Human ideas outrank speculative AI suggestions
 
-Existing user-captured ideas should be surfaced before GiftPipe automatically generates alternatives.
+Existing user-captured or explicitly adopted ideas should be surfaced before GiftPipe automatically generates alternatives. User-supplied idea content counts as useful; recipient-only empty placeholders do not suppress generation. A due Occasion Reminder initiates the check. When no useful ideas exist, the Occasion Overview can show transient options in a separate Consider these section. Add to occasion explicitly saves a chosen idea and its occasion context; unadded options last for the current planning visit, not permanent research history. See [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md) for this boundary.
 
 AI fills gaps, develops an idea, evaluates options, or assists research. It should not make the user's own saved context secondary by default.
 
@@ -287,7 +287,7 @@ Most currently tracked open questions concern detailed domain semantics rather t
 
 Two active questions have direct product-behavior implications:
 
-- **OQ-014 — What qualifies as having a sufficiently useful manual idea so proactive AI suggestions should not run?** This affects the balance between respecting captured user context and proactively helping when an occasion approaches.
+- **OQ-022 — How should reminder-triggered suggestions be prepared and handed to the Occasion Overview?** The usefulness boundary is now resolved under OQ-014; exact generation execution and temporary handoff behavior remain open.
 - **OQ-015 — What should control post-occasion reconciliation follow-up frequency and stopping conditions?** This affects how proactive GiftPipe can be without becoming intrusive.
 
 The current domain register also contains unresolved questions about candidate identity, occasion occurrence identity, and reconciliation state. These should remain in [the open questions register](../discovery/open-questions.md) rather than being independently resolved here.

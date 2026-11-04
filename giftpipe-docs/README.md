@@ -40,7 +40,7 @@ giftpipe-docs/
     └── documentation-audit.md
 ```
 
-The documents below exist in the repository. The decision index links to the seven Accepted ADRs; the audit records the original assessment and subsequent approved remediation batches.
+The documents below exist in the repository. The decision index links to the eight Accepted ADRs; the audit records the original assessment and subsequent approved remediation batches.
 
 **Generation provenance:** When this guide was first established, only the guide was being created here. The glossary had been produced during discovery but its repository presence was unverified; other paths described the planned organization. The inventory below now describes existing files.
 

@@ -676,6 +676,8 @@ Brings together Occasion information, ideas and candidates currently in the plan
 **Important distinctions:**
 There is one Occasion Overview rather than a separate Reminder Screen. It may support preparation before an Occasion and access to reconciliation and history afterward. Rounded + / − controls on the overview and full-list modal provide quick planning changes. Opening an idea retains the Occasion context for its Add/Remove action. The ranking rules, preview count, and remaining presentation details remain open under `OQ-020`. The GiftIdea page provides separate access to general research and each occasion context's research. A [Research Summary](#research-summary) is derived research information, not the name of this screen.
 
+The saved hierarchy prioritizes explicitly planned items, including intentional empty stubs, before other valid ideas. Empty unassigned placeholders with no idea or recommendation content do not appear in the picker. When useful saved ideas are absent, an empty state and a separate Consider these section support transient suggestions and explicit adoption under [FR-038](requirements.md#fr-038--adopt-transient-suggestions-within-an-occasion-planning-visit).
+
 Displaying an idea in the overview does not create an OccasionGiftIdea or change its outcome. Explicit removal changes planning participation while preserving the context and research; re-addition restores that same context (`DM-R023`).
 
 **Status:** Confirmed
@@ -684,15 +686,17 @@ Displaying an idea in the overview does not create an OccasionGiftIdea or change
 
 ### AI-Generated Occasion Suggestion
 
-**Definition:**  
-A contextual recommendation generated proactively when an important Occasion approaches and no sufficiently useful user-captured gift idea is available.
+**Definition:**
+A transient contextual proposal offered in the Occasion Overview's "Consider these" section when a due Occasion Reminder finds no useful saved ideas under FR-022.
 
-**Important distinctions:**  
-Automatic generation is intended to be constrained both to manage AI cost and to avoid excessive user messaging.
+**Important distinctions:**
+A user-supplied idea title, description, link, or other captured idea material counts as useful without candidates or research. Explicitly adopted suggestions also count. A recipient-only placeholder with no idea content does not; explicitly planned empty stubs can remain visible as intentional work without blocking suggestions.
 
-If manual GiftIdeas already provide useful options, GiftPipe should surface those first and make further AI generation user-initiated.
+Unadopted suggestions are not durable GiftIdeas, candidates, or research nodes. Add to occasion creates the chosen GiftIdea and its OccasionGiftIdea context, placing it in the current plan. The other suggestions remain through the same occasion-planning visit, including details, research, and modals, then are discarded on departure. A reminder-originated visit with suggestions and no adoption has a confirmation for normal departure; hard-close interception/recovery is outside the MVP. See [FR-038](requirements.md#fr-038--adopt-transient-suggestions-within-an-occasion-planning-visit).
 
-**Status:** Confirmed
+Useful saved ideas suppress automatic generation while explicit bounded AI actions remain available. This transient proposal stage complements retained AI research under [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md), without superseding ADR-005. Exact generation/handoff mechanics remain under OQ-022.
+
+**Status:** Confirmed product behavior; technical mechanics unresolved
 
 ---
 

@@ -61,6 +61,7 @@ AI coding agents and contributors must not treat the absence of a decision recor
 | [ADR-005](ADR-005-bound-ai-to-explicit-gifting-actions.md) | Bound AI to explicit gifting actions and persist useful research | Product | Accepted |
 | [ADR-006](ADR-006-make-link-semantics-user-directed.md) | Let users distinguish reference links from product links | Domain | Accepted |
 | [ADR-007](ADR-007-keep-personprofile-explicitly-user-controlled.md) | Keep PersonProfile explicitly user-controlled | Domain | Accepted |
+| [ADR-008](ADR-008-keep-proactive-suggestions-transient-until-adopted.md) | Keep proactive suggestions transient until explicitly adopted | Product | Accepted |
 
 ## Guidance for AI coding agents
 
