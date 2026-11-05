@@ -24,13 +24,15 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 ## 2. Overview
 
+Counts cover active questions only. OQ-014 is resolved below; OQ-022 tracks the remaining generation execution/handoff uncertainty.
+
 | Category                          |  High | Medium |   Low |  Total |
 | --------------------------------- | ----: | -----: | ----: | -----: |
-| Domain model                      |     3 |      2 |     3 |      8 |
+| Domain model                      |     3 |      3 |     3 |      9 |
 | Domain operations and lifecycle   |     0 |      5 |     1 |      6 |
 | Requirements and user experience  |     0 |      5 |     0 |      5 |
 | Architecture and technical design |     0 |      0 |     2 |      2 |
-| **Total**                         | **3** | **12** | **6** | **21** |
+| **Total**                         | **3** | **13** | **6** | **22** |
 
 ---
 
@@ -106,6 +108,15 @@ Unresolved questions are **not approved requirements or implementation instructi
 - **Impact:** Research history integrity, cross-occasion reuse, Candidate reuse, and possible ResearchThread semantics.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q011`; `DM-R014`.
 
+#### OQ-023 — What recipient data belongs in Person and PersonProfile for gifting context?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** The cold-start flow can collect free-form interest-profile details when profile, history, and idea leads provide no usable recipient context. The user requested a separate discussion of the Person data model: information beyond interests could also help provide context. Gender and relationship type were mentioned as possible examples only; neither is an approved field or inference rule.
+- **Unresolved details:** Which recipient attributes are useful; whether they belong on Person or PersonProfile; optionality and editing semantics; how supplied non-interest data contributes to contextual generation when interests are empty. The schema, value sets, and interpretation of any proposed field remain undecided.
+- **Impact:** Recipient capture/editing, profile shape, AI context assembly, and the boundary between an empty interest profile and absent recipient context.
+- **References:** [Person](../domain/domain-model.md#41-person), [PersonProfile](../domain/domain-model.md#42-personprofile); FR-003, FR-027, FR-038.
+
 ---
 
 ### Domain operations and lifecycle
@@ -166,14 +177,6 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 ### Requirements and user experience
 
-#### OQ-014 — What qualifies as having a sufficiently useful manual idea so proactive AI suggestions should not run?
-
-- **Priority:** Medium
-- **Status:** Open
-- **Context:** The agreed product principle is to surface user-captured ideas first and generate proactive AI suggestions when an approaching occasion has no useful manual ideas. "Useful" has not yet been defined. A vague GiftIdea such as "Whisky" may be useful enough for one user but may still benefit from proactive research for another. Recipient-only GiftIdeas with generated placeholder titles are now valid; whether such a record qualifies as useful manual context is also unresolved. The Occasion Overview offers all otherwise eligible ideas for the Person, including ideas used before or associated with other Occasions, subject to existing recipient and archival constraints. `OQ-020` owns the ranking rules and remaining presentation details. Display eligibility and ranking do not by themselves settle the usefulness threshold.
-- **Impact:** Reminder behavior, AI cost, user annoyance, proactive suggestion requirements, and settings.
-- **References:** Product discovery; [Domain Model](../domain/domain-model.md) — bounded AI and OccasionGiftIdea concepts.
-
 #### OQ-015 — What should control post-occasion reconciliation follow-up frequency and stopping conditions?
 
 - **Priority:** Medium
@@ -195,9 +198,9 @@ Unresolved questions are **not approved requirements or implementation instructi
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** The Occasion Overview is shared by ordinary navigation and notification entry. It distinguishes current plans from other available ideas for the Person. Otherwise eligible ideas remain available despite previous use, association with other Occasions, or withdrawal from this Occasion's plan. Recipient and archival constraints still apply. Business rules rank available ideas; the first x appear in a preview, and View all opens a modal containing the full eligible list. Rounded + / − controls and contextual idea-page Add/Remove actions change participation explicitly. Merely viewing ideas does not change planning data. The GiftIdea page separately exposes general research and links to each occasion context's specific research, including withdrawn contexts.
-- **Unresolved details:** Exact business rules and their ordering/tie behavior; the preview count x; remaining layout, contextual labelling, and research-workflow UI details beyond the established separate entry points. No ranking algorithm, score, configuration policy for x, or detailed research editor has been selected. Existing archival constraints remain in force; this question does not authorize resurfacing archived ideas proactively.
-- **Impact:** Resurfacing usefulness, ordering, presentation, and acceptance criteria for the ranked preview and full list. Prior use no longer leaves eligibility ambiguous, but ranking and display do not settle the usefulness threshold in `OQ-014`.
+- **Context:** The Occasion Overview is shared by ordinary navigation and notification entry. It distinguishes current plans from other available ideas for the Person. Otherwise eligible ideas remain available despite previous use, association with other Occasions, or withdrawal from this Occasion's plan. Recipient and archival constraints still apply. Empty placeholders outside the current plan without idea or recommendation content are omitted from the picker, while explicitly planned empty stubs remain visible. The separate transient Consider these section and visit/adoption behavior are established in FR-038. Business rules rank available ideas; the first x appear in a preview, and View all opens a modal containing the full eligible list. Rounded + / − controls and contextual idea-page Add/Remove actions change participation explicitly. Merely viewing ideas does not change planning data. The GiftIdea page separately exposes general research and links to each occasion context's specific research, including withdrawn contexts.
+- **Unresolved details:** Exact business rules and their ordering/tie behavior; the preview count x; remaining layout, contextual labelling, transient-suggestion count/presentation, and research-workflow UI details beyond the established separate entry points. No ranking algorithm, score, configuration policy for x, or detailed research editor has been selected. Existing archival constraints remain in force; this question does not authorize resurfacing archived ideas proactively.
+- **Impact:** Resurfacing usefulness, ordering, presentation, and acceptance criteria for the ranked preview and full list. Prior use no longer leaves eligibility ambiguous. FR-022 now establishes usefulness independently of the exact ranking rules; OQ-022 owns remaining generation mechanics.
 - **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; [Occasion Overview](../product/glossary.md#occasion-overview); [Domain Model](../domain/domain-model.md#dm-r019--giving-a-gift-does-not-retire-the-giftidea) — `DM-R019`, `DM-R021`.
 
 #### OQ-021 — Is initial notification delivery email-only, and what content belongs in each channel?
@@ -207,6 +210,17 @@ Unresolved questions are **not approved requirements or implementation instructi
 - **Context:** The notification layer should remain thin and largely platform agnostic, with brief notifications directing users to the Occasion Overview. Email-only initial delivery was recalled during discussion but could not be verified in the repository; it remains proposed scope. Email may permit more context than a push notification, but the content distinction is deferred.
 - **Impact:** Initial-release scope, supported delivery channels, notification content, and channel-specific acceptance criteria. Mentioning a channel does not commit the product to supporting it.
 - **References:** [Requirements](../product/requirements.md#fr-021--remind-users-about-approaching-occasions) — `FR-021`; [Release boundaries](../product/requirements.md#release-boundaries).
+
+---
+
+#### OQ-022 — How should reminder-triggered suggestions be prepared and handed to the Occasion Overview?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** FR-022 resolves the usefulness boundary; due Occasion Reminders initiate the eligibility check. FR-023/FR-038 and DM-R025 define transient proposals, explicit adoption into durable idea/planning context, same-visit retention, and departure behavior. The cold-start interaction is also established: an immediate inline prompt offers profile editing or explicit general ideas, saved profile details start generation, cancellation returns without generation, and existing usable context bypasses the prompt. These product decisions do not select execution or temporary-state machinery; the recipient field model remains separately under `OQ-023`.
+- **Unresolved details:** Exact generation timing relative to notification delivery and opening its link; temporary handoff/storage before and during the visit; late entry or changed context between reminder and opening; generation failure and list availability. No scheduler, cache, transport, or permanent suggestion archive is selected. Hard-close recovery is explicitly outside the MVP rather than an open requirement.
+- **Impact:** Generation execution, notification/overview coordination, acceptance criteria for failures and late entry, and temporary-state implementation.
+- **References:** [FR-023](../product/requirements.md#fr-023--proactively-generate-contextual-suggestions-when-needed), [FR-038](../product/requirements.md#fr-038--adopt-transient-suggestions-within-an-occasion-planning-visit); [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
 
 ---
 
@@ -228,6 +242,19 @@ Unresolved questions are **not approved requirements or implementation instructi
 - **Context:** Raw Research History is authoritative, while Current Research State and summaries are derived to avoid feeding an ever-growing tree into AI. The project intentionally deferred whether summaries are generated lazily, cached, invalidated after changes, or refreshed by another policy.
 - **Impact:** AI context construction, model cost, stale-summary risk, and future technical design.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q017`; research-state concepts.
+
+---
+
+## Resolved question references
+
+These entries preserve stable identifiers and links to authoritative resolutions; they are excluded from the active overview counts.
+
+#### OQ-014 — What qualifies as having a sufficiently useful manual idea so proactive AI suggestions should not run?
+
+- **Priority at resolution:** Medium
+- **Status:** Resolved
+- **Resolution:** User-supplied idea content or an explicitly adopted suggestion is sufficient across the Person's eligible idea pool. Recipient-only placeholders without idea content are insufficient, even when explicitly planned. Due Occasion Reminders initiate the check. The authoritative behavior is in [FR-022](../product/requirements.md#fr-022--avoid-unnecessary-proactive-ai-when-useful-manual-ideas-exist), DM-R025, and [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
+- **Remaining separate uncertainty:** OQ-022 owns execution and temporary handoff mechanics. OQ-020 retains ranking and detailed presentation; this resolution does not define those rules.
 
 ---
 

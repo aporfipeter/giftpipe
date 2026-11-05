@@ -141,7 +141,7 @@ Frictionless capture is the primary product loop.
 **References:** `DM-R001`, `DM-R002`, `DM-R003`, `DM-R005`.
 
 **Limitations:**
-Title-derivation failure handling and the exact placeholder numbering/collision rules remain open under [OQ-018](../discovery/open-questions.md#oq-018--how-should-giftidea-title-assignment-handle-failures-and-numbering). Link-derived titles do not settle automatic GiftCandidate creation, which remains under `OQ-011`. Whether a recipient-only placeholder qualifies as a useful manual idea remains under `OQ-014`.
+Title-derivation failure handling and the exact placeholder numbering/collision rules remain open under [OQ-018](../discovery/open-questions.md#oq-018--how-should-giftidea-title-assignment-handle-failures-and-numbering). Link-derived titles do not settle automatic GiftCandidate creation, which remains under `OQ-011`. A recipient-only placeholder without idea content does not suppress proactive suggestions; the settled usefulness rule is in `FR-022`.
 
 ---
 
@@ -504,10 +504,11 @@ Resurfacing saved context at the right time is central to the product value prop
 - The same Occasion Overview is accessible through normal app navigation; reminder entry does not require a separate Reminder Screen.
 - The overview distinguishes ideas and candidates currently in the Occasion's plan from other available GiftIdeas for the same Person.
 - The available pool includes otherwise eligible ideas regardless of prior use, association with other Occasions, or previous withdrawal from this Occasion's plan. The same-Person constraint (`DM-R020`) and established exclusion of archived ideas from proactive consideration (`DM-R019`) remain in force.
+- Empty placeholders outside the current plan with no idea or recommendation content are omitted from the available-ideas picker. Explicitly included empty stubs remain visible in the current plan but do not suppress proactive suggestions (`FR-022`).
 - Business rules rank available ideas for this Occasion. A preview shows the first x ideas; View all opens a modal exposing the full eligible list from that ranked pool. Ranking rules and the value of x remain TBD under `OQ-020`.
 - The overview and modal offer rounded + / − controls with the behavior in `FR-015`; browsing an idea retains the Occasion context for its contextual Add/Remove action.
 - Previous gifts and outcomes remain available as context; prior use does not by itself disqualify an idea.
-- Existing user-captured ideas are prioritized ahead of speculative AI alternatives.
+- Existing user-captured ideas and explicitly adopted suggestions are prioritized ahead of speculative alternatives. Placeholder display, empty states, the separate Consider these section, and adoption/departure behavior follow `FR-038`.
 - The overview links to detailed research. On the GiftIdea page, general research and linked OccasionGiftIdea research are separately accessible as specified in `FR-010`. The detailed research workflow and remaining layout details remain deferred.
 - Opening the overview through a notification does not change gift-planning data: it does not create OccasionGiftIdeas, nominate candidates, record outcomes, or mark preparation or reconciliation complete.
 - The overview supports occasion context before and after the Occasion, including access to reconciliation and history. Reconciliation entry and explicit no-gift outcomes follow `FR-028`.
@@ -521,20 +522,26 @@ The core pre-occasion schedule and defaults behavior is established in `FR-037`.
 
 ### FR-022 — Avoid unnecessary proactive AI when useful manual ideas exist
 
-**Status:** Blocked
+**Status:** Confirmed
 
-**Requirement:**  
-GiftPipe must suppress automatic proactive AI gift generation when the Occasion already has sufficiently useful user-captured ideas.
+**Requirement:**
+GiftPipe must suppress automatic proactive generation when the Person's eligible idea pool contains a useful user-captured or explicitly adopted idea, following `DM-R025`.
 
-**Rationale:**  
-The product should respect human-captured context, control AI cost, and avoid unnecessary noise.
+**Rationale:**
+Recorded intent gives the user something to elaborate on. Generation should not require the user to research an idea or add it to this Occasion first.
 
 **Acceptance criteria:**
 
-- Automatic AI generation does not always run for every reminder.
-- The exact rule for determining when manual ideas are "sufficiently useful" cannot be finalized until `OQ-014` is resolved.
+- A user-supplied idea title, description, link, or other captured idea material is sufficient; a vague idea needs no candidate or research to count.
+- Eligibility covers the same Person's valid pool, including ideas not in the current plan and ideas previously used or associated elsewhere. Recipient and archival constraints still apply.
+- A recipient-only placeholder with no idea content does not suppress generation, including when explicitly added to the Occasion. A saved link still counts if title derivation failed and the displayed title is generic.
+- A suggestion explicitly adopted through Add to occasion counts as useful saved intent on subsequent reminder checks. Merely generated, unadopted suggestions do not become user-adopted content.
+- A due Occasion Reminder initiates the check. Automatic generation is suppressed when a qualifying idea exists, so it does not run for every reminder. Explicit bounded AI actions remain available.
 
-**References:** `OQ-014`.
+**References:** `DM-R025`; [OQ-014 resolution](../discovery/open-questions.md#oq-014--what-qualifies-as-having-a-sufficiently-useful-manual-idea-so-proactive-ai-suggestions-should-not-run); [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
+
+**Limitation:**
+The usefulness boundary and reminder coupling are established; exact generation execution and temporary handoff behavior remain under `OQ-022`.
 
 ---
 
@@ -542,23 +549,24 @@ The product should respect human-captured context, control AI cost, and avoid un
 
 **Status:** Confirmed
 
-**Requirement:**  
-GiftPipe must be capable of proactively generating contextual gift suggestions for an approaching Occasion when the configured conditions for lacking useful manual ideas are satisfied.
+**Requirement:**
+GiftPipe must be capable of offering contextual proactive suggestions when a due Occasion Reminder's eligibility check finds no useful saved ideas under FR-022.
 
-**Rationale:**  
-The product should help users avoid starting from zero when an Occasion is near.
+**Rationale:**
+The reminder can lead to saved ideas or, when none are useful, options the user can consider without automatically adding data to their plan.
 
 **Acceptance criteria:**
 
-- Proactive suggestions can use available PersonProfile context.
-- Proactive suggestions can use relevant Gift History.
-- Proactive suggestions can use relevant existing gifting context.
-- Generated suggestions do not overwrite user-captured ideas.
+- Suggestions can use available PersonProfile context, Gift History, and relevant gifting research without overwriting captured ideas.
+- With no useful saved ideas, use relevant recipient context from the existing profile, Gift History, and research/idea leads where available. If that context is absent, the reminder opens an empty OO with the inline cold-start prompt in FR-038; generation waits for the user to add details or choose general ideas. A name alone is not personalized interest context.
+- Generated results appear as transient suggestions in a distinct "Consider these" section, following FR-038. A reminder remains brief and links to the overview.
+- Generating or displaying suggestions does not create GiftIdeas, OccasionGiftIdeas, candidates, or durable research nodes. Add to occasion explicitly establishes the saved idea and plan context.
+- A later reminder evaluates the current eligible pool again. An adopted suggestion suppresses automatic generation as useful saved intent. No regeneration is required merely because one suggestion was adopted during the current visit; the remaining suggestions stay available for that visit.
 
-**References:** [Product Vision](vision.md), Contextual AI scope; `OQ-014`.
+**References:** `DM-R025`; FR-022, FR-038; [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
 
-**Limitation:**  
-The trigger threshold remains dependent on `OQ-014`.
+**Limitation:**
+Exact execution timing relative to notification delivery/opening, temporary handoff/storage, late entry, and failure behavior remain under `OQ-022`. This does not establish a delivery channel or a general automatic-generation trigger on ordinary navigation.
 
 ---
 
@@ -599,6 +607,37 @@ New occasions should receive useful defaults while users retain control over the
 
 **Limitations:**
 Recurring-occurrence identity and how defaults apply to future recurring occurrences remain under `OQ-004`. `OQ-019` retains detailed timezone-change, daylight-saving, manual past-time/boundary handling, notification delivery/retry, and already-delivered reminder behavior. Channel choice remains under `OQ-021`; post-occasion reconciliation follow-up remains separately under `OQ-015`. The potential future system for detailed GiftIdea plans and deadlines is outside this MVP requirement.
+
+---
+
+### FR-038 — Adopt transient suggestions within an occasion-planning visit
+
+**Status:** Confirmed
+
+**Requirement:**
+GiftPipe must let users consider and explicitly adopt transient proactive suggestions within a reminder-originated Occasion Overview visit, preserving saved intent and clearly handling departure.
+
+**Acceptance criteria:**
+
+- The existing hierarchy remains current-plan ideas first, followed by the ranked preview of other valid ideas. Empty placeholders outside the current plan with neither idea nor recommendation content are omitted from the picker, while explicitly included empty stubs remain visible in the current plan.
+- When no useful ideas exist, an empty state replaces the otherwise empty hierarchy, followed by "Consider these". If intentional empty plan stubs exist, retain them above the available-ideas empty state and suggestion section.
+- In a reminder-originated visit with neither useful ideas nor usable recipient context from the existing profile, Gift History, or research/idea leads, immediately show an inline prompt within the OO empty state. Offer Add details and Create general ideas; the initial prompt is not a blocking dialog.
+- Add details opens the Person's interest-profile (PersonProfile) editor in a modal. The user can add free-form text and Save; saving persists the explicitly supplied profile details, closes the modal, and starts generation in the same OO visit using the added context. A complete structured profile is not required. Cancelling returns to the inline prompt without generating.
+- Create general ideas explicitly starts generation using only the Person's name as supplied recipient context and the model's general knowledge. The name identifies the recipient; do not infer interests from it or imply personalization. Label the results as general ideas. This action does not fill or change PersonProfile.
+- If usable recipient context already exists, skip this cold-start prompt and follow the ordinary reminder-triggered generation flow. An empty interest field alone does not establish that all recipient context is absent.
+- The profile modal is part of the same occasion-planning visit. Profile details saved there are durable even if no suggestion is adopted; the generated suggestions remain transient until Add to occasion. Saving a profile is not suggestion adoption for the exit guard.
+- Each suggestion offers Add to occasion. The action creates a GiftIdea containing its content for the Occasion's Person and an OccasionGiftIdea included in that plan. The UI places the adopted idea in the current-plan section; it does not infer a GiftCandidate from concrete wording or silently fill an unrelated placeholder.
+- Unadded suggestions stay available after an adoption for the rest of the visit. The adopted idea is durable; displaying the other suggestions does not save them.
+- Opening idea details, research, or modals for the same Occasion and returning is part of the same visit. It does not discard suggestions or trigger the departure confirmation.
+- Leaving that occasion-planning visit discards unadded suggestions. Saved ideas remain, and explicit bounded AI actions can still generate further ideas later.
+- For normal app-controlled departure, show confirmation only when the visit came from a reminder, transient suggestions are available, and none were adopted during that visit. Suggested copy: "Leave this occasion? You haven't saved any suggestions. Leaving will discard them." Actions: Keep browsing / Leave and discard.
+- Keep browsing preserves the visit and list. Leave and discard permits departure and discards unadded suggestions. This guard does not apply after at least one adoption or when no transient suggestions were shown.
+- The MVP does not require interception or recovery for browser/app closure or process termination; those may discard unadded suggestions without confirmation.
+
+**References:** `DM-R021`, `DM-R025`; FR-021, FR-022, FR-023; [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
+
+**Limitations:**
+Technical handoff and temporary-state mechanics remain under `OQ-022`; detailed ranking and presentation remain under `OQ-020`. The Person/PersonProfile field model and how non-interest attributes can provide context remain open under `OQ-023`; no gender or relationship-type field is established here. This is not a persistence schema, full research-node taxonomy, or research-promotion policy.
 
 ---
 
@@ -652,7 +691,7 @@ A vague thought such as "Dad wants an AI book" may become a research project wit
 Useful AI-generated research must be preservable as part of the relevant GiftIdea or OccasionGiftIdea research history.
 
 **Rationale:**  
-AI output should contribute to cumulative research rather than disappear as transient chat.
+AI output should contribute to cumulative research rather than disappear as transient chat. Unadopted proactive suggestions are a separate temporary proposal stage under `FR-038`; retaining useful research does not require automatically persisting those proposals.
 
 **Acceptance criteria:**
 
@@ -1031,10 +1070,10 @@ Cost management and avoiding harassment were explicit motivations for bounded pr
 - The product supports stopping or limiting post-Occasion follow-up.
 - Pre-occasion schedules follow `FR-037`: at most three default entries and five entries per Occasion, with exact duplicates merged.
 
-**References:** `OQ-014`, `OQ-015`.
+**References:** `FR-022`, `OQ-015`, `OQ-022`.
 
 **Limitation:**  
-The pre-occasion schedule controls in `FR-037` are established. The proactive AI usefulness threshold and post-occasion follow-up timing/stopping policy remain unresolved, so this broader quality objective is not yet fully measurable.
+The pre-occasion schedule controls in `FR-037` are established. The usefulness boundary is established in `FR-022`; generation execution/handoff under `OQ-022` and post-occasion follow-up timing/stopping under `OQ-015` remain unresolved, so this broader quality objective is not yet fully measurable.
 
 ---
 
@@ -1109,10 +1148,10 @@ An Occasion and its Person exist. Viewing the Occasion Overview does not require
 `FR-010`, `FR-015`, `FR-018`, `FR-019`, `FR-020`, `FR-021` through `FR-023`.
 
 **Expected outcome:**  
-The user can open the Occasion Overview directly or through a brief notification. It presents the current plan and a ranked preview of other eligible ideas for the Person, including ideas used before or associated with other Occasions. View all exposes the full eligible list in a modal. Rounded + / − controls add or remove ideas from the plan; inspecting an idea opens it with the Occasion context and its explicit Add/Remove action. Removal retains the OccasionGiftIdea and its research; re-addition restores the same context. General research and individual occasion-specific research remain separately accessible from the GiftIdea page. Candidate nomination or creation remains explicit where applicable; merely viewing ideas or research does not change planning data. Ranking rules, the preview count, and remaining presentation details are unresolved under `OQ-020`.
+The user can open the Occasion Overview directly or through a brief notification. It presents the current plan and a ranked preview of other eligible ideas for the Person, including ideas used before or associated with other Occasions. View all exposes the full eligible list in a modal. Rounded + / − controls add or remove ideas from the plan; inspecting an idea opens it with the Occasion context and its explicit Add/Remove action. Removal retains the OccasionGiftIdea and its research; re-addition restores the same context. General research and individual occasion-specific research remain separately accessible from the GiftIdea page. Candidate nomination or creation remains explicit where applicable; merely viewing ideas or research does not change planning data. A reminder-originated visit with no useful ideas can show Consider these; explicit adoption, retention through related detail views, and departure follow `FR-038`. Ranking rules, the preview count, and remaining presentation details are unresolved under `OQ-020`.
 
 **Unresolved questions:**  
-Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive AI threshold depends on `OQ-014`. Pre-occasion schedules follow `FR-037`; detailed timezone and delivery behavior remains under `OQ-019`; ranking rules, preview count, and remaining presentation details depend on `OQ-020`; initial delivery channel and channel-specific content depend on `OQ-021`.
+Occasion-only candidate identity depends on `OQ-001`; exact candidate state semantics depend on `OQ-003`; proactive eligibility follows `FR-022` and `FR-023`, with generation execution/handoff details under `OQ-022`. Pre-occasion schedules follow `FR-037`; detailed timezone and delivery behavior remains under `OQ-019`; ranking rules, preview count, and remaining presentation details depend on `OQ-020`; initial delivery channel and channel-specific content depend on `OQ-021`.
 
 ---
 
@@ -1213,7 +1252,8 @@ This loop describes product direction but should not be treated as a complete re
 | `FR-020`, `FR-030` | `OQ-003` | Exact OccasionGiftCandidate selection/outcome state model | State transitions and some acceptance criteria remain incomplete |
 | `FR-028`, `FR-035` | `OQ-003` | Exact representation of reconciliation outcomes, including explicit no-gift reports | Confirmed observable outcomes do not establish the full state model |
 | `FR-028` | `OQ-010` | Whether completed reconciliation can be corrected or reopened | Forward outcome recording is established; correction behavior remains open |
-| `FR-022`, `FR-023` | `OQ-014` | Definition of a sufficiently useful manual idea | Automatic AI trigger behavior cannot be finalized |
+| `FR-003`, `FR-027`, `FR-038` | `OQ-023` | Person/PersonProfile fields and context beyond interests | Existing free-form profile editing and the cold-start flow are established; additional structured fields are undecided |
+| `FR-023`, `FR-038` | `OQ-022` | Exact reminder-to-overview generation execution, temporary handoff, and failure behavior | The usefulness boundary, reminder coupling, adoption, and visit lifetime are established; technical execution details remain open |
 | `FR-034` | `OQ-015` | Reconciliation follow-up frequency and stopping rules | Notification behavior remains incomplete |
 | `FR-036` | `OQ-013` | Partial reconciliation semantics | Incomplete Occasion resolution behavior remains blocked |
 | `FR-004` | `OQ-018` | Link-title derivation failure handling and exact placeholder numbering | Basic title precedence is established; edge-case behavior is not finalized |
