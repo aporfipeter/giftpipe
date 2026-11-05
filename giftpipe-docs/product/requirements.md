@@ -558,7 +558,8 @@ The reminder can lead to saved ideas or, when none are useful, options the user 
 **Acceptance criteria:**
 
 - Suggestions can use available PersonProfile context, Gift History, and relevant gifting research without overwriting captured ideas.
-- The Occasion Overview offers transient suggestions in a distinct "Consider these" section when useful saved ideas are absent, following FR-038. A reminder remains brief and links to the overview.
+- With no useful saved ideas, use relevant recipient context from the existing profile, Gift History, and research/idea leads where available. If that context is absent, the reminder opens an empty OO with the inline cold-start prompt in FR-038; generation waits for the user to add details or choose general ideas. A name alone is not personalized interest context.
+- Generated results appear as transient suggestions in a distinct "Consider these" section, following FR-038. A reminder remains brief and links to the overview.
 - Generating or displaying suggestions does not create GiftIdeas, OccasionGiftIdeas, candidates, or durable research nodes. Add to occasion explicitly establishes the saved idea and plan context.
 - A later reminder evaluates the current eligible pool again. An adopted suggestion suppresses automatic generation as useful saved intent. No regeneration is required merely because one suggestion was adopted during the current visit; the remaining suggestions stay available for that visit.
 
@@ -620,6 +621,11 @@ GiftPipe must let users consider and explicitly adopt transient proactive sugges
 
 - The existing hierarchy remains current-plan ideas first, followed by the ranked preview of other valid ideas. Empty placeholders outside the current plan with neither idea nor recommendation content are omitted from the picker, while explicitly included empty stubs remain visible in the current plan.
 - When no useful ideas exist, an empty state replaces the otherwise empty hierarchy, followed by "Consider these". If intentional empty plan stubs exist, retain them above the available-ideas empty state and suggestion section.
+- In a reminder-originated visit with neither useful ideas nor usable recipient context from the existing profile, Gift History, or research/idea leads, immediately show an inline prompt within the OO empty state. Offer Add details and Create general ideas; the initial prompt is not a blocking dialog.
+- Add details opens the Person's interest-profile (PersonProfile) editor in a modal. The user can add free-form text and Save; saving persists the explicitly supplied profile details, closes the modal, and starts generation in the same OO visit using the added context. A complete structured profile is not required. Cancelling returns to the inline prompt without generating.
+- Create general ideas explicitly starts generation using only the Person's name as supplied recipient context and the model's general knowledge. The name identifies the recipient; do not infer interests from it or imply personalization. Label the results as general ideas. This action does not fill or change PersonProfile.
+- If usable recipient context already exists, skip this cold-start prompt and follow the ordinary reminder-triggered generation flow. An empty interest field alone does not establish that all recipient context is absent.
+- The profile modal is part of the same occasion-planning visit. Profile details saved there are durable even if no suggestion is adopted; the generated suggestions remain transient until Add to occasion. Saving a profile is not suggestion adoption for the exit guard.
 - Each suggestion offers Add to occasion. The action creates a GiftIdea containing its content for the Occasion's Person and an OccasionGiftIdea included in that plan. The UI places the adopted idea in the current-plan section; it does not infer a GiftCandidate from concrete wording or silently fill an unrelated placeholder.
 - Unadded suggestions stay available after an adoption for the rest of the visit. The adopted idea is durable; displaying the other suggestions does not save them.
 - Opening idea details, research, or modals for the same Occasion and returning is part of the same visit. It does not discard suggestions or trigger the departure confirmation.
@@ -631,7 +637,7 @@ GiftPipe must let users consider and explicitly adopt transient proactive sugges
 **References:** `DM-R021`, `DM-R025`; FR-021, FR-022, FR-023; [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
 
 **Limitations:**
-Technical handoff and temporary-state mechanics remain under `OQ-022`; detailed ranking and presentation remain under `OQ-020`. This is not a persistence schema, full research-node taxonomy, or research-promotion policy.
+Technical handoff and temporary-state mechanics remain under `OQ-022`; detailed ranking and presentation remain under `OQ-020`. The Person/PersonProfile field model and how non-interest attributes can provide context remain open under `OQ-023`; no gender or relationship-type field is established here. This is not a persistence schema, full research-node taxonomy, or research-promotion policy.
 
 ---
 
@@ -1246,6 +1252,7 @@ This loop describes product direction but should not be treated as a complete re
 | `FR-020`, `FR-030` | `OQ-003` | Exact OccasionGiftCandidate selection/outcome state model | State transitions and some acceptance criteria remain incomplete |
 | `FR-028`, `FR-035` | `OQ-003` | Exact representation of reconciliation outcomes, including explicit no-gift reports | Confirmed observable outcomes do not establish the full state model |
 | `FR-028` | `OQ-010` | Whether completed reconciliation can be corrected or reopened | Forward outcome recording is established; correction behavior remains open |
+| `FR-003`, `FR-027`, `FR-038` | `OQ-023` | Person/PersonProfile fields and context beyond interests | Existing free-form profile editing and the cold-start flow are established; additional structured fields are undecided |
 | `FR-023`, `FR-038` | `OQ-022` | Exact reminder-to-overview generation execution, temporary handoff, and failure behavior | The usefulness boundary, reminder coupling, adoption, and visit lifetime are established; technical execution details remain open |
 | `FR-034` | `OQ-015` | Reconciliation follow-up frequency and stopping rules | Notification behavior remains incomplete |
 | `FR-036` | `OQ-013` | Partial reconciliation semantics | Incomplete Occasion resolution behavior remains blocked |

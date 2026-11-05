@@ -88,7 +88,7 @@ A Person is conceptually distinct from other recipients managed by the same Gift
 
 - Acts as the owner/context for GiftIdeas.
 - Acts as the recipient for Occasions.
-- Provides the recipient context used during gifting decisions.
+- Provides the recipient context used during gifting decisions. The Person/PersonProfile field model, including possible context beyond interests, remains under [OQ-023](../discovery/open-questions.md#oq-023--what-recipient-data-belongs-in-person-and-personprofile-for-gifting-context).
 
 **Relationships:**
 
@@ -119,7 +119,7 @@ Whether PersonProfile has identity independent of Person is unresolved.
 
 **Responsibilities:**
 
-- Preserve recipient facts and preferences explicitly maintained by the user.
+- Preserve recipient facts and preferences explicitly maintained by the user. The full field model is unresolved under `OQ-023`; suggested fields such as gender or relationship type are discussion examples, not established attributes.
 - Provide context for AI-assisted gifting.
 
 **Relationships:**  
@@ -1357,7 +1357,8 @@ Recurrence remains under `OQ-004`. Timezone changes, daylight-saving boundaries,
 - A due Occasion Reminder initiates the eligibility check for proactive suggestions. The check uses the Person's eligible idea pool, including ideas outside the current plan and those used before or associated elsewhere, subject to recipient and archival constraints.
 - A GiftIdea with user-supplied idea content, such as a title, description, or link, is useful for this check without requiring research or candidates. An explicitly adopted AI suggestion also counts. A recipient-only record with a generated placeholder and no idea content does not count, even if explicitly included in the plan. The check examines content, not the displayed title.
 - Useful saved ideas suppress automatic generation; bounded AI actions remain available on explicit user request. Ordinary navigation is not a separate automatic-generation trigger. Exact generation timing and handoff mechanics remain under `OQ-022`.
-- When no useful ideas exist, the Occasion Overview can show an empty state and a separate "Consider these" section. Explicitly included empty stubs remain visible in the current plan as intentional work items; empty placeholders outside the current plan with no recommendation content are omitted from the available-ideas picker. This does not invalidate recipient-only capture or delete those records.
+- When no useful ideas exist, generation uses available recipient profile, history, and research/idea context. If those sources provide no usable context, the reminder-originated OO shows an inline prompt before generation. Saving user-entered profile details through its modal persists those details and starts generation; cancelling does not. Alternatively, explicit Create general ideas runs with only the Person's name as supplied recipient context and general model knowledge, with general-ideas labelling and no inferred interests or profile mutation. Existing usable context bypasses the prompt.
+- The Occasion Overview shows generated proposals in a separate "Consider these" section after the applicable generation path. Profile editing remains in the same planning visit; saved profile data is durable, but it is not adoption of a suggestion. Explicitly included empty stubs remain visible in the current plan as intentional work items; empty placeholders outside the current plan with no recommendation content are omitted from the available-ideas picker. This does not invalidate recipient-only capture or delete those records.
 - Unadopted proactive suggestions are transient proposals, not durable GiftIdeas, candidates, or research nodes. Explicit Add to occasion creates a GiftIdea from the chosen suggestion and its OccasionGiftIdea context. The adopted idea enters the current plan and counts as useful for subsequent reminder checks; textual specificity does not automatically create a GiftCandidate.
 - Other suggestions remain available during the same occasion-planning visit after an adoption, including while the user opens that Occasion's idea details, research, or modals. Leaving the visit discards unadded suggestions; adopted ideas remain. No hard-close recovery is required for the MVP.
 - A reminder-originated visit with available transient suggestions and no adoption requires confirmation before normal navigation away. Detail/research/modal navigation within that visit does not trigger this guard. With no suggestions or after at least one adoption, this specific guard does not apply.

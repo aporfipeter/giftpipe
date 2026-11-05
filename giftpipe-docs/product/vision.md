@@ -140,7 +140,7 @@ A captured idea may remain valuable even when no concrete product or candidate i
 
 ### Human ideas outrank speculative AI suggestions
 
-Existing user-captured or explicitly adopted ideas should be surfaced before GiftPipe automatically generates alternatives. User-supplied idea content counts as useful; recipient-only empty placeholders do not suppress generation. A due Occasion Reminder initiates the check. When no useful ideas exist, the Occasion Overview can show transient options in a separate Consider these section. Add to occasion explicitly saves a chosen idea and its occasion context; unadded options last for the current planning visit, not permanent research history. See [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md) for this boundary.
+Existing user-captured or explicitly adopted ideas should be surfaced before GiftPipe automatically generates alternatives. User-supplied idea content counts as useful; recipient-only empty placeholders do not suppress generation. A due Occasion Reminder initiates the check. When no useful ideas exist, the Occasion Overview can show transient options in a separate Consider these section. When recipient context is also absent, an inline prompt lets the user add profile details or explicitly request labelled general ideas; it does not require a completed profile. Add to occasion explicitly saves a chosen idea and its occasion context; unadded options last for the current planning visit, not permanent research history. See [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md) for this boundary.
 
 AI fills gaps, develops an idea, evaluates options, or assists research. It should not make the user's own saved context secondary by default.
 

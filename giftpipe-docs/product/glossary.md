@@ -687,12 +687,14 @@ Displaying an idea in the overview does not create an OccasionGiftIdea or change
 ### AI-Generated Occasion Suggestion
 
 **Definition:**
-A transient contextual proposal offered in the Occasion Overview's "Consider these" section when a due Occasion Reminder finds no useful saved ideas under FR-022.
+A transient proposal offered in the Occasion Overview's "Consider these" section when a due Occasion Reminder finds no useful saved ideas under FR-022. Generation uses available recipient context; if profile/history/idea context is absent, an inline OO prompt offers Add details or Create general ideas before generation. The profile modal saves explicit recipient details and starts generation within the visit; cancellation returns to the prompt. General ideas use only the recipient name as supplied recipient context plus model knowledge, and are labelled as general rather than personalized. Usable existing context bypasses the prompt.
 
 **Important distinctions:**
 A user-supplied idea title, description, link, or other captured idea material counts as useful without candidates or research. Explicitly adopted suggestions also count. A recipient-only placeholder with no idea content does not; explicitly planned empty stubs can remain visible as intentional work without blocking suggestions.
 
 Unadopted suggestions are not durable GiftIdeas, candidates, or research nodes. Add to occasion creates the chosen GiftIdea and its OccasionGiftIdea context, placing it in the current plan. The other suggestions remain through the same occasion-planning visit, including details, research, and modals, then are discarded on departure. A reminder-originated visit with suggestions and no adoption has a confirmation for normal departure; hard-close interception/recovery is outside the MVP. See [FR-038](requirements.md#fr-038--adopt-transient-suggestions-within-an-occasion-planning-visit).
+
+Profile details saved through the modal are durable and user-maintained, while proposals remain transient until adopted; profile saving alone is not adoption. Possible additional Person fields remain under `OQ-023`.
 
 Useful saved ideas suppress automatic generation while explicit bounded AI actions remain available. This transient proposal stage complements retained AI research under [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md), without superseding ADR-005. Exact generation/handoff mechanics remain under OQ-022.
 

@@ -28,11 +28,11 @@ Counts cover active questions only. OQ-014 is resolved below; OQ-022 tracks the 
 
 | Category                          |  High | Medium |   Low |  Total |
 | --------------------------------- | ----: | -----: | ----: | -----: |
-| Domain model                      |     3 |      2 |     3 |      8 |
+| Domain model                      |     3 |      3 |     3 |      9 |
 | Domain operations and lifecycle   |     0 |      5 |     1 |      6 |
 | Requirements and user experience  |     0 |      5 |     0 |      5 |
 | Architecture and technical design |     0 |      0 |     2 |      2 |
-| **Total**                         | **3** | **12** | **6** | **21** |
+| **Total**                         | **3** | **13** | **6** | **22** |
 
 ---
 
@@ -107,6 +107,15 @@ Counts cover active questions only. OQ-014 is resolved below; OQ-022 tracks the 
 - **Context:** General GiftIdea research and Occasion-specific research are deliberately separate. The GiftIdea page exposes general research separately from links to individual OccasionGiftIdeas and their specific research, including withdrawn contexts. Browsing those contexts is established and does not promote or merge their research. Discovery has discussed promoting useful occasion discoveries into durable general knowledge but has not decided whether the operation should move, copy, reference, summarize, or otherwise reconcile the information.
 - **Impact:** Research history integrity, cross-occasion reuse, Candidate reuse, and possible ResearchThread semantics.
 - **References:** [Domain Model](../domain/domain-model.md) — `DM-Q011`; `DM-R014`.
+
+#### OQ-023 — What recipient data belongs in Person and PersonProfile for gifting context?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** The cold-start flow can collect free-form interest-profile details when profile, history, and idea leads provide no usable recipient context. The user requested a separate discussion of the Person data model: information beyond interests could also help provide context. Gender and relationship type were mentioned as possible examples only; neither is an approved field or inference rule.
+- **Unresolved details:** Which recipient attributes are useful; whether they belong on Person or PersonProfile; optionality and editing semantics; how supplied non-interest data contributes to contextual generation when interests are empty. The schema, value sets, and interpretation of any proposed field remain undecided.
+- **Impact:** Recipient capture/editing, profile shape, AI context assembly, and the boundary between an empty interest profile and absent recipient context.
+- **References:** [Person](../domain/domain-model.md#41-person), [PersonProfile](../domain/domain-model.md#42-personprofile); FR-003, FR-027, FR-038.
 
 ---
 
@@ -208,7 +217,7 @@ Counts cover active questions only. OQ-014 is resolved below; OQ-022 tracks the 
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** FR-022 resolves the usefulness boundary; due Occasion Reminders initiate the eligibility check. FR-023/FR-038 and DM-R025 define transient proposals, explicit adoption into durable idea/planning context, same-visit retention, and departure behavior. These product decisions do not select execution or temporary-state machinery.
+- **Context:** FR-022 resolves the usefulness boundary; due Occasion Reminders initiate the eligibility check. FR-023/FR-038 and DM-R025 define transient proposals, explicit adoption into durable idea/planning context, same-visit retention, and departure behavior. The cold-start interaction is also established: an immediate inline prompt offers profile editing or explicit general ideas, saved profile details start generation, cancellation returns without generation, and existing usable context bypasses the prompt. These product decisions do not select execution or temporary-state machinery; the recipient field model remains separately under `OQ-023`.
 - **Unresolved details:** Exact generation timing relative to notification delivery and opening its link; temporary handoff/storage before and during the visit; late entry or changed context between reminder and opening; generation failure and list availability. No scheduler, cache, transport, or permanent suggestion archive is selected. Hard-close recovery is explicitly outside the MVP rather than an open requirement.
 - **Impact:** Generation execution, notification/overview coordination, acceptance criteria for failures and late entry, and temporary-state implementation.
 - **References:** [FR-023](../product/requirements.md#fr-023--proactively-generate-contextual-suggestions-when-needed), [FR-038](../product/requirements.md#fr-038--adopt-transient-suggestions-within-an-occasion-planning-visit); [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
