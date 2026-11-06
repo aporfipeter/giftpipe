@@ -32,7 +32,7 @@ A Person is the recipient/giftee being planned for, not the GiftPipe account hol
 ### PersonProfile
 
 **Definition:**  
-The user-maintained description of a Person that provides durable contextual information useful for gifting. It may contain both structured information, such as interests or dislikes, and free-form notes.
+The user-maintained description of a Person that provides durable contextual information useful for gifting. The MVP includes optional structured relationship type, birth-date information, and gender alongside separate free-text Interests and preferences and Relationship description. The [domain field definitions](../domain/domain-model.md#mvp-recipient-context-fields) own their values and semantics; exact Person/PersonProfile allocation remains unresolved.
 
 **Relationships:**  
 Belongs to a [Person](#person) and may be used as context by GiftPipe's AI capabilities.
@@ -41,6 +41,30 @@ Belongs to a [Person](#person) and may be used as context by GiftPipe's AI capab
 The PersonProfile represents information explicitly maintained by the user. Gift outcomes, AI inferences, and observed gifting patterns must not silently modify it.
 
 **Status:** Confirmed
+
+---
+
+### Person Page
+
+**Definition:**
+The Person's capture and planning page, with a recipient header, prominent upcoming-occasion carousel, All Occasions and All Ideas routes, and separate fixed-height interests and relationship-description cards.
+
+**Important distinctions:**
+The header shows name, relationship type, and an optional derived tagline; birth date and gender remain available in editing rather than displayed there. Page-level Add Idea captures independently; an occasion card's + supports eligible existing ideas and new capture that creates both idea and occasion context. Ideas reached through occasions/timeline use occasion-specific research; the library uses general research. Empty context cards retain their inline encouragement after a separate pop-up is dismissed. [FR-039](requirements.md#fr-039--browse-and-capture-from-a-person-page) owns the page behavior; the exact visual hierarchy remains open.
+
+**Status:** Confirmed behavior; detailed design deferred
+
+---
+
+### Recipient Tagline
+
+**Definition:**
+A short, stored AI-derived display summary for the Person header, sourced only from Interests and preferences and Relationship description.
+
+**Important distinctions:**
+It is separate from authoritative user context and from Research Summary. Derive it from nonempty source text and refresh only when its sources change; page opens and unrelated edits do not regenerate it. Hide it when both sources are empty. It must not invent facts or overwrite profile data. See [DM-R026](../domain/domain-model.md#dm-r026--recipient-taglines-are-stored-derived-display-data).
+
+**Status:** Confirmed behavior; technical refresh/failure handling unresolved
 
 ---
 
@@ -694,7 +718,7 @@ A user-supplied idea title, description, link, or other captured idea material c
 
 Unadopted suggestions are not durable GiftIdeas, candidates, or research nodes. Add to occasion creates the chosen GiftIdea and its OccasionGiftIdea context, placing it in the current plan. The other suggestions remain through the same occasion-planning visit, including details, research, and modals, then are discarded on departure. A reminder-originated visit with suggestions and no adoption has a confirmation for normal departure; hard-close interception/recovery is outside the MVP. See [FR-038](requirements.md#fr-038--adopt-transient-suggestions-within-an-occasion-planning-visit).
 
-Profile details saved through the modal are durable and user-maintained, while proposals remain transient until adopted; profile saving alone is not adoption. Possible additional Person fields remain under `OQ-023`.
+Profile details saved through the modal are durable and user-maintained, while proposals remain transient until adopted; profile saving alone is not adoption. The MVP recipient fields are defined in FR-003; exact allocation/representation and remaining non-interest-context questions remain under `OQ-023`.
 
 Useful saved ideas suppress automatic generation while explicit bounded AI actions remain available. This transient proposal stage complements retained AI research under [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md), without superseding ADR-005. Exact generation/handoff mechanics remain under OQ-022.
 

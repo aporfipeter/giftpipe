@@ -88,7 +88,7 @@ A Person is conceptually distinct from other recipients managed by the same Gift
 
 - Acts as the owner/context for GiftIdeas.
 - Acts as the recipient for Occasions.
-- Provides the recipient context used during gifting decisions. The Person/PersonProfile field model, including possible context beyond interests, remains under [OQ-023](../discovery/open-questions.md#oq-023--what-recipient-data-belongs-in-person-and-personprofile-for-gifting-context).
+- Provides the recipient context used during gifting decisions. The MVP recipient fields are established below; their exact allocation/representation between Person and PersonProfile remains under [OQ-023](../discovery/open-questions.md#oq-023--what-recipient-data-belongs-in-person-and-personprofile-for-gifting-context).
 
 **Relationships:**
 
@@ -119,7 +119,7 @@ Whether PersonProfile has identity independent of Person is unresolved.
 
 **Responsibilities:**
 
-- Preserve recipient facts and preferences explicitly maintained by the user. The full field model is unresolved under `OQ-023`; suggested fields such as gender or relationship type are discussion examples, not established attributes.
+- Preserve recipient facts and preferences explicitly maintained by the user. The MVP recipient-field meanings and allowed values are established below. Exact field allocation and technical representation remain under `OQ-023`.
 - Provide context for AI-assisted gifting.
 
 **Relationships:**  
@@ -134,6 +134,20 @@ Initially, only the user changes the profile. AI or outcome-derived patterns may
 - AI inferences do not automatically become profile truth.
 
 **Status:** Confirmed definition; classification unresolved.
+
+#### MVP recipient context fields
+
+These are logical recipient-data definitions, not a database schema or a decision about aggregate ownership. All additions below are optional and user-maintained.
+
+| Field | Meaning and MVP constraints |
+|---|---|
+| Relationship type | Relationship to the GiftPipe user. Closed choices: Parent, Child, Sibling, Partner, Grandparent, Grandchild, Other family member, Friend, Colleague, Other. No custom labels; selection is optional. |
+| Relationship description | Optional free text about how they met, their relationship, shared experiences, or other relevant context. No prescribed format or additional content rules. AI may use the supplied text as context. |
+| Birth date | Optional month/day with an optional year. Current age is derived only when a full date is available; age is not independently maintained. Automatic birthday Occasion creation remains undecided. |
+| Gender | Optional closed choices: Woman, Man, Non-binary, Other. The user supplies the value; it is not inferred from a name. |
+| Interests and preferences | One optional free-text field for interests, tastes, dislikes, and practical context. No tag taxonomy or separate Things to avoid field is required by this MVP. |
+
+The interest-profile and relationship-description text are separate sources. Either can supply recipient context without requiring the other. Their contents remain authoritative user data; a stored derived tagline is a separate display artifact under `DM-R026`. Displaying neither birth date nor gender in the Person header does not remove them from recipient editing or contextual data.
 
 ---
 
@@ -1371,6 +1385,24 @@ Recurrence remains under `OQ-004`. Timezone changes, daylight-saving boundaries,
 
 **Rationale:**
 Saved intent takes priority over speculative alternatives. Explicit adoption establishes durable intent; merely displaying a suggestion does not. Keeping the list through related detail views supports comparison, while discarding unchosen proposals on departure avoids silently accumulating research. [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md) records why this complements retained AI research rather than replacing it. User-visible behavior is specified in FR-022, FR-023, and FR-038.
+
+---
+
+### DM-R026 — Recipient taglines are stored derived display data
+
+**Rule:**
+The Person header may show a short AI-maintained tagline derived only from Interests and preferences and Relationship description. Store the derived result so opening the profile does not regenerate it. Generate it from nonempty source text and regenerate only when either source field actually changes, not on unrelated edits or visits. If both fields are empty, hide the tagline and do not generate one.
+
+The tagline must remain faithful to its two sources, must not invent recipient facts, and must not overwrite user-maintained fields. It is not authoritative PersonProfile data or a Research Summary. Either source field can independently support recipient context; completing both is not required. Tagline refresh does not itself request gift suggestions.
+
+**Affected concepts:** Person, PersonProfile, Recipient Tagline
+
+**Relevant operation/lifecycle:** Recipient-context editing, derived header display
+
+**Status:** Confirmed behavior; exact derived-state mechanics unresolved
+
+**Rationale:**
+The concise header can communicate useful recipient context without turning every page visit into an AI request or silently modifying explicit profile facts. Remaining refresh/failure and UI policies are tracked under `OQ-024`; technical allocation of recipient data remains under `OQ-023`. User-visible behavior is specified in FR-003 and FR-039 through FR-041.
 
 ---
 

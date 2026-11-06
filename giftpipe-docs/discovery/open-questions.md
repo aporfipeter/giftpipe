@@ -30,9 +30,9 @@ Counts cover active questions only. OQ-014 is resolved below; OQ-022 tracks the 
 | --------------------------------- | ----: | -----: | ----: | -----: |
 | Domain model                      |     3 |      3 |     3 |      9 |
 | Domain operations and lifecycle   |     0 |      5 |     1 |      6 |
-| Requirements and user experience  |     0 |      5 |     0 |      5 |
+| Requirements and user experience  |     0 |      6 |     0 |      6 |
 | Architecture and technical design |     0 |      0 |     2 |      2 |
-| **Total**                         | **3** | **13** | **6** | **22** |
+| **Total**                         | **3** | **14** | **6** | **23** |
 
 ---
 
@@ -112,8 +112,8 @@ Counts cover active questions only. OQ-014 is resolved below; OQ-022 tracks the 
 
 - **Priority:** Medium
 - **Status:** Open
-- **Context:** The cold-start flow can collect free-form interest-profile details when profile, history, and idea leads provide no usable recipient context. The user requested a separate discussion of the Person data model: information beyond interests could also help provide context. Gender and relationship type were mentioned as possible examples only; neither is an approved field or inference rule.
-- **Unresolved details:** Which recipient attributes are useful; whether they belong on Person or PersonProfile; optionality and editing semantics; how supplied non-interest data contributes to contextual generation when interests are empty. The schema, value sets, and interpretation of any proposed field remain undecided.
+- **Context:** MVP recipient-field meanings are now established in FR-003 and the domain field table: optional closed relationship type, free-text relationship description, optional birth date with optional year, optional closed gender, and free-text interests/preferences. These are user-maintained sources; the stored header tagline is separately derived from the two text fields. Either text field can supply context without requiring the other. This narrows the question without deciding an aggregate or storage model.
+- **Unresolved details:** Exact allocation of fields between Person and PersonProfile and their technical representation; remaining interpretation of structured non-interest context for AI; whether/how birth-date data should establish a birthday Occasion. Automatic Occasion creation and recurring identity are not implied by accepting a birth date. The MVP field choices, allowed values, and optionality are no longer open.
 - **Impact:** Recipient capture/editing, profile shape, AI context assembly, and the boundary between an empty interest profile and absent recipient context.
 - **References:** [Person](../domain/domain-model.md#41-person), [PersonProfile](../domain/domain-model.md#42-personprofile); FR-003, FR-027, FR-038.
 
@@ -221,6 +221,17 @@ Counts cover active questions only. OQ-014 is resolved below; OQ-022 tracks the 
 - **Unresolved details:** Exact generation timing relative to notification delivery and opening its link; temporary handoff/storage before and during the visit; late entry or changed context between reminder and opening; generation failure and list availability. No scheduler, cache, transport, or permanent suggestion archive is selected. Hard-close recovery is explicitly outside the MVP rather than an open requirement.
 - **Impact:** Generation execution, notification/overview coordination, acceptance criteria for failures and late entry, and temporary-state implementation.
 - **References:** [FR-023](../product/requirements.md#fr-023--proactively-generate-contextual-suggestions-when-needed), [FR-038](../product/requirements.md#fr-038--adopt-transient-suggestions-within-an-occasion-planning-visit); [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
+
+---
+
+#### OQ-024 — What are the remaining Person-page and context-encouragement policies?
+
+- **Priority:** Medium
+- **Status:** Open
+- **Context:** FR-039 establishes the Person-page behavior and research entry contexts. FR-040/DM-R026 establish a stored tagline refreshed only on changes to its two source fields. FR-041 establishes independent inline empty states plus staggered in-app pop-ups with a shared per-Person cooldown. These contracts allow a separate UI session without silently freezing the exact layout.
+- **Unresolved details:** Detailed section hierarchy and carousel/timeline/library design; archived-idea access; exact upcoming-window presentation and remaining bounded-AI action placement; cooldown duration, initial prompt target, and precise appearance timing; first-generation and stale/in-flight/failure behavior for the stored tagline. The expectation of usually one or two upcoming Occasions remains an unvalidated design assumption.
+- **Impact:** Discoverability, navigation, context editing, optional-context encouragement, and acceptance criteria for derived-display edge cases.
+- **References:** [FR-039](../product/requirements.md#fr-039--browse-and-capture-from-a-person-page), FR-040, FR-041; [DM-R026](../domain/domain-model.md#dm-r026--recipient-taglines-are-stored-derived-display-data). OQ-023 owns remaining recipient-model allocation; OQ-004 owns recurring occurrence identity.
 
 ---
 
