@@ -106,10 +106,86 @@ Recipient context is intended to support manual planning and contextual AI recom
 **Acceptance criteria:**
 
 - The user can maintain explicit recipient information beyond the Person's name.
-- The profile can include structured information and free-form contextual notes.
+- The profile can include structured information and free-form contextual notes. The logical MVP fields and value sets are defined in the [recipient context fields](../domain/domain-model.md#mvp-recipient-context-fields).
+- Optional relationship type uses Parent, Child, Sibling, Partner, Grandparent, Grandchild, Other family member, Friend, Colleague, or Other, with no custom option. An optional, separate relationship description accepts free text without a prescribed format.
+- Birth date is optional and its year may be omitted. Derive current age only from a full birth date; do not require a separately maintained age. This does not automatically create an Occasion.
+- Optional gender uses Woman, Man, Non-binary, or Other; no selection is required and the app does not infer a value from the name.
+- Interests and preferences is one optional free-text field, with orienting help such as: "Share their hobbies, favourite things, dislikes, or anything else that could help you choose a gift." This is guidance rather than a format requirement.
+- Neither interests nor relationship description is required to complete the other; both are usable as explicitly supplied AI context. Their editor can be opened from the Person page or the contextual OO flow.
 - AI-generated inferences and gift outcomes do not silently alter the user-maintained PersonProfile.
 
-**References:** `DM-R015`.
+**References:** `DM-R015`, `DM-R026`; [Person](../domain/domain-model.md#41-person), [PersonProfile](../domain/domain-model.md#42-personprofile); `OQ-023`.
+
+---
+
+### FR-039 — Browse and capture from a Person page
+
+**Status:** Confirmed
+
+**Requirement:**
+GiftPipe must offer a Person page centered on upcoming occasion planning, quick capture, and accessible recipient context without requiring completed profile details.
+
+**Acceptance criteria:**
+
+- The header card shows the recipient name, optional relationship type, and the derived tagline when available under FR-040. Birth date and gender remain editable/contextual data but are not displayed in this header.
+- Edit is at the top right of the whole page; Add Idea sits to its left. This Add Idea captures a GiftIdea for the Person independently of an Occasion, using the existing capture rules.
+- Upcoming Occasions is prominent, with Add Occasion opposite the section title. Its empty state is simply "No Upcoming Occasions"; it does not repeat actions already available on the page.
+- Adding the first upcoming Occasion immediately exposes a one-card carousel. Additional cards can be swiped between and are ordered closest in time first. Each compact card shows the Occasion and GiftIdeas currently included in its plan.
+- Each occasion card has a + action and View details. The + opens a list of eligible existing GiftIdeas with a further + to expose the new-idea entry form. Saving that form creates the GiftIdea and its included OccasionGiftIdea for the selected Person and Occasion; merely opening it does not create records. Selecting an existing idea establishes or restores its context under FR-015.
+- View details opens that Occasion's Occasion Overview. Ideas opened from an occasion card use occasion-specific context.
+- All Occasions provides a route to a timeline-like view, including access to past occasion context and history. Ideas opened from that timeline use the corresponding occasion-specific context. The exact timeline design remains deferred.
+- All Ideas provides access to the Person's captured idea library, including independent ideas and valid placeholder captures. Opening an idea there uses general GiftIdea research context. The page does not need a directly featured GiftIdea carousel; Upcoming Occasions takes priority.
+- Two separate fixed-height cards show Interests and preferences and Relationship description. Each independently displays truncated saved text, or its own inline encouragement and action while empty. Tapping saved text exposes the full text with immediate editing access.
+- Dismissing a periodic pop-up does not hide the corresponding inline empty state. General editing remains distinct from the OO cold-start Save-and-generate flow in FR-038; normal Person-page editing does not introduce another gift-suggestion trigger.
+
+**References:** FR-003, FR-004, FR-015, FR-038, FR-040, FR-041; `DM-R014`, `DM-R023`, `DM-R026`.
+
+**Limitations:**
+The exact section hierarchy, visual layout, carousel/timeline/library design, archived-library presentation, and detailed bounded-AI action placement remain under `OQ-024` for a separate UI iteration. The expectation that most Persons have one or two upcoming Occasions is a design assumption, not validated usage evidence. Recurrence and automatic birthday-Occasion creation remain undecided.
+
+---
+
+### FR-040 — Maintain a stored derived recipient tagline
+
+**Status:** Confirmed
+
+**Requirement:**
+GiftPipe must support a concise AI-derived Person-header tagline from the two text context fields, following `DM-R026`.
+
+**Acceptance criteria:**
+
+- Derive the tagline only from Interests and preferences and Relationship description. Either nonempty field can supply its source; when both are empty, hide it and do not generate one.
+- Store the derived text and regenerate only when one of those source fields actually changes. Opening the page, saving unchanged sources, or editing unrelated recipient fields does not regenerate it.
+- Keep the tagline separate from authoritative user-maintained profile fields. It must remain faithful to the supplied text and must not invent facts or rewrite either source.
+- A tagline refresh is distinct from generating gift suggestions and does not alter the reminder/explicit-action generation rules.
+
+**References:** `DM-R015`, `DM-R026`; [Recipient Tagline](glossary.md#recipient-tagline); `OQ-024`.
+
+**Limitations:**
+First-generation mechanics, stale/in-flight/failure presentation, and technical storage remain to be specified without changing the established source-change-only refresh contract.
+
+---
+
+### FR-041 — Encourage optional recipient context inside the app
+
+**Status:** Confirmed
+
+**Requirement:**
+GiftPipe must encourage completion of empty Interests and preferences and Relationship description fields through persistent inline empty states and occasional in-app prompts, while preserving frictionless capture.
+
+**Acceptance criteria:**
+
+- Each empty Person-page context card uses the subtle inline encouragement pattern established for the OO cold-start prompt. Its action opens the shared recipient editor focused on that field. Filled cards show saved text instead. Both empty cards may each show their own inline prompt.
+- Periodic pop-ups can appear when the user opens a Person. They target empty fields and use a shared per-Person cooldown across both targets.
+- When both fields are empty, stagger successive eligible pop-ups between them. When only one is empty, target that field; when both have content, stop these empty-field pop-ups.
+- Add details opens the shared recipient editor at the requested field. Dismissing or choosing Not now leaves the data unchanged, and the inline card prompt remains visible when the user reaches it.
+- Relationship context receives the same encouragement treatment as interests. Suggested wording may explain that adding interests or a little about the relationship can make gift assistance more relevant; wording is orienting, not a data-entry constraint.
+- Do not send these encouragement messages outside the app or require recipient context before GiftIdea capture. These prompts do not introduce a standalone Person-page AI-generation control; the OO cold-start behavior remains under FR-038.
+
+**References:** FR-003, FR-038, FR-039; `DM-R015`; `OQ-024`.
+
+**Limitations:**
+Cooldown duration, initial target when both fields are empty, precise appearance timing, and remaining UI details are intentionally deferred. No numeric cooldown is selected; these encouragement nudges remain in-app.
 
 ---
 
@@ -637,7 +713,7 @@ GiftPipe must let users consider and explicitly adopt transient proactive sugges
 **References:** `DM-R021`, `DM-R025`; FR-021, FR-022, FR-023; [ADR-008](../decisions/ADR-008-keep-proactive-suggestions-transient-until-adopted.md).
 
 **Limitations:**
-Technical handoff and temporary-state mechanics remain under `OQ-022`; detailed ranking and presentation remain under `OQ-020`. The Person/PersonProfile field model and how non-interest attributes can provide context remain open under `OQ-023`; no gender or relationship-type field is established here. This is not a persistence schema, full research-node taxonomy, or research-promotion policy.
+Technical handoff and temporary-state mechanics remain under `OQ-022`; detailed ranking and presentation remain under `OQ-020`. The MVP recipient fields are established in `FR-003`. Their technical allocation and remaining non-interest-context interpretation remain under `OQ-023`; context encouragement on the Person page follows `FR-041`. This is not a persistence schema, full research-node taxonomy, or research-promotion policy.
 
 ---
 
@@ -1252,7 +1328,8 @@ This loop describes product direction but should not be treated as a complete re
 | `FR-020`, `FR-030` | `OQ-003` | Exact OccasionGiftCandidate selection/outcome state model | State transitions and some acceptance criteria remain incomplete |
 | `FR-028`, `FR-035` | `OQ-003` | Exact representation of reconciliation outcomes, including explicit no-gift reports | Confirmed observable outcomes do not establish the full state model |
 | `FR-028` | `OQ-010` | Whether completed reconciliation can be corrected or reopened | Forward outcome recording is established; correction behavior remains open |
-| `FR-003`, `FR-027`, `FR-038` | `OQ-023` | Person/PersonProfile fields and context beyond interests | Existing free-form profile editing and the cold-start flow are established; additional structured fields are undecided |
+| `FR-003`, `FR-027`, `FR-038` | `OQ-023` | Exact allocation/representation of recipient fields and remaining interpretation of non-interest context | MVP field choices and optionality are established; no persistence/aggregate model is selected |
+| `FR-039`, `FR-040`, `FR-041` | `OQ-024` | Detailed Person/timeline/library design, pop-up timing, and derived-tagline mechanics | Page behaviors, distinct empty states, shared cooldown, and stored source-change-only tagline refresh are established |
 | `FR-023`, `FR-038` | `OQ-022` | Exact reminder-to-overview generation execution, temporary handoff, and failure behavior | The usefulness boundary, reminder coupling, adoption, and visit lifetime are established; technical execution details remain open |
 | `FR-034` | `OQ-015` | Reconciliation follow-up frequency and stopping rules | Notification behavior remains incomplete |
 | `FR-036` | `OQ-013` | Partial reconciliation semantics | Incomplete Occasion resolution behavior remains blocked |
